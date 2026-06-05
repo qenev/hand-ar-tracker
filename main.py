@@ -43,3 +43,8 @@ def load_config(config_path: str = "config.yaml") -> Dict[str, Any]:
     except FileNotFoundError:
         print(f"[WARNING] Config file '{config_path}' not found, using defaults.")
         return defaults
+
+
+def _get_default_config() -> Dict[str, Any]:
+    """Return the default configuration dictionary.
+
