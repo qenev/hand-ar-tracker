@@ -98,3 +98,7 @@ class HandRenderer:
         pixel_coords = self._compute_pixel_coords(
             landmarks, width, height
         )
+        frame = self._draw_skeleton(frame, pixel_coords)
+        frame = self._draw_keypoints(frame, pixel_coords)
+        if self.show_hand_label and hand_label:
+            frame = self._draw_hand_label(
