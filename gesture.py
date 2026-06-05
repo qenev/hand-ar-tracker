@@ -204,3 +204,5 @@ def _is_peace_sign(finger_states: List[bool]) -> bool:
 
     Args:
         finger_states: List of 5 booleans for finger extension states.
+
+    Returns:
