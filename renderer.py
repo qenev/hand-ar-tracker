@@ -50,3 +50,7 @@ class HandRenderer:
         Args:
             skeleton_color: BGR color for skeleton connection lines.
             keypoint_color: BGR color for landmark keypoint dots.
+            keypoint_radius: Radius in pixels for keypoint circles.
+            skeleton_thickness: Line thickness in pixels for skeleton.
+            show_fps: Enable FPS counter display in top-left corner.
+            show_coordinates: Enable landmark coordinate display.
