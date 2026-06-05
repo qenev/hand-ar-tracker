@@ -30,3 +30,5 @@ def test_tracker_initialization(mock_hands: MagicMock) -> None:
     assert tracker.get_landmark_count() == 21
     assert tracker.get_connection_list() == HAND_CONNECTIONS
 
+
+@patch("mediapipe.solutions.hands.Hands")
