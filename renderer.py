@@ -90,3 +90,7 @@ class HandRenderer:
             landmarks: List of 21 (x, y, z) normalized coordinates.
             hand_label: Left/Right hand label string.
             gesture_label: Detected gesture name string.
+
+        Returns:
+            The frame with hand visualization drawn on it.
+        """
