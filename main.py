@@ -138,3 +138,8 @@ def initialize_camera(config: Dict[str, Any]) -> cv2.VideoCapture:
     cap.set(cv2.CAP_PROP_FPS, cam_config["fps"])
     print(f"[INFO] Camera opened: index={cam_config['index']}, "
           f"resolution={cam_config['width']}x{cam_config['height']}")
+    return cap
+
+
+def initialize_tracker(config: Dict[str, Any]) -> HandTracker:
+    """Create and configure the hand tracker instance.
