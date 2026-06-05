@@ -90,3 +90,7 @@ def select_device(config_preference: str) -> "torch.device":
     - 'auto': Displays available devices and prompts user to select one.
     - Specific device string (e.g. 'cpu', 'cuda:0', 'mps'): Attempts
       to use the specified device directly.
+    - Falls back to CPU if the requested device is unavailable.
+
+    Args:
+        config_preference: Device preference string from config.yaml.
