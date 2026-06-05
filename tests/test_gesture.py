@@ -52,3 +52,5 @@ def make_fist_landmarks() -> List[Tuple[float, float, float]]:
 
     Fingertips are located below their respective PIP joints (y-coordinate is larger),
     and the thumb is curled in.
+    """
+    lms = [(0.0, 0.5, 0.0)] * 21
