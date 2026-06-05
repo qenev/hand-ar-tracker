@@ -20,3 +20,4 @@ tracking:
 
 renderer:
   # BGR color values for skeleton connections [Blue, Green, Red]
+  skeleton_color: [0, 255, 0]
