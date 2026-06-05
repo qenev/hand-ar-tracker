@@ -28,3 +28,6 @@ def calculate_distance(
     dz = point_a[2] - point_b[2]
     return math.sqrt(dx * dx + dy * dy + dz * dz)
 
+
+def calculate_distance_2d(
+    point_a: Tuple[float, float],
