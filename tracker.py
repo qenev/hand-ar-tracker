@@ -156,3 +156,76 @@ class HandTracker:
         """Extract hand labels (Left/Right) from MediaPipe results.
 
         MediaPipe labels are mirrored by default since the camera
+        provides a mirror view. This function returns the raw labels
+        from the detection results.
+
+        Args:
+            results: MediaPipe results object from process_frame.
+
+        Returns:
+            A list of hand label strings ("Left" or "Right") in the
+            same order as the detected hands. Returns an empty list
+            if no hands are detected.
+        """
+        if results is None or results.multi_handedness is None:
+            return []
+        labels: List[str] = []
+        for handedness in results.multi_handedness:
+            label = handedness.classification[0].label
+            labels.append(label)
+        return labels
+
+    def get_smoothed_landmarks(
+        self,
+        hand_index: int,
+        current_landmarks: List[Tuple[float, float, float]],
+        smoothing_factor: float = 0.5,
+    ) -> List[Tuple[float, float, float]]:
+        """Apply temporal smoothing to hand landmarks.
+
+        Uses exponential moving average smoothing between the current
+        and previous frame landmarks to reduce tracking jitter.
+
+        Args:
+            hand_index: Index of the hand (0 or 1) for tracking
+                previous frame state.
+            current_landmarks: Current frame landmark positions.
+            smoothing_factor: Blending weight for current frame.
+
+        Returns:
+            Smoothed landmark positions as a list of (x, y, z) tuples.
+        """
+        previous = self.previous_landmarks.get(hand_index)
+        smoothed = smooth_landmarks(
+            current_landmarks,
+            previous,
+            smoothing_factor,
+        )
+        self.previous_landmarks[hand_index] = smoothed
+        return smoothed
+
+    def get_landmark_count(self) -> int:
+        """Get the number of landmarks per hand.
+
+        Returns:
+            The constant number of landmarks per hand (always 21).
+        """
+        return 21
+
+    def get_connection_list(self) -> List[Tuple[int, int]]:
+        """Get the list of connections defining the hand skeleton.
+
+        Returns:
+            A list of (start_index, end_index) tuples defining
+            which landmarks should be connected by lines.
+        """
+        return HAND_CONNECTIONS.copy()
+
+    def release(self) -> None:
+        """Release MediaPipe resources.
+
+        Should be called when the tracker is no longer needed
+        to free GPU memory and processing resources.
+        """
+        self.hands.close()
+        self.previous_landmarks.clear()
