@@ -188,3 +188,8 @@ def initialize_renderer(config: Dict[str, Any]) -> HandRenderer:
 
 
 def process_hands(
+    frame: np.ndarray,
+    tracker: HandTracker,
+    renderer: HandRenderer,
+    config: Dict[str, Any],
+) -> np.ndarray:
