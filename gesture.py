@@ -234,3 +234,5 @@ def _is_open_hand(finger_states: List[bool]) -> bool:
     return all(finger_states)
 
 
+def get_extended_finger_count(
+    finger_states: List[bool],
