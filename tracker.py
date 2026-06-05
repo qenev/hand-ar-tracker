@@ -134,3 +134,5 @@ class HandTracker:
         """Parse landmarks for a single detected hand.
 
         Args:
+            hand_landmarks: MediaPipe hand landmarks protobuf object
+                containing 21 landmark positions.
