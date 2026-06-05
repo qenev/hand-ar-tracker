@@ -74,3 +74,7 @@ class HandRenderer:
         self._bg_color = (0, 0, 0)
 
     def draw_hand(
+        self,
+        frame: np.ndarray,
+        landmarks: List[Tuple[float, float, float]],
+        hand_label: str = "",
