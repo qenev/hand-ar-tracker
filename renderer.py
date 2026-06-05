@@ -178,3 +178,7 @@ class HandRenderer:
         using the configured color and radius.
 
         Args:
+            frame: Input video frame as BGR NumPy array.
+            pixel_coords: List of pixel coordinate tuples for each landmark.
+
+        Returns:
