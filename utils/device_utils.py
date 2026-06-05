@@ -18,3 +18,7 @@ def list_available_devices() -> List[Dict[str, str]]:
     """Detect and list all available compute devices on the system.
 
     Queries PyTorch to find CPU, CUDA (NVIDIA GPU), and MPS (Apple
+    Silicon GPU) devices. Each device is returned with an index,
+    type identifier, and human-readable name.
+
+    Returns:
