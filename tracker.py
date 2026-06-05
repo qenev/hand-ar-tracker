@@ -144,3 +144,5 @@ class HandTracker:
         for landmark in hand_landmarks.landmark:
             landmarks.append((
                 landmark.x,
+                landmark.y,
+                landmark.z,
