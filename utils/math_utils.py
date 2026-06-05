@@ -220,3 +220,6 @@ def cross_product(
     """Calculate the cross product of two 3D vectors.
 
     Args:
+        vector_a: First vector as (x, y, z) tuple.
+        vector_b: Second vector as (x, y, z) tuple.
+
