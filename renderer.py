@@ -46,3 +46,7 @@ class HandRenderer:
         show_device_label: bool = True,
     ) -> None:
         """Initialize the renderer with display configuration.
+
+        Args:
+            skeleton_color: BGR color for skeleton connection lines.
+            keypoint_color: BGR color for landmark keypoint dots.
