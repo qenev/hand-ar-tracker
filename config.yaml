@@ -38,3 +38,4 @@ renderer:
   # Show active compute device in top-right corner
   show_device_label: true
 
+gestures:
