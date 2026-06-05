@@ -126,3 +126,5 @@ def _is_thumb_extended(
     thumb_mcp_dist = abs(thumb_mcp[0] - index_mcp[0])
     return thumb_tip_dist > thumb_mcp_dist
 
+
+def _is_pinch(
