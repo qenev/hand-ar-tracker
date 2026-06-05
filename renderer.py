@@ -78,3 +78,7 @@ class HandRenderer:
         frame: np.ndarray,
         landmarks: List[Tuple[float, float, float]],
         hand_label: str = "",
+        gesture_label: str = "",
+    ) -> np.ndarray:
+        """Draw a complete hand visualization on the frame.
+
