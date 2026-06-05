@@ -230,3 +230,7 @@ class HandRenderer:
         gesture: str,
     ) -> np.ndarray:
         """Draw the detected gesture name above the hand.
+
+        Places the gesture label above the middle finger MCP landmark
+        with a semi-transparent background for readability.
+
