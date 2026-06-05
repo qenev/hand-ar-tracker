@@ -62,3 +62,5 @@ class HandTracker:
             max_hands: Maximum number of hands to detect per frame.
                 Valid range is 1 to 2.
             min_detection_confidence: Minimum confidence threshold for
+                the hand detection model. Range 0.0 to 1.0.
+            min_tracking_confidence: Minimum confidence threshold for
