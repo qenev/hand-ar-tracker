@@ -146,3 +146,7 @@ def _prompt_device_selection(
             choice = "0"
         idx = int(choice)
         if 0 <= idx < len(devices):
+            device_type = devices[idx]["type"]
+            print(f"[INFO] Selected device: {devices[idx]['name']}")
+            return torch.device(device_type)
+    except (ValueError, IndexError, KeyboardInterrupt):
