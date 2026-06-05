@@ -26,3 +26,5 @@ from utils.math_utils import (
 
 
 def test_calculate_distance() -> None:
+    """Test 3D Euclidean distance calculation."""
+    pt1 = (0.0, 0.0, 0.0)
