@@ -143,3 +143,8 @@ def initialize_camera(config: Dict[str, Any]) -> cv2.VideoCapture:
 
 def initialize_tracker(config: Dict[str, Any]) -> HandTracker:
     """Create and configure the hand tracker instance.
+
+    Args:
+        config: Configuration dictionary containing tracking settings
+            under the 'tracking' key.
+
