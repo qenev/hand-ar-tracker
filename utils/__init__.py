@@ -28,3 +28,4 @@ __all__ = [
     "list_available_devices",
     "select_device",
     "get_device_label",
+]
