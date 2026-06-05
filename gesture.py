@@ -90,3 +90,5 @@ def get_finger_states(
     Args:
         landmarks: List of 21 (x, y, z) tuples for hand landmarks.
 
+    Returns:
+        A list of 5 booleans corresponding to [thumb, index, middle,
