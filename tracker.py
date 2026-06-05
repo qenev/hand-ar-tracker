@@ -72,3 +72,5 @@ class HandTracker:
         self._mp_hands = mp.solutions.hands
         self.hands = self._mp_hands.Hands(
             static_image_mode=False,
+            max_num_hands=self.max_hands,
+            min_detection_confidence=self.min_detection_confidence,
