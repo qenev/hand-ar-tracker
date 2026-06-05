@@ -58,3 +58,7 @@ class HandRenderer:
             show_hand_label: Enable Left/Right label display.
             show_device_label: Enable device label in top-right corner.
         """
+        self.skeleton_color = skeleton_color
+        self.keypoint_color = keypoint_color
+        self.keypoint_radius = keypoint_radius
+        self.skeleton_thickness = skeleton_thickness
