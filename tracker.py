@@ -68,3 +68,5 @@ class HandTracker:
         """
         self.max_hands: int = max_hands
         self.min_detection_confidence: float = min_detection_confidence
+        self.min_tracking_confidence: float = min_tracking_confidence
+        self._mp_hands = mp.solutions.hands
