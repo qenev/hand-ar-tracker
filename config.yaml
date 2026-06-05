@@ -40,3 +40,4 @@ renderer:
 
 gestures:
   # Enable or disable gesture recognition logic
+  enabled: true
