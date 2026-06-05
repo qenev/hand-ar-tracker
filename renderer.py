@@ -66,3 +66,7 @@ class HandRenderer:
         self.show_coordinates = show_coordinates
         self.show_gesture_label = show_gesture_label
         self.show_hand_label = show_hand_label
+        self.show_device_label = show_device_label
+        self._font = cv2.FONT_HERSHEY_SIMPLEX
+        self._font_scale = 0.5
+        self._font_thickness = 1
