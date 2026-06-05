@@ -94,3 +94,5 @@ class HandTracker:
         Returns:
             The MediaPipe results object containing detected hands,
             or None if processing fails.
+        """
+        rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
