@@ -13,3 +13,4 @@ camera:
 tracking:
   # Maximum number of hands to detect and track simultaneously (1 or 2)
   max_hands: 2
+  # Minimum confidence value ([0.0, 1.0]) for hand detection to be considered successful
