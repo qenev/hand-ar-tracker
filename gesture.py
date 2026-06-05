@@ -112,3 +112,5 @@ def _is_thumb_extended(
 
     Uses the horizontal distance between the thumb tip and the
     thumb CMC joint compared to the index finger MCP position.
+
+    Args:
