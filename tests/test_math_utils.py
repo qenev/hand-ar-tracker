@@ -78,3 +78,5 @@ def test_landmark_to_pixel() -> None:
 
 def test_smooth_landmarks() -> None:
     """Test exponential moving average landmark smoothing."""
+    curr = [(1.0, 2.0, 3.0), (4.0, 5.0, 6.0)]
+    assert smooth_landmarks(curr, None) == curr
