@@ -154,3 +154,5 @@ class HandTracker:
         results: Any,
     ) -> List[str]:
         """Extract hand labels (Left/Right) from MediaPipe results.
+
+        MediaPipe labels are mirrored by default since the camera
