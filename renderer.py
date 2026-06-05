@@ -394,3 +394,22 @@ class HandRenderer:
         """
         text_size = cv2.getTextSize(
             text, self._font, scale, self._font_thickness
+        )[0]
+        pad = 5
+        x, y = position
+        bg_start = (x - pad, y - text_size[1] - pad)
+        bg_end = (x + text_size[0] + pad, y + pad)
+        overlay = frame.copy()
+        cv2.rectangle(overlay, bg_start, bg_end, self._bg_color, cv2.FILLED)
+        cv2.addWeighted(overlay, 0.6, frame, 0.4, 0, frame)
+        cv2.putText(
+            frame,
+            text,
+            position,
+            self._font,
+            scale,
+            self._text_color,
+            self._font_thickness,
+            cv2.LINE_AA,
+        )
+        return frame
