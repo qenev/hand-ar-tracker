@@ -166,3 +166,7 @@ def _direct_device_selection(preference: str) -> "torch.device":
         with a warning message.
     """
     preference_lower = preference.lower().strip()
+    if preference_lower == "cpu":
+        print("[INFO] Using CPU as specified in config.")
+        return _create_cpu_device()
+    if _is_device_available(preference_lower):
