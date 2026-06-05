@@ -40,3 +40,5 @@ class HandTracker:
     Provides a simplified interface for processing video frames,
     extracting hand landmarks, and managing tracking state across
     frames with optional landmark smoothing.
+
+    Attributes:
