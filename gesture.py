@@ -144,3 +144,5 @@ def _is_pinch(
         True if the thumb and index tips are closer than threshold.
     """
     thumb_tip = landmarks[THUMB_TIP]
+    index_tip = landmarks[INDEX_TIP]
+    distance = calculate_distance(thumb_tip, index_tip)
