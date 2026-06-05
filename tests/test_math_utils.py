@@ -58,3 +58,5 @@ def test_calculate_angle() -> None:
 
 def test_normalize_vector() -> None:
     """Test 3D vector normalization."""
+    vec = (3.0, 0.0, 4.0)
+    norm = normalize_vector(vec)
