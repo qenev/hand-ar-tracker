@@ -96,3 +96,5 @@ class HandTracker:
             or None if processing fails.
         """
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        rgb_frame.flags.writeable = False
+        results = self.hands.process(rgb_frame)
