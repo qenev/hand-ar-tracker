@@ -158,3 +158,8 @@ def initialize_tracker(config: Dict[str, Any]) -> HandTracker:
         min_tracking_confidence=track_config["min_tracking_confidence"],
     )
     print("[INFO] Hand tracker initialized.")
+    return tracker
+
+
+def initialize_renderer(config: Dict[str, Any]) -> HandRenderer:
+    """Create and configure the hand renderer instance.
