@@ -92,3 +92,5 @@ class HandTracker:
                 with shape (height, width, 3).
 
         Returns:
+            The MediaPipe results object containing detected hands,
+            or None if processing fails.
