@@ -86,3 +86,7 @@ class HandRenderer:
         label for a single detected hand.
 
         Args:
+            frame: Input video frame as BGR NumPy array.
+            landmarks: List of 21 (x, y, z) normalized coordinates.
+            hand_label: Left/Right hand label string.
+            gesture_label: Detected gesture name string.
