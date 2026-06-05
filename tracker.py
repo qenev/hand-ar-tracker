@@ -146,3 +146,5 @@ class HandTracker:
                 landmark.x,
                 landmark.y,
                 landmark.z,
+            ))
+        return landmarks
