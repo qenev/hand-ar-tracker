@@ -326,3 +326,7 @@ class HandRenderer:
         active as a text overlay.
 
         Args:
+            frame: Input video frame as BGR NumPy array.
+            device_text: Device label string to display.
+
+        Returns:
