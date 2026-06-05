@@ -76,3 +76,6 @@ def calculate_angle(
         point_c[2] - point_b[2],
     )
     dot_product = sum(a * b for a, b in zip(vector_ba, vector_bc))
+    magnitude_ba = math.sqrt(sum(v * v for v in vector_ba))
+    magnitude_bc = math.sqrt(sum(v * v for v in vector_bc))
+    if magnitude_ba == 0.0 or magnitude_bc == 0.0:
