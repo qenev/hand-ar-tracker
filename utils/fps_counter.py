@@ -92,3 +92,5 @@ class FPSCounter:
         """Get the minimum FPS observed since initialization or last reset.
 
         Returns:
+            The lowest FPS value recorded, or 0.0 if no frames
+            have been processed yet.
