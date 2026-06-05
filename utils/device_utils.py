@@ -22,3 +22,7 @@ def list_available_devices() -> List[Dict[str, str]]:
     type identifier, and human-readable name.
 
     Returns:
+        A list of dictionaries, each containing:
+            - index: Integer index for device selection.
+            - type: Device type string (cpu, cuda, mps).
+            - name: Human-readable device name.
