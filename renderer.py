@@ -270,3 +270,7 @@ class HandRenderer:
 
         Returns:
             Frame with coordinate labels drawn.
+        """
+        tip_indices = [4, 8, 12, 16, 20]
+        for idx in tip_indices:
+            if idx < len(landmarks) and idx < len(pixel_coords):
