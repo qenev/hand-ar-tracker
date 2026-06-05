@@ -38,3 +38,8 @@ def load_config(config_path: str = "config.yaml") -> Dict[str, Any]:
         with open(config_path, "r", encoding="utf-8") as config_file:
             user_config = yaml.safe_load(config_file)
         if user_config is None:
+            return defaults
+        return _merge_configs(defaults, user_config)
+    except FileNotFoundError:
+        print(f"[WARNING] Config file '{config_path}' not found, using defaults.")
+        return defaults
