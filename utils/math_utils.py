@@ -13,3 +13,6 @@ import numpy as np
 def calculate_distance(
     point_a: Tuple[float, float, float],
     point_b: Tuple[float, float, float],
+) -> float:
+    """Calculate the Euclidean distance between two 3D points.
+
