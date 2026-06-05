@@ -184,3 +184,5 @@ def _is_thumbs_up(
         landmarks: List of 21 (x, y, z) tuples for hand landmarks.
 
     Returns:
+        True if the hand is showing a thumbs up gesture.
+    """
