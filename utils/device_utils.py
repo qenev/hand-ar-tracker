@@ -158,3 +158,7 @@ def _prompt_device_selection(
 def _direct_device_selection(preference: str) -> "torch.device":
     """Attempt to select a specific device by type string.
 
+    Args:
+        preference: Device type string like 'cpu', 'cuda:0', or 'mps'.
+
+    Returns:
