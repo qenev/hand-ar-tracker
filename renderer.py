@@ -138,3 +138,7 @@ class HandRenderer:
 
     def _draw_skeleton(
         self,
+        frame: np.ndarray,
+        pixel_coords: List[Tuple[int, int]],
+    ) -> np.ndarray:
+        """Draw the skeletal mesh connecting hand landmarks.
