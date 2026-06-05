@@ -172,3 +172,5 @@ def _is_fist(
 
 def _is_thumbs_up(
     finger_states: List[bool],
+    landmarks: List[Tuple[float, float, float]],
+) -> bool:
