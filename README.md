@@ -89,3 +89,16 @@ Follow these steps to set up the project from scratch:
 ## How to Run
 
 Start the application with the following command:
+
+```bash
+python main.py
+```
+
+### What happens on startup
+
+1. The configuration file `config.yaml` is loaded. If no file is found, default values are used.
+2. The device selection system determines whether to use GPU or CPU for torch operations.
+3. The webcam is initialized at the resolution and frame rate specified in the configuration.
+4. A live video window opens showing the camera feed with hand tracking overlays.
+
+### How to quit

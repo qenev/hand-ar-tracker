@@ -89,3 +89,16 @@ ipython_config.py
 
 # poetry
 #   Similar to Pipfile.lock, poetry.lock contains system-specific information and should be ignored
+#   if not desired.
+# poetry.lock
+
+# pdm
+#   Similar to Pipfile.lock, pdm.lock contains system-specific information and should be ignored
+#   if not desired.
+# pdm.lock
+
+# PEP 582; project local packages directory (used by pdm)
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
