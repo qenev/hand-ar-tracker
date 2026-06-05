@@ -210,3 +210,5 @@ def _is_peace_sign(finger_states: List[bool]) -> bool:
     """
     index_extended = finger_states[1]
     middle_extended = finger_states[2]
+    ring_curled = not finger_states[3]
+    pinky_curled = not finger_states[4]
