@@ -50,3 +50,7 @@ def _add_cuda_devices(
     Returns:
         Updated device list with any CUDA devices appended.
     """
+    if torch is not None and torch.cuda.is_available():
+        cuda_count = torch.cuda.device_count()
+        for i in range(cuda_count):
+            device_name = torch.cuda.get_device_name(i)
