@@ -116,3 +116,5 @@ def _is_thumb_extended(
     Args:
         landmarks: List of 21 (x, y, z) tuples for hand landmarks.
 
+    Returns:
+        True if the thumb appears to be extended outward.
