@@ -36,3 +36,5 @@ class FPSCounter:
         self.min_fps: float = float("inf")
         self.max_fps: float = 0.0
         self._frame_count: int = 0
+
+    def tick(self) -> None:
