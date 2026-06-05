@@ -378,3 +378,7 @@ class HandRenderer:
         position: Tuple[int, int],
         scale: float = 0.5,
     ) -> np.ndarray:
+        """Draw text with a semi-transparent dark background.
+
+        Creates a dark rectangle behind the text for improved
+        readability against varying video backgrounds.
