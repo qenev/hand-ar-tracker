@@ -12,3 +12,5 @@ from typing import Optional
 
 class FPSCounter:
     """Rolling window FPS counter with statistics tracking.
+
+    Maintains a deque of frame timestamps and computes the rolling
