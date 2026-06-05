@@ -16,3 +16,5 @@ class FPSCounter:
     Maintains a deque of frame timestamps and computes the rolling
     average frames per second over a configurable window size.
 
+    Attributes:
+        window_size: Number of frames to include in the rolling average.
