@@ -114,3 +114,5 @@ class HandTracker:
             results: MediaPipe results object from process_frame.
 
         Returns:
+            A list of hands, where each hand is a list of 21
+            (x, y, z) coordinate tuples in normalized space.
