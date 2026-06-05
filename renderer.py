@@ -198,3 +198,7 @@ class HandRenderer:
     def _draw_hand_label(
         self,
         frame: np.ndarray,
+        pixel_coords: List[Tuple[int, int]],
+        label: str,
+    ) -> np.ndarray:
+        """Draw the Left/Right hand label near the wrist.
