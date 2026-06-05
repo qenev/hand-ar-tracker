@@ -66,3 +66,5 @@ class HandTracker:
             min_tracking_confidence: Minimum confidence threshold for
                 the hand tracking model. Range 0.0 to 1.0.
         """
+        self.max_hands: int = max_hands
+        self.min_detection_confidence: float = min_detection_confidence
