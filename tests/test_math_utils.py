@@ -76,3 +76,5 @@ def test_landmark_to_pixel() -> None:
     assert landmark_to_pixel(-0.1, 1.2, width, height) == (0, 479)
 
 
+def test_smooth_landmarks() -> None:
+    """Test exponential moving average landmark smoothing."""

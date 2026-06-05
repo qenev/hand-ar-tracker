@@ -76,3 +76,5 @@ def make_fist_landmarks() -> List[Tuple[float, float, float]]:
     lms[4] = (0.22, 0.46, 0.0)  # THUMB_TIP
     return lms
 
+
+def make_peace_landmarks() -> List[Tuple[float, float, float]]:
