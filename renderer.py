@@ -194,3 +194,7 @@ class HandRenderer:
                 cv2.LINE_AA,
             )
         return frame
+
+    def _draw_hand_label(
+        self,
+        frame: np.ndarray,
