@@ -97,3 +97,6 @@ def normalize_vector(
     Returns:
         A unit vector in the same direction. Returns (0, 0, 0) if
         the input vector has zero magnitude.
+    """
+    magnitude = math.sqrt(sum(v * v for v in vector))
+    if magnitude == 0.0:
