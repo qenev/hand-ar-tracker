@@ -6,3 +6,5 @@ and landmark smoothing operations.
 
 import math
 from typing import List, Tuple
+
+import pytest

@@ -6,3 +6,5 @@ at test-time so that tests can import tracker.py and run without errors.
 """
 
 import sys
+from unittest.mock import MagicMock
+

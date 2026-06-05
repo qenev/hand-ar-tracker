@@ -6,3 +6,5 @@ Tests initialization, constants, and helper methods using mocks.
 from unittest.mock import MagicMock, patch
 import pytest
 
+from tracker import HandTracker, LANDMARK_NAMES, HAND_CONNECTIONS
+
