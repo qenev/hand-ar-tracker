@@ -6,3 +6,7 @@ onto video frames using OpenCV drawing primitives.
 """
 
 from typing import List, Tuple, Optional, Dict, Any
+
+import cv2
+import numpy as np
+
