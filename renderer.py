@@ -370,3 +370,7 @@ class HandRenderer:
             frame, message, (x, y), scale=0.7
         )
         return frame
+
+    def _draw_text_with_background(
+        self,
+        frame: np.ndarray,
