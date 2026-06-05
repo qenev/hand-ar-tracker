@@ -64,3 +64,5 @@ class FPSCounter:
 
     def get_fps(self) -> float:
         """Calculate the current rolling average FPS.
+
+        Computes the average frame rate over the timestamps stored
