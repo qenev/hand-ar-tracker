@@ -62,3 +62,5 @@ class FPSCounter:
         if current_fps > self.max_fps:
             self.max_fps = current_fps
 
+    def get_fps(self) -> float:
+        """Calculate the current rolling average FPS.
