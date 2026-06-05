@@ -100,3 +100,6 @@ def normalize_vector(
     """
     magnitude = math.sqrt(sum(v * v for v in vector))
     if magnitude == 0.0:
+        return (0.0, 0.0, 0.0)
+    return (
+        vector[0] / magnitude,
