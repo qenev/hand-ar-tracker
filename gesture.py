@@ -208,3 +208,5 @@ def _is_peace_sign(finger_states: List[bool]) -> bool:
     Returns:
         True if the hand is showing a peace sign.
     """
+    index_extended = finger_states[1]
+    middle_extended = finger_states[2]
