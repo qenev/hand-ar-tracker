@@ -45,3 +45,4 @@ gestures:
   pinch_threshold: 0.05
   # Minimum ratio of curled fingers to total fingers to detect a fist gesture
   fist_threshold: 0.85
+
