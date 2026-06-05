@@ -112,3 +112,5 @@ class HandTracker:
 
         Args:
             results: MediaPipe results object from process_frame.
+
+        Returns:
