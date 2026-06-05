@@ -206,3 +206,16 @@ pytest tests/
 ```
 
 ### Expected output
+
+All tests should pass with output similar to:
+
+```
+========================= test session starts ==========================
+collected 15 items
+
+tests/test_config.py ....                                         [ 26%]
+tests/test_gesture.py ......                                      [ 66%]
+tests/test_tracker.py .....                                       [100%]
+
+========================== 15 passed in 2.34s ==========================
+```
