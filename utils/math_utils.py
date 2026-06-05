@@ -19,3 +19,6 @@ def calculate_distance(
     Args:
         point_a: First point as (x, y, z) tuple with normalized coordinates.
         point_b: Second point as (x, y, z) tuple with normalized coordinates.
+
+    Returns:
+        The Euclidean distance between the two points as a float.
