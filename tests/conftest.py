@@ -14,3 +14,5 @@ mock_hands = MagicMock()
 
 # Inject the mocks into sys.modules so imports and getattr operations succeed
 sys.modules["mediapipe.solutions"] = mock_solutions
+sys.modules["mediapipe.solutions.hands"] = mock_hands
+

@@ -14,3 +14,5 @@ def test_constants() -> None:
     assert len(LANDMARK_NAMES) == 21
     assert "WRIST" in LANDMARK_NAMES
     assert len(HAND_CONNECTIONS) > 0
+
+
