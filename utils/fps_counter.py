@@ -78,3 +78,5 @@ class FPSCounter:
         if time_span <= 0.0:
             return 0.0
         frame_count = len(self.timestamps) - 1
+        return frame_count / time_span
+
