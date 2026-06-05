@@ -76,3 +76,5 @@ def recognize_gesture(
     if _is_open_hand(finger_states):
         return "Open Hand"
     return "Unknown"
+
+
