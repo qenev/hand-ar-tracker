@@ -130,3 +130,5 @@ class HandTracker:
     def _parse_single_hand(
         self,
         hand_landmarks: Any,
+    ) -> List[Tuple[float, float, float]]:
+        """Parse landmarks for a single detected hand.
