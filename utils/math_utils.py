@@ -25,3 +25,6 @@ def calculate_distance(
     """
     dx = point_a[0] - point_b[0]
     dy = point_a[1] - point_b[1]
+    dz = point_a[2] - point_b[2]
+    return math.sqrt(dx * dx + dy * dy + dz * dz)
+
