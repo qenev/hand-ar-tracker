@@ -208,3 +208,6 @@ def dot_product(
         vector_b: Second vector as (x, y, z) tuple.
 
     Returns:
+        The scalar dot product of the two vectors.
+    """
+    return sum(a * b for a, b in zip(vector_a, vector_b))
