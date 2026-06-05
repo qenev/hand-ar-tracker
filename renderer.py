@@ -238,3 +238,7 @@ class HandRenderer:
             frame: Input video frame as BGR NumPy array.
             pixel_coords: List of pixel coordinate tuples.
             gesture: Detected gesture name string.
+
+        Returns:
+            Frame with gesture label drawn.
+        """
