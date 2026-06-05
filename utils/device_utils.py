@@ -26,3 +26,7 @@ def list_available_devices() -> List[Dict[str, str]]:
             - index: Integer index for device selection.
             - type: Device type string (cpu, cuda, mps).
             - name: Human-readable device name.
+    """
+    devices: List[Dict[str, str]] = []
+    devices.append({
+        "index": 0,
