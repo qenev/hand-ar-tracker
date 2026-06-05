@@ -13,3 +13,4 @@ from utils.math_utils import (
     smooth_landmarks,
 )
 from utils.device_utils import (
+    list_available_devices,
