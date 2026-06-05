@@ -214,3 +214,7 @@ class HandRenderer:
         Returns:
             Frame with hand label drawn.
         """
+        if len(pixel_coords) == 0:
+            return frame
+        wrist = pixel_coords[0]
+        text_position = (wrist[0] - 20, wrist[1] - 20)
