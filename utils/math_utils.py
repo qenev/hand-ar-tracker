@@ -196,3 +196,6 @@ def vector_magnitude(vector: Tuple[float, float, float]) -> float:
     """
     return math.sqrt(sum(v * v for v in vector))
 
+
+def dot_product(
+    vector_a: Tuple[float, float, float],
