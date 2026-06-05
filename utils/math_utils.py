@@ -115,3 +115,6 @@ def landmark_to_pixel(
     frame_height: int,
 ) -> Tuple[int, int]:
     """Convert normalized landmark coordinates to pixel coordinates.
+
+    MediaPipe returns landmarks in normalized [0, 1] coordinate space.
+    This function maps them to actual pixel positions in the frame.
