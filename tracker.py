@@ -70,3 +70,5 @@ class HandTracker:
         self.min_detection_confidence: float = min_detection_confidence
         self.min_tracking_confidence: float = min_tracking_confidence
         self._mp_hands = mp.solutions.hands
+        self.hands = self._mp_hands.Hands(
+            static_image_mode=False,
