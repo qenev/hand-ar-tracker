@@ -236,3 +236,92 @@ def _is_open_hand(finger_states: List[bool]) -> bool:
 
 def get_extended_finger_count(
     finger_states: List[bool],
+) -> int:
+    """Count the number of extended fingers.
+
+    Args:
+        finger_states: List of 5 booleans for finger extension states.
+
+    Returns:
+        Integer count of extended fingers (0 to 5).
+    """
+    return sum(1 for state in finger_states if state)
+
+
+def get_gesture_confidence(
+    landmarks: List[Tuple[float, float, float]],
+    gesture_name: str,
+    pinch_threshold: float = 0.05,
+) -> float:
+    """Calculate a confidence score for a specific gesture.
+
+    Provides a rough confidence metric based on how clearly the
+    landmark geometry matches the expected gesture pattern.
+
+    Args:
+        landmarks: List of 21 (x, y, z) tuples for hand landmarks.
+        gesture_name: Name of the gesture to evaluate.
+        pinch_threshold: Distance threshold for pinch detection.
+
+    Returns:
+        A confidence score between 0.0 and 1.0, where 1.0 indicates
+        a very clear match for the specified gesture.
+    """
+    if len(landmarks) != 21:
+        return 0.0
+    finger_states = get_finger_states(landmarks)
+    if gesture_name == "Pinch":
+        return _pinch_confidence(landmarks, pinch_threshold)
+    if gesture_name == "Fist":
+        return _fist_confidence(finger_states)
+    if gesture_name == "Open Hand":
+        return _open_hand_confidence(finger_states)
+    return 0.0
+
+
+def _pinch_confidence(
+    landmarks: List[Tuple[float, float, float]],
+    threshold: float,
+) -> float:
+    """Calculate confidence score for a pinch gesture.
+
+    Args:
+        landmarks: List of 21 (x, y, z) tuples for hand landmarks.
+        threshold: Distance threshold for pinch detection.
+
+    Returns:
+        Confidence score between 0.0 and 1.0.
+    """
+    distance = calculate_distance(
+        landmarks[THUMB_TIP],
+        landmarks[INDEX_TIP],
+    )
+    if distance >= threshold:
+        return 0.0
+    return 1.0 - (distance / threshold)
+
+
+def _fist_confidence(finger_states: List[bool]) -> float:
+    """Calculate confidence score for a fist gesture.
+
+    Args:
+        finger_states: List of 5 booleans for finger extension states.
+
+    Returns:
+        Confidence score between 0.0 and 1.0.
+    """
+    curled = sum(1 for s in finger_states if not s)
+    return curled / len(finger_states)
+
+
+def _open_hand_confidence(finger_states: List[bool]) -> float:
+    """Calculate confidence score for an open hand gesture.
+
+    Args:
+        finger_states: List of 5 booleans for finger extension states.
+
+    Returns:
+        Confidence score between 0.0 and 1.0.
+    """
+    extended = sum(1 for s in finger_states if s)
+    return extended / len(finger_states)
