@@ -76,3 +76,5 @@ class HandTracker:
             min_detection_confidence=self.min_detection_confidence,
             min_tracking_confidence=self.min_tracking_confidence,
         )
+        self.previous_landmarks: Dict[int, List[Tuple[float, float, float]]] = {}
+
