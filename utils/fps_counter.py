@@ -56,3 +56,5 @@ class FPSCounter:
         Args:
             current_fps: The current FPS reading to compare against
                 stored min and max values.
+        """
+        if current_fps < self.min_fps:
