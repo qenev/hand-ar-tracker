@@ -70,3 +70,5 @@ class FPSCounter:
 
         Returns:
             The current FPS as a float. Returns 0.0 if fewer than
+            two frames have been recorded.
+        """
