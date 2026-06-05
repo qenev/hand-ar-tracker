@@ -173,3 +173,8 @@ def initialize_renderer(config: Dict[str, Any]) -> HandRenderer:
     """
     rend_config = config["renderer"]
     renderer = HandRenderer(
+        skeleton_color=tuple(rend_config["skeleton_color"]),
+        keypoint_color=tuple(rend_config["keypoint_color"]),
+        keypoint_radius=rend_config["keypoint_radius"],
+        skeleton_thickness=rend_config["skeleton_thickness"],
+        show_fps=rend_config["show_fps"],
