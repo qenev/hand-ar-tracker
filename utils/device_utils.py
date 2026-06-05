@@ -182,3 +182,7 @@ def _direct_device_selection(preference: str) -> "torch.device":
 def _is_device_available(device_type: str) -> bool:
     """Check if a specific device type is available on this system.
 
+    Args:
+        device_type: Device type string to check (e.g. 'cuda:0', 'mps').
+
+    Returns:
