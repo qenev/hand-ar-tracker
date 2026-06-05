@@ -14,3 +14,7 @@ except ImportError:
     torch = None
 
 
+def list_available_devices() -> List[Dict[str, str]]:
+    """Detect and list all available compute devices on the system.
+
+    Queries PyTorch to find CPU, CUDA (NVIDIA GPU), and MPS (Apple
