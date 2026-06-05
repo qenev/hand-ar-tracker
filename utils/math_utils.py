@@ -112,3 +112,6 @@ def landmark_to_pixel(
     landmark_x: float,
     landmark_y: float,
     frame_width: int,
+    frame_height: int,
+) -> Tuple[int, int]:
+    """Convert normalized landmark coordinates to pixel coordinates.
