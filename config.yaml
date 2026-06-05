@@ -8,3 +8,4 @@ camera:
   # Requested video height in pixels
   height: 720
   # Requested frame rate (FPS)
+  fps: 30
