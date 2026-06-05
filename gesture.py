@@ -70,3 +70,5 @@ def recognize_gesture(
     if _is_fist(finger_states, fist_threshold):
         return "Fist"
     if _is_thumbs_up(finger_states, landmarks):
+        return "Thumbs Up"
+    if _is_peace_sign(finger_states):
