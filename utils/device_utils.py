@@ -70,3 +70,7 @@ def _add_mps_device(
     Args:
         devices: Existing list of detected devices to append to.
 
+    Returns:
+        Updated device list with MPS device appended if available.
+    """
+    if torch is not None and hasattr(torch.backends, "mps"):
