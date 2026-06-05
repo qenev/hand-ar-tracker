@@ -217,3 +217,6 @@ def cross_product(
     vector_a: Tuple[float, float, float],
     vector_b: Tuple[float, float, float],
 ) -> Tuple[float, float, float]:
+    """Calculate the cross product of two 3D vectors.
+
+    Args:
