@@ -148,3 +148,5 @@ def _is_pinch(
     distance = calculate_distance(thumb_tip, index_tip)
     return distance < threshold
 
+
+def _is_fist(
