@@ -58,3 +58,5 @@ class HandTracker:
     ) -> None:
         """Initialize the hand tracker with detection parameters.
 
+        Args:
+            max_hands: Maximum number of hands to detect per frame.
