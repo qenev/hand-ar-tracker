@@ -178,3 +178,5 @@ def _is_thumbs_up(
 
     Requires the thumb to be extended and pointing upward while
     all other fingers are curled into the palm.
+
+    Args:
