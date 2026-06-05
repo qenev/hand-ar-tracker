@@ -91,3 +91,6 @@ def normalize_vector(
 ) -> Tuple[float, float, float]:
     """Normalize a 3D vector to unit length.
 
+    Args:
+        vector: The input vector as (x, y, z) tuple.
+
