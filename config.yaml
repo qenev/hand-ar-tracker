@@ -32,3 +32,4 @@ renderer:
   # Show coordinates next to fingertip landmarks
   show_coordinates: true
   # Show gesture name overlay near the hand
+  show_gesture_label: true
