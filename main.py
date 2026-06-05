@@ -198,3 +198,8 @@ def process_hands(
     Runs the full pipeline: detection, landmark extraction,
     gesture recognition, and overlay rendering for all detected hands.
 
+    Args:
+        frame: Input video frame as BGR NumPy array.
+        tracker: Configured HandTracker instance.
+        renderer: Configured HandRenderer instance.
+        config: Full configuration dictionary.
