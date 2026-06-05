@@ -28,3 +28,5 @@ from utils.math_utils import (
 def test_calculate_distance() -> None:
     """Test 3D Euclidean distance calculation."""
     pt1 = (0.0, 0.0, 0.0)
+    pt2 = (3.0, 4.0, 0.0)
+    assert math.isclose(calculate_distance(pt1, pt2), 5.0)

@@ -28,3 +28,5 @@ def test_tracker_initialization(mock_hands: MagicMock) -> None:
     assert tracker.min_detection_confidence == 0.8
     assert tracker.min_tracking_confidence == 0.7
     assert tracker.get_landmark_count() == 21
+    assert tracker.get_connection_list() == HAND_CONNECTIONS
+
