@@ -42,3 +42,4 @@ gestures:
   # Enable or disable gesture recognition logic
   enabled: true
   # Maximum distance threshold between thumb tip and index tip to detect a pinch gesture
+  pinch_threshold: 0.05
