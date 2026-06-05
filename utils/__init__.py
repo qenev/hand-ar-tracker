@@ -14,3 +14,4 @@ from utils.math_utils import (
 )
 from utils.device_utils import (
     list_available_devices,
+    select_device,
