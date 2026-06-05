@@ -112,3 +112,5 @@ def test_dot_product() -> None:
 
 
 def test_cross_product() -> None:
+    """Test computing cross product of two vectors."""
+    vec_a = (1.0, 0.0, 0.0)
