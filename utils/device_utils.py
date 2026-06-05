@@ -66,3 +66,7 @@ def _add_mps_device(
     devices: List[Dict[str, str]],
 ) -> List[Dict[str, str]]:
     """Add Apple Silicon MPS device if available.
+
+    Args:
+        devices: Existing list of detected devices to append to.
+
