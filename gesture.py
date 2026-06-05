@@ -162,3 +162,5 @@ def _is_fist(
         finger_states: List of 5 booleans for finger extension states.
         threshold: Minimum ratio of curled fingers (0.0 to 1.0).
 
+    Returns:
+        True if enough fingers are curled to constitute a fist.
