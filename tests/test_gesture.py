@@ -50,3 +50,5 @@ def make_open_hand_landmarks() -> List[Tuple[float, float, float]]:
 def make_fist_landmarks() -> List[Tuple[float, float, float]]:
     """Helper to generate mock landmarks for a fist gesture.
 
+    Fingertips are located below their respective PIP joints (y-coordinate is larger),
+    and the thumb is curled in.

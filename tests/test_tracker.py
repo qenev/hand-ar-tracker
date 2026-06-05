@@ -50,3 +50,5 @@ def test_smoothing(mock_hands: MagicMock) -> None:
     """Test landmark smoothing buffer management."""
     tracker = HandTracker()
     curr = [(1.0, 2.0, 3.0)] * 21
+    # First frame (no previous)
+    smoothed = tracker.get_smoothed_landmarks(0, curr)
