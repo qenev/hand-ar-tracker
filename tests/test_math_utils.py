@@ -88,3 +88,5 @@ def test_smooth_landmarks() -> None:
 
     # Mismatched lengths
     mismatched_prev = [(0.0, 0.0, 0.0)]
+    assert smooth_landmarks(curr, mismatched_prev) == curr
+

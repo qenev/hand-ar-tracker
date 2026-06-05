@@ -88,3 +88,5 @@ def make_peace_landmarks() -> List[Tuple[float, float, float]]:
     # Extend MIDDLE
     lms[12] = (0.0, 0.2, 0.0)  # MIDDLE_TIP
     return lms
+
+
