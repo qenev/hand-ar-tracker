@@ -56,3 +56,5 @@ def test_calculate_angle() -> None:
     assert math.isclose(calculate_angle(pt_b, pt_b, pt_c), 0.0)
 
 
+def test_normalize_vector() -> None:
+    """Test 3D vector normalization."""

@@ -56,3 +56,5 @@ def make_fist_landmarks() -> List[Tuple[float, float, float]]:
     lms = [(0.0, 0.5, 0.0)] * 21
     # INDEX
     lms[5] = (0.1, 0.4, 0.0)  # INDEX_MCP
+    lms[6] = (0.1, 0.35, 0.0)  # INDEX_PIP
+    lms[8] = (0.1, 0.45, 0.0)  # INDEX_TIP

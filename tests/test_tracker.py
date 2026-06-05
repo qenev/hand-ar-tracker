@@ -56,3 +56,4 @@ def test_smoothing(mock_hands: MagicMock) -> None:
     # Second frame (should blend)
     curr2 = [(2.0, 3.0, 4.0)] * 21
     smoothed2 = tracker.get_smoothed_landmarks(0, curr2, smoothing_factor=0.5)
+    assert smoothed2[0] == (1.5, 2.5, 3.5)
