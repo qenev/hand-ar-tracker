@@ -84,3 +84,5 @@ def get_finger_states(
     """Determine the extended/curled state of each finger.
 
     For the thumb, uses a horizontal distance comparison relative
+    to the palm. For other fingers, compares tip position to PIP
+    joint position along the y-axis.
