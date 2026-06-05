@@ -354,3 +354,7 @@ class HandRenderer:
         their hands to the camera.
 
         Args:
+            frame: Input video frame as BGR NumPy array.
+
+        Returns:
+            Frame with the informational message drawn.
