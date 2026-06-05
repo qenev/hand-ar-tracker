@@ -10,3 +10,6 @@ from typing import Tuple, List, Optional
 import numpy as np
 
 
+def calculate_distance(
+    point_a: Tuple[float, float, float],
+    point_b: Tuple[float, float, float],
