@@ -338,3 +338,7 @@ class HandRenderer:
             device_text, self._font, 0.6, 1
         )[0]
         width = frame.shape[1]
+        position = (width - text_size[0] - 15, 30)
+        frame = self._draw_text_with_background(
+            frame, device_text, position, scale=0.6
+        )
