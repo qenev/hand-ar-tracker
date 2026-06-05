@@ -66,3 +66,5 @@ def recognize_gesture(
         return "Unknown"
     finger_states = get_finger_states(landmarks)
     if _is_pinch(landmarks, pinch_threshold):
+        return "Pinch"
+    if _is_fist(finger_states, fist_threshold):
