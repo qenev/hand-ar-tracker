@@ -22,3 +22,5 @@ class FPSCounter:
         min_fps: Lowest FPS value observed since last reset.
         max_fps: Highest FPS value observed since last reset.
     """
+
+    def __init__(self, window_size: int = 30) -> None:
