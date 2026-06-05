@@ -243,3 +243,8 @@ def _get_gesture(
         fist_threshold=gesture_config.get("fist_threshold", 0.85),
     )
 
+
+def run_main_loop(
+    cap: cv2.VideoCapture,
+    tracker: HandTracker,
+    renderer: HandRenderer,
