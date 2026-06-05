@@ -198,3 +198,5 @@ def _is_thumbs_up(
 
 def _is_peace_sign(finger_states: List[bool]) -> bool:
     """Detect a peace sign (V sign) gesture.
+
+    Requires the index and middle fingers to be extended while
