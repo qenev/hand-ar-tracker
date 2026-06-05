@@ -238,3 +238,8 @@ def _get_gesture(
     if not gesture_config.get("enabled", True):
         return ""
     return recognize_gesture(
+        landmarks,
+        pinch_threshold=gesture_config.get("pinch_threshold", 0.05),
+        fist_threshold=gesture_config.get("fist_threshold", 0.85),
+    )
+
