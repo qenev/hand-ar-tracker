@@ -104,3 +104,5 @@ def make_pinch_landmarks() -> List[Tuple[float, float, float]]:
 def test_recognize_gesture_invalid() -> None:
     """Test gesture recognition with incorrect landmark count."""
     assert recognize_gesture([]) == "Unknown"
+    assert recognize_gesture([(0.0, 0.0, 0.0)] * 10) == "Unknown"
+

@@ -104,3 +104,5 @@ def test_vector_magnitude() -> None:
     assert math.isclose(vector_magnitude(vec), 5.0)
 
 
+def test_dot_product() -> None:
+    """Test computing dot product of two vectors."""
