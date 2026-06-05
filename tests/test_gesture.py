@@ -116,3 +116,5 @@ def test_get_finger_states() -> None:
     fist = make_fist_landmarks()
     states = get_finger_states(fist)
     assert states == [False, False, False, False, False]
+
+
