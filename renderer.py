@@ -122,3 +122,7 @@ class HandRenderer:
     ) -> List[Tuple[int, int]]:
         """Convert normalized landmarks to pixel coordinates.
 
+        Args:
+            landmarks: List of (x, y, z) normalized coordinates.
+            width: Frame width in pixels.
+            height: Frame height in pixels.
