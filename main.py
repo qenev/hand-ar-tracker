@@ -273,3 +273,8 @@ def run_main_loop(
         success, frame = cap.read()
         if not success:
             print("[WARNING] Failed to capture frame, retrying...")
+            continue
+        frame = cv2.flip(frame, 1)
+        fps_counter.tick()
+        frame = process_hands(frame, tracker, renderer, config)
+        frame = renderer.draw_fps(frame, fps_counter.get_fps_string())
