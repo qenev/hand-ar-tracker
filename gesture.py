@@ -108,3 +108,5 @@ def get_finger_states(
 def _is_thumb_extended(
     landmarks: List[Tuple[float, float, float]],
 ) -> bool:
+    """Check if the thumb is extended outward from the palm.
+
