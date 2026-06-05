@@ -90,3 +90,5 @@ class FPSCounter:
 
     def get_min_fps(self) -> float:
         """Get the minimum FPS observed since initialization or last reset.
+
+        Returns:
