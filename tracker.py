@@ -24,3 +24,5 @@ HAND_CONNECTIONS = [
     (5, 9), (9, 13), (13, 17),
 ]
 
+# Landmark names for coordinate display.
+LANDMARK_NAMES = [
