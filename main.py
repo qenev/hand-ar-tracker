@@ -248,3 +248,8 @@ def run_main_loop(
     cap: cv2.VideoCapture,
     tracker: HandTracker,
     renderer: HandRenderer,
+    fps_counter: FPSCounter,
+    device_label: str,
+    config: Dict[str, Any],
+) -> None:
+    """Execute the main webcam processing loop.
