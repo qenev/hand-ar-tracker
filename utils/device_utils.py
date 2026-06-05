@@ -38,3 +38,7 @@ def list_available_devices() -> List[Dict[str, str]]:
         devices = _add_mps_device(devices)
     return devices
 
+
+def _add_cuda_devices(
+    devices: List[Dict[str, str]],
+) -> List[Dict[str, str]]:
