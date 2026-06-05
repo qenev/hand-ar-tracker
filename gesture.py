@@ -202,3 +202,5 @@ def _is_peace_sign(finger_states: List[bool]) -> bool:
     Requires the index and middle fingers to be extended while
     the ring and pinky fingers are curled. Thumb state is ignored.
 
+    Args:
+        finger_states: List of 5 booleans for finger extension states.
