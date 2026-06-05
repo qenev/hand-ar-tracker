@@ -54,3 +54,7 @@ def _add_cuda_devices(
         cuda_count = torch.cuda.device_count()
         for i in range(cuda_count):
             device_name = torch.cuda.get_device_name(i)
+            devices.append({
+                "index": len(devices),
+                "type": f"cuda:{i}",
+                "name": f"CUDA:{i} -- {device_name}",
