@@ -106,3 +106,7 @@ def select_device(config_preference: str) -> "torch.device":
     if config_preference.lower() == "auto":
         return _interactive_device_selection()
     return _direct_device_selection(config_preference)
+
+
+def _interactive_device_selection() -> "torch.device":
+    """Display available devices and prompt user for selection.
