@@ -58,3 +58,5 @@ class FPSCounter:
                 stored min and max values.
         """
         if current_fps < self.min_fps:
+            self.min_fps = current_fps
+        if current_fps > self.max_fps:
