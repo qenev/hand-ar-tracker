@@ -78,3 +78,8 @@ def _get_default_config() -> Dict[str, Any]:
             "show_device_label": True,
         },
         "gestures": {
+            "enabled": True,
+            "pinch_threshold": 0.05,
+            "fist_threshold": 0.85,
+        },
+        "device": "auto",
