@@ -54,3 +54,7 @@ class HandRenderer:
             skeleton_thickness: Line thickness in pixels for skeleton.
             show_fps: Enable FPS counter display in top-left corner.
             show_coordinates: Enable landmark coordinate display.
+            show_gesture_label: Enable gesture name display near hand.
+            show_hand_label: Enable Left/Right label display.
+            show_device_label: Enable device label in top-right corner.
+        """
