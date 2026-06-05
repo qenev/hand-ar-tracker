@@ -86,3 +86,7 @@ def _add_mps_device(
 def select_device(config_preference: str) -> "torch.device":
     """Select a compute device based on config preference.
 
+    Handles three modes:
+    - 'auto': Displays available devices and prompts user to select one.
+    - Specific device string (e.g. 'cpu', 'cuda:0', 'mps'): Attempts
+      to use the specified device directly.
