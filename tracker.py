@@ -136,3 +136,5 @@ class HandTracker:
         Args:
             hand_landmarks: MediaPipe hand landmarks protobuf object
                 containing 21 landmark positions.
+
+        Returns:
