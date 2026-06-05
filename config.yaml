@@ -16,3 +16,4 @@ tracking:
   # Minimum confidence value ([0.0, 1.0]) for hand detection to be considered successful
   min_detection_confidence: 0.7
   # Minimum confidence value ([0.0, 1.0]) for hand landmarks to be tracked successfully
+  min_tracking_confidence: 0.6
