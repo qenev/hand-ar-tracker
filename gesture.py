@@ -226,3 +226,5 @@ def _is_open_hand(finger_states: List[bool]) -> bool:
     Requires all five fingers including the thumb to be extended.
 
     Args:
+        finger_states: List of 5 booleans for finger extension states.
+
