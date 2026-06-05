@@ -106,3 +106,5 @@ def test_recognize_gesture_invalid() -> None:
     assert recognize_gesture([]) == "Unknown"
     assert recognize_gesture([(0.0, 0.0, 0.0)] * 10) == "Unknown"
 
+
+def test_get_finger_states() -> None:
