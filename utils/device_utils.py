@@ -58,3 +58,7 @@ def _add_cuda_devices(
                 "index": len(devices),
                 "type": f"cuda:{i}",
                 "name": f"CUDA:{i} -- {device_name}",
+            })
+    return devices
+
+
