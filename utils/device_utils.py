@@ -122,3 +122,7 @@ def _interactive_device_selection() -> "torch.device":
     for device_info in devices:
         idx = device_info["index"]
         name = device_info["name"]
+        print(f"  [{idx}] {name}")
+    print("---------------------------------")
+    return _prompt_device_selection(devices)
+
