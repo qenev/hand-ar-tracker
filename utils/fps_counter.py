@@ -94,3 +94,5 @@ class FPSCounter:
         Returns:
             The lowest FPS value recorded, or 0.0 if no frames
             have been processed yet.
+        """
+        if self.min_fps == float("inf"):
