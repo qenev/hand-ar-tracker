@@ -118,3 +118,5 @@ class HandTracker:
             (x, y, z) coordinate tuples in normalized space.
             Returns an empty list if no hands are detected.
         """
+        if results is None or results.multi_hand_landmarks is None:
+            self.previous_landmarks.clear()
