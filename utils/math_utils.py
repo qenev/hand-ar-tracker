@@ -118,3 +118,6 @@ def landmark_to_pixel(
 
     MediaPipe returns landmarks in normalized [0, 1] coordinate space.
     This function maps them to actual pixel positions in the frame.
+
+    Args:
+        landmark_x: Normalized x coordinate from MediaPipe (0.0 to 1.0).
