@@ -138,3 +138,7 @@ def _prompt_device_selection(
 
     Returns:
         The selected torch.device based on user input. Falls back
+        to CPU on invalid input or errors.
+    """
+    try:
+        choice = input("Select device by number [0]: ").strip()
