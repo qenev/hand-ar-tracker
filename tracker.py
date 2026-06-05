@@ -82,3 +82,5 @@ class HandTracker:
         self,
         frame: np.ndarray,
     ) -> Optional[Any]:
+        """Process a single video frame for hand detection.
+
