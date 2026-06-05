@@ -37,3 +37,6 @@ def calculate_distance_2d(
 
     Args:
         point_a: First point as (x, y) tuple.
+        point_b: Second point as (x, y) tuple.
+
+    Returns:
