@@ -190,3 +190,7 @@ class HandRenderer:
                 point,
                 self.keypoint_radius,
                 self.keypoint_color,
+                cv2.FILLED,
+                cv2.LINE_AA,
+            )
+        return frame
