@@ -42,3 +42,5 @@ class FPSCounter:
 
         Should be called once per frame at the point where you want
         to measure the frame rate. Updates internal statistics.
+        """
+        current_time = time.perf_counter()
