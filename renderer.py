@@ -322,3 +322,7 @@ class HandRenderer:
     ) -> np.ndarray:
         """Draw the active device label in the top-right corner.
 
+        Shows which compute device (CPU/CUDA/MPS) is currently
+        active as a text overlay.
+
+        Args:
