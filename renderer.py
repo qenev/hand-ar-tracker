@@ -22,3 +22,7 @@ class HandRenderer:
     hand landmarks and configuration settings.
 
     Attributes:
+        skeleton_color: BGR color tuple for skeleton lines.
+        keypoint_color: BGR color tuple for keypoint dots.
+        keypoint_radius: Pixel radius for keypoint circles.
+        skeleton_thickness: Pixel thickness for skeleton lines.
