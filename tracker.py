@@ -128,3 +128,5 @@ class HandTracker:
         return all_hands
 
     def _parse_single_hand(
+        self,
+        hand_landmarks: Any,
