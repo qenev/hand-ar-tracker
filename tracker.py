@@ -106,3 +106,5 @@ class HandTracker:
         results: Any,
     ) -> List[List[Tuple[float, float, float]]]:
         """Extract landmark coordinates from MediaPipe results.
+
+        Converts the MediaPipe landmark protobuf objects into plain
