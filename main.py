@@ -3,3 +3,8 @@
 Initializes the webcam capture, hand tracker, gesture recognizer,
 renderer, and FPS counter. Runs the main processing loop that
 captures frames, detects hands, recognizes gestures, and renders
+the augmented reality overlay in real time.
+"""
+
+import sys
+from typing import Dict, Any, Optional
