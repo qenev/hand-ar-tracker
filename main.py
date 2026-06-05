@@ -283,3 +283,8 @@ def run_main_loop(
         key = cv2.waitKey(1) & 0xFF
         if key == ord("q") or key == 27:
             break
+
+
+def cleanup(
+    cap: cv2.VideoCapture,
+    tracker: HandTracker,
