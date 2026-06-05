@@ -199,3 +199,6 @@ def vector_magnitude(vector: Tuple[float, float, float]) -> float:
 
 def dot_product(
     vector_a: Tuple[float, float, float],
+    vector_b: Tuple[float, float, float],
+) -> float:
+    """Calculate the dot product of two 3D vectors.
