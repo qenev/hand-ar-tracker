@@ -38,3 +38,5 @@ def make_open_hand_landmarks() -> List[Tuple[float, float, float]]:
     lms[16] = (-0.1, 0.2, 0.0)  # RING_TIP
     # PINKY
     lms[17] = (-0.2, 0.4, 0.0)  # PINKY_MCP
+    lms[18] = (-0.2, 0.35, 0.0)  # PINKY_PIP
+    lms[20] = (-0.2, 0.2, 0.0)  # PINKY_TIP

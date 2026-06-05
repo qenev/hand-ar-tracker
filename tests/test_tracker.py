@@ -38,3 +38,5 @@ def test_extract_landmarks_empty(mock_hands: MagicMock) -> None:
     assert tracker.extract_landmarks(None) == []
 
 
+@patch("mediapipe.solutions.hands.Hands")
+def test_extract_handedness_empty(mock_hands: MagicMock) -> None:

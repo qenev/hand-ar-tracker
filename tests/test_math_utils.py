@@ -38,3 +38,5 @@ def test_calculate_distance() -> None:
 
 def test_calculate_distance_2d() -> None:
     """Test 2D Euclidean distance calculation."""
+    pt1 = (0.0, 0.0)
+    pt2 = (3.0, 4.0)
