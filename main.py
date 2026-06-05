@@ -48,3 +48,8 @@ def load_config(config_path: str = "config.yaml") -> Dict[str, Any]:
 def _get_default_config() -> Dict[str, Any]:
     """Return the default configuration dictionary.
 
+    Provides sensible defaults for all configuration parameters
+    so the application can run without a config file.
+
+    Returns:
+        Dictionary with default values for all config sections.
