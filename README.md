@@ -115,3 +115,16 @@ The application includes a device selection system that determines whether PyTor
 
 When `device` in `config.yaml` is set to `"auto"` (the default), the application checks for CUDA availability at startup. If a compatible GPU is detected, the user is prompted to confirm GPU usage. If declined, the system falls back to CPU.
 
+### Configuration override
+
+Setting `device` to `"cuda"` or `"cpu"` in `config.yaml` bypasses the interactive prompt entirely. The application will attempt to use the specified device directly.
+
+- `"cuda"` -- Forces GPU usage. If no compatible GPU is found, the application falls back to CPU and logs a warning.
+- `"cpu"` -- Forces CPU usage regardless of GPU availability.
+- `"auto"` -- Prompts the user at startup if a GPU is detected.
+
+### Example configuration
+
+```yaml
+device: "auto"   # Options: "auto", "cuda", "cpu"
+```
