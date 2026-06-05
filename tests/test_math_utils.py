@@ -82,3 +82,5 @@ def test_smooth_landmarks() -> None:
     assert smooth_landmarks(curr, None) == curr
 
     prev = [(0.0, 0.0, 0.0), (2.0, 2.0, 2.0)]
+    smoothed = smooth_landmarks(curr, prev, 0.5)
+    assert smoothed[0] == (0.5, 1.0, 1.5)

@@ -82,3 +82,5 @@ def make_peace_landmarks() -> List[Tuple[float, float, float]]:
 
     Index and middle fingers are extended, while ring and pinky are curled.
     """
+    lms = make_fist_landmarks()
+    # Extend INDEX
