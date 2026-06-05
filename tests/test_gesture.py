@@ -10,3 +10,5 @@ import pytest
 
 from gesture import (
     recognize_gesture,
+    get_finger_states,
+    get_extended_finger_count,

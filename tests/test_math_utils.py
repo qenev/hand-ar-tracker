@@ -10,3 +10,5 @@ from typing import List, Tuple
 import pytest
 
 from utils.math_utils import (
+    calculate_distance,
+    calculate_distance_2d,

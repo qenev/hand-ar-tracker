@@ -10,3 +10,5 @@ from unittest.mock import MagicMock
 
 # Create mock objects for the missing mediapipe submodules
 mock_solutions = MagicMock()
+mock_hands = MagicMock()
+

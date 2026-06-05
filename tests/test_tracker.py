@@ -10,3 +10,5 @@ from tracker import HandTracker, LANDMARK_NAMES, HAND_CONNECTIONS
 
 
 def test_constants() -> None:
+    """Test tracker metadata constants."""
+    assert len(LANDMARK_NAMES) == 21
