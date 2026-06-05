@@ -50,3 +50,16 @@ Follow these steps to set up the project from scratch:
 
    ```bash
    git clone https://github.com/your-username/hand-ar-tracker.git
+   cd hand-ar-tracker
+   ```
+
+2. **Create a virtual environment**
+
+   ```bash
+   python -m venv venv
+   ```
+
+   Activate the virtual environment:
+
+   - Windows:
+     ```bash
