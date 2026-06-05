@@ -142,3 +142,7 @@ def _prompt_device_selection(
     """
     try:
         choice = input("Select device by number [0]: ").strip()
+        if choice == "":
+            choice = "0"
+        idx = int(choice)
+        if 0 <= idx < len(devices):
