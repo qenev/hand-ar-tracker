@@ -70,3 +70,7 @@ class HandRenderer:
         self._font = cv2.FONT_HERSHEY_SIMPLEX
         self._font_scale = 0.5
         self._font_thickness = 1
+        self._text_color = (255, 255, 255)
+        self._bg_color = (0, 0, 0)
+
+    def draw_hand(
