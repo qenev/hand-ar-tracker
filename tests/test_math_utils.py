@@ -122,3 +122,5 @@ def test_midpoint() -> None:
     """Test computing midpoint between two points."""
     pt_a = (1.0, 2.0, 3.0)
     pt_b = (3.0, 4.0, 5.0)
+    assert midpoint(pt_a, pt_b) == (2.0, 3.0, 4.0)
+

@@ -122,3 +122,5 @@ def test_recognize_gestures() -> None:
     """Test gesture classification for different hand poses."""
     assert recognize_gesture(make_open_hand_landmarks()) == "Open Hand"
     assert recognize_gesture(make_fist_landmarks()) == "Fist"
+    assert recognize_gesture(make_peace_landmarks()) == "Peace"
+    assert recognize_gesture(make_pinch_landmarks()) == "Pinch"
