@@ -11,3 +11,16 @@ Hand AR Tracker is a real-time hand and finger tracking augmented reality system
 - Green skeletal mesh overlay connecting keypoints along anatomically correct finger and palm connections
 - Red keypoint dots rendered at each of the 21 landmark positions
 - Gesture recognition supporting 5 distinct gestures (Pinch, Fist, Open Hand, Peace, Thumbs Up)
+- Real-time FPS counter displayed on the video feed
+- Coordinate display showing landmark positions in pixel space
+- GPU/CPU device selection with automatic detection and manual override
+- YAML-based configuration system for all tunable parameters
+- Graceful handling of 0, 1, or 2 hands in the camera frame without errors or visual artifacts
+
+---
+
+## Hardware Requirements
+
+### Minimum
+
+| Component       | Requirement                          |
