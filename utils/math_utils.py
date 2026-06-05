@@ -16,3 +16,6 @@ def calculate_distance(
 ) -> float:
     """Calculate the Euclidean distance between two 3D points.
 
+    Args:
+        point_a: First point as (x, y, z) tuple with normalized coordinates.
+        point_b: Second point as (x, y, z) tuple with normalized coordinates.
