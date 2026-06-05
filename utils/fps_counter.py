@@ -6,3 +6,5 @@ with support for min, max, and average statistics.
 """
 
 import time
+from collections import deque
+from typing import Optional
