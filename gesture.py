@@ -200,3 +200,5 @@ def _is_peace_sign(finger_states: List[bool]) -> bool:
     """Detect a peace sign (V sign) gesture.
 
     Requires the index and middle fingers to be extended while
+    the ring and pinky fingers are curled. Thumb state is ignored.
+
