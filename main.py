@@ -83,3 +83,8 @@ def _get_default_config() -> Dict[str, Any]:
             "fist_threshold": 0.85,
         },
         "device": "auto",
+    }
+
+
+def _merge_configs(
+    defaults: Dict[str, Any],
