@@ -85,3 +85,6 @@ def calculate_angle(
     angle_radians = math.acos(cosine)
     return math.degrees(angle_radians)
 
+
+def normalize_vector(
+    vector: Tuple[float, float, float],
