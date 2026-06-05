@@ -118,3 +118,5 @@ def test_get_finger_states() -> None:
     assert states == [False, False, False, False, False]
 
 
+def test_recognize_gestures() -> None:
+    """Test gesture classification for different hand poses."""

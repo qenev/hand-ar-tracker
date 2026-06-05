@@ -118,3 +118,5 @@ def test_cross_product() -> None:
     assert cross_product(vec_a, vec_b) == (0.0, 0.0, 1.0)
 
 
+def test_midpoint() -> None:
+    """Test computing midpoint between two points."""
