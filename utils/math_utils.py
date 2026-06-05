@@ -82,3 +82,6 @@ def calculate_angle(
         return 0.0
     cosine = dot_product / (magnitude_ba * magnitude_bc)
     cosine = max(-1.0, min(1.0, cosine))
+    angle_radians = math.acos(cosine)
+    return math.degrees(angle_radians)
+
