@@ -74,3 +74,5 @@ def test_landmark_to_pixel() -> None:
     height = 480
     assert landmark_to_pixel(0.5, 0.5, width, height) == (320, 240)
     assert landmark_to_pixel(-0.1, 1.2, width, height) == (0, 479)
+
+
