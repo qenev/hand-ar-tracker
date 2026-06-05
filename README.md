@@ -24,3 +24,16 @@ Hand AR Tracker is a real-time hand and finger tracking augmented reality system
 ### Minimum
 
 | Component       | Requirement                          |
+|-----------------|--------------------------------------|
+| Camera          | Any USB webcam (built-in or external)|
+| Python          | 3.10 or higher                       |
+| RAM             | 4 GB                                 |
+| CPU             | Any modern x86_64 or ARM processor   |
+| Operating System| Windows 10+, macOS 12+, or Linux     |
+
+### Recommended
+
+| Component       | Recommendation                              |
+|-----------------|---------------------------------------------|
+| GPU             | Dedicated NVIDIA GPU with CUDA support      |
+| Camera          | 1080p webcam for higher fidelity tracking   |
