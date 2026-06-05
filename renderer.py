@@ -302,3 +302,7 @@ class HandRenderer:
 
         Args:
             frame: Input video frame as BGR NumPy array.
+            fps_text: Formatted FPS string to display.
+
+        Returns:
+            Frame with FPS overlay drawn.
