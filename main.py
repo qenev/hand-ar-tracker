@@ -63,3 +63,8 @@ def _get_default_config() -> Dict[str, Any]:
         },
         "tracking": {
             "max_hands": 2,
+            "min_detection_confidence": 0.7,
+            "min_tracking_confidence": 0.6,
+        },
+        "renderer": {
+            "skeleton_color": [0, 255, 0],
