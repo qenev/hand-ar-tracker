@@ -262,3 +262,7 @@ class HandRenderer:
         Shows the normalized (x, y, z) coordinates as small text
         labels next to the fingertip landmarks only, to avoid
         cluttering the display.
+
+        Args:
+            frame: Input video frame as BGR NumPy array.
+            landmarks: List of (x, y, z) normalized coordinates.
