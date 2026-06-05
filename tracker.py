@@ -8,3 +8,5 @@ with configurable confidence thresholds.
 from typing import List, Tuple, Optional, Dict, Any
 
 import cv2
+import mediapipe as mp
+import numpy as np
