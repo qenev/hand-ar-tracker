@@ -108,3 +108,8 @@ def _merge_configs(
         if key in merged and isinstance(merged[key], dict) and isinstance(value, dict):
             merged[key] = _merge_configs(merged[key], value)
         else:
+            merged[key] = value
+    return merged
+
+
+def initialize_camera(config: Dict[str, Any]) -> cv2.VideoCapture:
