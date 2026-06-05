@@ -55,3 +55,6 @@ def calculate_angle(
     """Calculate the angle at point_b formed by points a, b, and c.
 
     Uses the dot product formula to compute the angle in degrees
+    at the vertex point_b between rays ba and bc.
+
+    Args:
