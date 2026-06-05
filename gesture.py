@@ -134,3 +134,5 @@ def _is_pinch(
     """Detect a pinch gesture between thumb and index finger.
 
     Measures the 3D distance between the thumb tip and index finger
+    tip landmarks and compares against the threshold.
+
