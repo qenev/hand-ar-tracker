@@ -128,3 +128,5 @@ def test_midpoint() -> None:
 def test_clamp() -> None:
     """Test value clamping utility."""
     assert math.isclose(clamp(5.0, 0.0, 10.0), 5.0)
+    assert math.isclose(clamp(-2.0, 0.0, 10.0), 0.0)
+    assert math.isclose(clamp(15.0, 0.0, 10.0), 10.0)
