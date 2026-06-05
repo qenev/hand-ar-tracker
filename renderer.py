@@ -246,3 +246,7 @@ class HandRenderer:
             return frame
         anchor = pixel_coords[9]
         text_position = (anchor[0] - 30, anchor[1] - 40)
+        frame = self._draw_text_with_background(
+            frame, gesture, text_position, scale=0.8
+        )
+        return frame
