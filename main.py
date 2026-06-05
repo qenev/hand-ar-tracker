@@ -148,3 +148,8 @@ def initialize_tracker(config: Dict[str, Any]) -> HandTracker:
         config: Configuration dictionary containing tracking settings
             under the 'tracking' key.
 
+    Returns:
+        A configured HandTracker instance ready for frame processing.
+    """
+    track_config = config["tracking"]
+    tracker = HandTracker(
