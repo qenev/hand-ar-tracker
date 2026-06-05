@@ -306,3 +306,7 @@ class HandRenderer:
 
         Returns:
             Frame with FPS overlay drawn.
+        """
+        if not self.show_fps:
+            return frame
+        position = (10, 30)
