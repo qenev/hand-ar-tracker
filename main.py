@@ -258,3 +258,8 @@ def run_main_loop(
     and gesture recognition, renders overlays, and displays results.
     Exits on 'q' key press or Escape key.
 
+    Args:
+        cap: Opened video capture device.
+        tracker: Configured hand tracker instance.
+        renderer: Configured hand renderer instance.
+        fps_counter: FPS counter for performance monitoring.
