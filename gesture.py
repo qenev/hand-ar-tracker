@@ -46,3 +46,5 @@ def recognize_gesture(
 ) -> str:
     """Identify the current hand gesture from landmark positions.
 
+    Analyzes the 21 hand landmarks to determine which gesture is
+    being performed. Checks gestures in priority order: pinch first,
