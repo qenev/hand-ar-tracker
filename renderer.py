@@ -170,3 +170,7 @@ class HandRenderer:
     def _draw_keypoints(
         self,
         frame: np.ndarray,
+        pixel_coords: List[Tuple[int, int]],
+    ) -> np.ndarray:
+        """Draw circular markers on each hand landmark.
+
