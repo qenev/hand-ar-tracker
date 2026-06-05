@@ -278,3 +278,7 @@ class HandRenderer:
                 px, py = pixel_coords[idx]
                 coord_text = f"({lm[0]:.2f},{lm[1]:.2f})"
                 text_pos = (px + 10, py + 5)
+                cv2.putText(
+                    frame,
+                    coord_text,
+                    text_pos,
