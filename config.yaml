@@ -19,3 +19,4 @@ tracking:
   min_tracking_confidence: 0.6
 
 renderer:
+  # BGR color values for skeleton connections [Blue, Green, Red]
