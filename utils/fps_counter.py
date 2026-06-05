@@ -96,3 +96,49 @@ class FPSCounter:
             have been processed yet.
         """
         if self.min_fps == float("inf"):
+            return 0.0
+        return self.min_fps
+
+    def get_max_fps(self) -> float:
+        """Get the maximum FPS observed since initialization or last reset.
+
+        Returns:
+            The highest FPS value recorded since initialization
+            or last reset.
+        """
+        return self.max_fps
+
+    def get_statistics_string(self) -> str:
+        """Get a formatted string with FPS statistics.
+
+        Returns:
+            A string containing current, min, and max FPS values
+            formatted for display overlay.
+        """
+        current = self.get_fps()
+        minimum = self.get_min_fps()
+        maximum = self.get_max_fps()
+        return (
+            f"FPS: {current:.1f} | "
+            f"Min: {minimum:.1f} | "
+            f"Max: {maximum:.1f}"
+        )
+
+    def get_frame_count(self) -> int:
+        """Get the total number of frames recorded.
+
+        Returns:
+            The total frame count since initialization or last reset.
+        """
+        return self._frame_count
+
+    def reset(self) -> None:
+        """Reset the FPS counter, clearing all stored data.
+
+        Clears the timestamp buffer and resets all statistics
+        to their initial values.
+        """
+        self.timestamps.clear()
+        self.min_fps = float("inf")
+        self.max_fps = 0.0
+        self._frame_count = 0
