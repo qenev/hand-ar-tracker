@@ -46,3 +46,5 @@ def test_extract_handedness_empty(mock_hands: MagicMock) -> None:
 
 
 @patch("mediapipe.solutions.hands.Hands")
+def test_smoothing(mock_hands: MagicMock) -> None:
+    """Test landmark smoothing buffer management."""
