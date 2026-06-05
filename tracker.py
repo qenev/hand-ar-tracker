@@ -86,3 +86,5 @@ class HandTracker:
 
         Converts the frame from BGR to RGB color space as required
         by MediaPipe, then runs the hand detection pipeline.
+
+        Args:
