@@ -226,3 +226,6 @@ def cross_product(
     Returns:
         The cross product vector as (x, y, z) tuple.
     """
+    return (
+        vector_a[1] * vector_b[2] - vector_a[2] * vector_b[1],
+        vector_a[2] * vector_b[0] - vector_a[0] * vector_b[2],
