@@ -358,3 +358,7 @@ class HandRenderer:
 
         Returns:
             Frame with the informational message drawn.
+        """
+        height, width = frame.shape[:2]
+        message = "No hands detected - show hands to camera"
+        text_size = cv2.getTextSize(
