@@ -235,3 +235,33 @@ def cross_product(
 
 def midpoint(
     point_a: Tuple[float, float, float],
+    point_b: Tuple[float, float, float],
+) -> Tuple[float, float, float]:
+    """Calculate the midpoint between two 3D points.
+
+    Args:
+        point_a: First point as (x, y, z) tuple.
+        point_b: Second point as (x, y, z) tuple.
+
+    Returns:
+        The midpoint as (x, y, z) tuple.
+    """
+    return (
+        (point_a[0] + point_b[0]) / 2.0,
+        (point_a[1] + point_b[1]) / 2.0,
+        (point_a[2] + point_b[2]) / 2.0,
+    )
+
+
+def clamp(value: float, min_val: float, max_val: float) -> float:
+    """Clamp a value to a specified range.
+
+    Args:
+        value: The input value to clamp.
+        min_val: The minimum allowed value.
+        max_val: The maximum allowed value.
+
+    Returns:
+        The clamped value, guaranteed to be within [min_val, max_val].
+    """
+    return max(min_val, min(max_val, value))
