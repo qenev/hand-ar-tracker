@@ -183,3 +183,8 @@ def initialize_renderer(config: Dict[str, Any]) -> HandRenderer:
         show_hand_label=rend_config["show_hand_label"],
         show_device_label=rend_config["show_device_label"],
     )
+    print("[INFO] Renderer initialized.")
+    return renderer
+
+
+def process_hands(
