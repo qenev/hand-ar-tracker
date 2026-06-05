@@ -175,3 +175,6 @@ def vector_between(
         point_a: Starting point as (x, y, z) tuple.
         point_b: Ending point as (x, y, z) tuple.
 
+    Returns:
+        The direction vector from point_a to point_b as (x, y, z) tuple.
+    """
