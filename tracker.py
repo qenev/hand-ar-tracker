@@ -80,3 +80,5 @@ class HandTracker:
 
     def process_frame(
         self,
+        frame: np.ndarray,
+    ) -> Optional[Any]:
