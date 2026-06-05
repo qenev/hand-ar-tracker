@@ -390,3 +390,7 @@ class HandRenderer:
             scale: Font scale multiplier for text size.
 
         Returns:
+            Frame with background-highlighted text drawn.
+        """
+        text_size = cv2.getTextSize(
+            text, self._font, scale, self._font_thickness
