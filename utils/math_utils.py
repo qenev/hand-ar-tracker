@@ -106,3 +106,6 @@ def normalize_vector(
         vector[1] / magnitude,
         vector[2] / magnitude,
     )
+
+
+def landmark_to_pixel(
