@@ -32,3 +32,5 @@ def test_tracker_initialization(mock_hands: MagicMock) -> None:
 
 
 @patch("mediapipe.solutions.hands.Hands")
+def test_extract_landmarks_empty(mock_hands: MagicMock) -> None:
+    """Test landmarks extraction when no hands are detected."""

@@ -32,3 +32,5 @@ def make_open_hand_landmarks() -> List[Tuple[float, float, float]]:
     lms[9] = (0.0, 0.4, 0.0)  # MIDDLE_MCP
     lms[10] = (0.0, 0.35, 0.0)  # MIDDLE_PIP
     lms[12] = (0.0, 0.2, 0.0)  # MIDDLE_TIP
+    # RING
+    lms[13] = (-0.1, 0.4, 0.0)  # RING_MCP

@@ -32,3 +32,5 @@ def test_calculate_distance() -> None:
     assert math.isclose(calculate_distance(pt1, pt2), 5.0)
 
     pt3 = (-1.0, -1.0, -1.0)
+    pt4 = (1.0, 1.0, 1.0)
+    assert math.isclose(calculate_distance(pt3, pt4), math.sqrt(12.0))
