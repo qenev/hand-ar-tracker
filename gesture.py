@@ -142,3 +142,5 @@ def _is_pinch(
 
     Returns:
         True if the thumb and index tips are closer than threshold.
+    """
+    thumb_tip = landmarks[THUMB_TIP]
