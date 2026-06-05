@@ -142,3 +142,6 @@ def smooth_landmarks(
 
     Reduces jitter in hand landmark positions by blending the current
     frame landmarks with the previous frame using a weighted average.
+
+    Args:
+        current: List of current frame landmark positions as (x, y, z) tuples.
