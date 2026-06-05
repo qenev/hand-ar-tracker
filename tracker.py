@@ -44,3 +44,5 @@ class HandTracker:
     Attributes:
         max_hands: Maximum number of hands to detect simultaneously.
         min_detection_confidence: Minimum confidence for initial detection.
+        min_tracking_confidence: Minimum confidence for frame-to-frame tracking.
+        hands: The underlying MediaPipe Hands solution instance.
