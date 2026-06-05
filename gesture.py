@@ -188,3 +188,5 @@ def _is_thumbs_up(
     """
     thumb_extended = finger_states[0]
     others_curled = all(not state for state in finger_states[1:])
+    if not (thumb_extended and others_curled):
+        return False
