@@ -182,3 +182,7 @@ class HandRenderer:
             pixel_coords: List of pixel coordinate tuples for each landmark.
 
         Returns:
+            Frame with keypoint dots drawn.
+        """
+        for point in pixel_coords:
+            cv2.circle(
