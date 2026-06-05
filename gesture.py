@@ -14,3 +14,5 @@ from utils.math_utils import calculate_distance, calculate_angle
 WRIST = 0
 THUMB_CMC = 1
 THUMB_MCP = 2
+THUMB_IP = 3
+THUMB_TIP = 4
