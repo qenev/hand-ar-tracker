@@ -30,3 +30,5 @@ class FPSCounter:
             window_size: Number of recent frames to use for calculating
                 the rolling average FPS. Larger values produce smoother
                 readings but respond more slowly to changes.
+        """
+        self.window_size: int = max(1, window_size)
