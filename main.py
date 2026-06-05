@@ -268,3 +268,8 @@ def run_main_loop(
     """
     print("[INFO] Starting main loop. Press 'q' or ESC to quit.")
     window_name = "Hand AR Tracker"
+    cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
+    while True:
+        success, frame = cap.read()
+        if not success:
+            print("[WARNING] Failed to capture frame, retrying...")
