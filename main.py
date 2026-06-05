@@ -128,3 +128,8 @@ def initialize_camera(config: Dict[str, Any]) -> cv2.VideoCapture:
     Raises:
         SystemExit: If the camera cannot be opened.
     """
+    cam_config = config["camera"]
+    cap = cv2.VideoCapture(cam_config["index"])
+    if not cap.isOpened():
+        print("[ERROR] Cannot open camera. Check camera index in config.yaml.")
+        sys.exit(1)
