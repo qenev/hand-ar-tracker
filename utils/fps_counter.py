@@ -54,3 +54,5 @@ class FPSCounter:
         """Update min and max FPS statistics.
 
         Args:
+            current_fps: The current FPS reading to compare against
+                stored min and max values.
