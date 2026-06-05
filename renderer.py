@@ -282,3 +282,7 @@ class HandRenderer:
                     frame,
                     coord_text,
                     text_pos,
+                    self._font,
+                    0.35,
+                    self._text_color,
+                    1,
