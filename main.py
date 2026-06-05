@@ -58,3 +58,8 @@ def _get_default_config() -> Dict[str, Any]:
         "camera": {
             "index": 0,
             "width": 1280,
+            "height": 720,
+            "fps": 30,
+        },
+        "tracking": {
+            "max_hands": 2,
