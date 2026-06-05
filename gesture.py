@@ -54,3 +54,5 @@ def recognize_gesture(
         landmarks: List of 21 (x, y, z) tuples representing hand
             landmark positions in normalized coordinates.
         pinch_threshold: Maximum distance between thumb tip and index
+            tip to register as a pinch gesture.
+        fist_threshold: Minimum ratio of curled fingers to total
