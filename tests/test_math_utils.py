@@ -66,3 +66,5 @@ def test_normalize_vector() -> None:
 
     zero_vec = (0.0, 0.0, 0.0)
     assert normalize_vector(zero_vec) == (0.0, 0.0, 0.0)
+
+
