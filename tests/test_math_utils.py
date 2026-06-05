@@ -114,3 +114,5 @@ def test_dot_product() -> None:
 def test_cross_product() -> None:
     """Test computing cross product of two vectors."""
     vec_a = (1.0, 0.0, 0.0)
+    vec_b = (0.0, 1.0, 0.0)
+    assert cross_product(vec_a, vec_b) == (0.0, 0.0, 1.0)
