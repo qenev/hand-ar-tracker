@@ -86,3 +86,5 @@ class FPSCounter:
         Returns:
             A string like "FPS: 30.5" with one decimal place precision.
         """
+        return f"FPS: {self.get_fps():.1f}"
+
