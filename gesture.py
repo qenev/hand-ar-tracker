@@ -92,3 +92,5 @@ def get_finger_states(
 
     Returns:
         A list of 5 booleans corresponding to [thumb, index, middle,
+        ring, pinky]. True means the finger is extended.
+    """
