@@ -12,3 +12,5 @@ import pytest
 from utils.math_utils import (
     calculate_distance,
     calculate_distance_2d,
+    calculate_angle,
+    normalize_vector,

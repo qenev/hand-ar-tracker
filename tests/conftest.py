@@ -12,3 +12,5 @@ from unittest.mock import MagicMock
 mock_solutions = MagicMock()
 mock_hands = MagicMock()
 
+# Inject the mocks into sys.modules so imports and getattr operations succeed
+sys.modules["mediapipe.solutions"] = mock_solutions
