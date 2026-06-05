@@ -68,3 +68,5 @@ class FPSCounter:
         Computes the average frame rate over the timestamps stored
         in the rolling window.
 
+        Returns:
+            The current FPS as a float. Returns 0.0 if fewer than
