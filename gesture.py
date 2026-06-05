@@ -80,3 +80,5 @@ def recognize_gesture(
 
 def get_finger_states(
     landmarks: List[Tuple[float, float, float]],
+) -> List[bool]:
+    """Determine the extended/curled state of each finger.
