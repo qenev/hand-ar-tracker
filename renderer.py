@@ -290,3 +290,7 @@ class HandRenderer:
                 )
         return frame
 
+    def draw_fps(
+        self,
+        frame: np.ndarray,
+        fps_text: str,
