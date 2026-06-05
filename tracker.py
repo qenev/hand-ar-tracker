@@ -150,3 +150,5 @@ class HandTracker:
         return landmarks
 
     def extract_handedness(
+        self,
+        results: Any,
