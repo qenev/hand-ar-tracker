@@ -60,3 +60,5 @@ def test_normalize_vector() -> None:
     """Test 3D vector normalization."""
     vec = (3.0, 0.0, 4.0)
     norm = normalize_vector(vec)
+    assert math.isclose(norm[0], 0.6)
+    assert math.isclose(norm[1], 0.0)
