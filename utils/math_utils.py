@@ -205,3 +205,6 @@ def dot_product(
 
     Args:
         vector_a: First vector as (x, y, z) tuple.
+        vector_b: Second vector as (x, y, z) tuple.
+
+    Returns:
