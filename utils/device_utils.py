@@ -126,3 +126,7 @@ def _interactive_device_selection() -> "torch.device":
     print("---------------------------------")
     return _prompt_device_selection(devices)
 
+
+def _prompt_device_selection(
+    devices: List[Dict[str, str]],
+) -> "torch.device":
