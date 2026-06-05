@@ -23,3 +23,4 @@ renderer:
   skeleton_color: [0, 255, 0]
   # BGR color values for landmark keypoints [Blue, Green, Red]
   keypoint_color: [0, 0, 255]
+  # Radius in pixels for drawing landmark keypoints
