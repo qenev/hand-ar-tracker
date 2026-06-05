@@ -146,3 +146,7 @@ class HandRenderer:
         Draws lines between connected landmarks as defined by
         the HAND_CONNECTIONS topology.
 
+        Args:
+            frame: Input video frame as BGR NumPy array.
+            pixel_coords: List of pixel coordinate tuples for each landmark.
+
