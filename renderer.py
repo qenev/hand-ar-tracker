@@ -18,3 +18,7 @@ class HandRenderer:
     """Renders hand tracking visualization overlays on video frames.
 
     Draws the skeletal mesh, keypoint markers, text labels, and
+    diagnostic information onto OpenCV frames based on detected
+    hand landmarks and configuration settings.
+
+    Attributes:
