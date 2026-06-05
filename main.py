@@ -23,3 +23,8 @@ from utils.device_utils import select_device, get_device_label
 def load_config(config_path: str = "config.yaml") -> Dict[str, Any]:
     """Load and validate the configuration from a YAML file.
 
+    Reads the config.yaml file and merges with default values
+    for any missing fields to ensure all required settings exist.
+
+    Args:
+        config_path: Path to the YAML configuration file.
