@@ -278,3 +278,8 @@ def run_main_loop(
         fps_counter.tick()
         frame = process_hands(frame, tracker, renderer, config)
         frame = renderer.draw_fps(frame, fps_counter.get_fps_string())
+        frame = renderer.draw_device_label(frame, device_label)
+        cv2.imshow(window_name, frame)
+        key = cv2.waitKey(1) & 0xFF
+        if key == ord("q") or key == 27:
+            break
