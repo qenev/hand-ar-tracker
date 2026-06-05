@@ -213,3 +213,8 @@ def process_hands(
     if len(all_landmarks) == 0:
         frame = renderer.draw_no_hands_message(frame)
         return frame
+    gesture_config = config["gestures"]
+    for i, landmarks in enumerate(all_landmarks):
+        smoothed = tracker.get_smoothed_landmarks(i, landmarks)
+        label = hand_labels[i] if i < len(hand_labels) else ""
+        gesture = _get_gesture(smoothed, gesture_config)
