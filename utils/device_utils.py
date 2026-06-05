@@ -98,3 +98,7 @@ def select_device(config_preference: str) -> "torch.device":
             like 'cpu', 'cuda:0', or 'mps' for direct selection.
 
     Returns:
+        A torch.device object representing the selected compute device.
+    """
+    if torch is None:
+        print("[WARNING] PyTorch not available, using CPU.")
