@@ -16,3 +16,5 @@ def test_constants() -> None:
     assert len(HAND_CONNECTIONS) > 0
 
 
+@patch("mediapipe.solutions.hands.Hands")
+def test_tracker_initialization(mock_hands: MagicMock) -> None:

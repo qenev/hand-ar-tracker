@@ -16,3 +16,5 @@ from gesture import (
 )
 
 
+def make_open_hand_landmarks() -> List[Tuple[float, float, float]]:
+    """Helper to generate mock landmarks for an open hand gesture.

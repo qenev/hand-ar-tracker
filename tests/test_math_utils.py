@@ -16,3 +16,5 @@ from utils.math_utils import (
     normalize_vector,
     landmark_to_pixel,
     smooth_landmarks,
+    vector_between,
+    vector_magnitude,

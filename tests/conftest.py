@@ -16,3 +16,5 @@ mock_hands = MagicMock()
 sys.modules["mediapipe.solutions"] = mock_solutions
 sys.modules["mediapipe.solutions.hands"] = mock_hands
 
+# Also bind them to the mediapipe module if it is already loaded
+try:
