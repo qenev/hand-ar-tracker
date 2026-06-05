@@ -162,3 +162,7 @@ class HandRenderer:
                     start_point,
                     end_point,
                     self.skeleton_color,
+                    self.skeleton_thickness,
+                    cv2.LINE_AA,
+                )
+        return frame
