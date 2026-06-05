@@ -20,3 +20,5 @@ from utils.math_utils import (
     vector_magnitude,
     dot_product,
     cross_product,
+    midpoint,
+    clamp,

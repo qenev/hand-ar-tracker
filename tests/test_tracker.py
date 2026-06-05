@@ -20,3 +20,5 @@ def test_constants() -> None:
 def test_tracker_initialization(mock_hands: MagicMock) -> None:
     """Test HandTracker initialization with custom parameters."""
     tracker = HandTracker(
+        max_hands=1,
+        min_detection_confidence=0.8,

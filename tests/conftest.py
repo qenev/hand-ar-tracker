@@ -20,3 +20,5 @@ sys.modules["mediapipe.solutions.hands"] = mock_hands
 try:
     import mediapipe as mp
     mp.solutions = mock_solutions
+    mock_solutions.hands = mock_hands
+except ImportError:
