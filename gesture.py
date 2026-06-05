@@ -120,3 +120,5 @@ def _is_thumb_extended(
         True if the thumb appears to be extended outward.
     """
     thumb_tip = landmarks[THUMB_TIP]
+    thumb_mcp = landmarks[THUMB_MCP]
+    index_mcp = landmarks[INDEX_MCP]
