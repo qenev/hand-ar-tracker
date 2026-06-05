@@ -27,3 +27,4 @@ renderer:
   keypoint_radius: 6
   # Line thickness in pixels for drawing skeleton lines
   skeleton_thickness: 2
+  # Show rolling average FPS counter on screen
