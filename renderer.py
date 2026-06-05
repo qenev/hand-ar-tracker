@@ -106,3 +106,7 @@ class HandRenderer:
             )
         if self.show_gesture_label and gesture_label:
             frame = self._draw_gesture_label(
+                frame, pixel_coords, gesture_label
+            )
+        if self.show_coordinates:
+            frame = self._draw_coordinates(
