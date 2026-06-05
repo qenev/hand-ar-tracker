@@ -34,3 +34,4 @@ renderer:
   # Show gesture name overlay near the hand
   show_gesture_label: true
   # Show Left/Right hand labels near the wrist
+  show_hand_label: true
