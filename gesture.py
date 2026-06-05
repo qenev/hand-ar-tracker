@@ -44,3 +44,5 @@ def recognize_gesture(
     pinch_threshold: float = 0.05,
     fist_threshold: float = 0.85,
 ) -> str:
+    """Identify the current hand gesture from landmark positions.
+
