@@ -58,3 +58,6 @@ def calculate_angle(
     at the vertex point_b between rays ba and bc.
 
     Args:
+        point_a: First endpoint as (x, y, z) tuple.
+        point_b: Vertex point as (x, y, z) tuple.
+        point_c: Second endpoint as (x, y, z) tuple.
