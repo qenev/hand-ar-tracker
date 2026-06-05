@@ -98,3 +98,5 @@ def make_pinch_landmarks() -> List[Tuple[float, float, float]]:
     lms = make_open_hand_landmarks()
     lms[4] = (0.1, 0.2, 0.0)  # THUMB_TIP
     lms[8] = (0.1, 0.2, 0.0)  # INDEX_TIP
+    return lms
+

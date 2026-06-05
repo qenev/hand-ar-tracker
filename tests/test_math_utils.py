@@ -98,3 +98,5 @@ def test_vector_between() -> None:
     assert vector_between(pt_a, pt_b) == (3.0, 4.0, 5.0)
 
 
+def test_vector_magnitude() -> None:
+    """Test computing vector magnitude."""
