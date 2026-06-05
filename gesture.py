@@ -186,3 +186,5 @@ def _is_thumbs_up(
     Returns:
         True if the hand is showing a thumbs up gesture.
     """
+    thumb_extended = finger_states[0]
+    others_curled = all(not state for state in finger_states[1:])
