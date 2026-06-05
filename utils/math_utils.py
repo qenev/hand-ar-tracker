@@ -232,3 +232,6 @@ def cross_product(
         vector_a[0] * vector_b[1] - vector_a[1] * vector_b[0],
     )
 
+
+def midpoint(
+    point_a: Tuple[float, float, float],
