@@ -103,3 +103,6 @@ def normalize_vector(
         return (0.0, 0.0, 0.0)
     return (
         vector[0] / magnitude,
+        vector[1] / magnitude,
+        vector[2] / magnitude,
+    )
