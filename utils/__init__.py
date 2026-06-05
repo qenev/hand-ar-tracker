@@ -19,3 +19,4 @@ from utils.device_utils import (
 )
 
 __all__ = [
+    "FPSCounter",
