@@ -386,3 +386,7 @@ class HandRenderer:
         Args:
             frame: Input video frame as BGR NumPy array.
             text: Text string to render.
+            position: (x, y) position for the text baseline origin.
+            scale: Font scale multiplier for text size.
+
+        Returns:
