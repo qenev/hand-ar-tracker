@@ -222,3 +222,7 @@ class HandRenderer:
             frame, label, text_position, scale=0.7
         )
         return frame
+
+    def _draw_gesture_label(
+        self,
+        frame: np.ndarray,
