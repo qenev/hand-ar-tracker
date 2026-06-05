@@ -62,3 +62,7 @@ def _add_cuda_devices(
     return devices
 
 
+def _add_mps_device(
+    devices: List[Dict[str, str]],
+) -> List[Dict[str, str]]:
+    """Add Apple Silicon MPS device if available.
