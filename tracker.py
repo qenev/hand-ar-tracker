@@ -54,3 +54,5 @@ class HandTracker:
         self,
         max_hands: int = 2,
         min_detection_confidence: float = 0.7,
+        min_tracking_confidence: float = 0.6,
+    ) -> None:
