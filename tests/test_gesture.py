@@ -134,3 +134,5 @@ def test_extended_finger_count() -> None:
 
 def test_get_gesture_confidence() -> None:
     """Test gesture confidence calculation."""
+    lms = make_pinch_landmarks()
+    # Distance is 0.0, confidence should be 1.0
