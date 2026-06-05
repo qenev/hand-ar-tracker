@@ -98,3 +98,5 @@ def get_finger_states(
     thumb_extended = _is_thumb_extended(landmarks)
     states.append(thumb_extended)
     for i in range(1, 5):
+        tip = landmarks[FINGER_TIP_INDICES[i]]
+        pip_joint = landmarks[FINGER_PIP_INDICES[i]]
