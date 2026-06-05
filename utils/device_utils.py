@@ -130,3 +130,7 @@ def _interactive_device_selection() -> "torch.device":
 def _prompt_device_selection(
     devices: List[Dict[str, str]],
 ) -> "torch.device":
+    """Prompt the user to select a device by index number.
+
+    Args:
+        devices: List of available device dictionaries with index,
