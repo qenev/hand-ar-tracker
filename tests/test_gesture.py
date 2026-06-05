@@ -100,3 +100,5 @@ def make_pinch_landmarks() -> List[Tuple[float, float, float]]:
     lms[8] = (0.1, 0.2, 0.0)  # INDEX_TIP
     return lms
 
+
+def test_recognize_gesture_invalid() -> None:

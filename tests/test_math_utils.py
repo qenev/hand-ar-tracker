@@ -100,3 +100,5 @@ def test_vector_between() -> None:
 
 def test_vector_magnitude() -> None:
     """Test computing vector magnitude."""
+    vec = (3.0, 4.0, 0.0)
+    assert math.isclose(vector_magnitude(vec), 5.0)
