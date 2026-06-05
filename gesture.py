@@ -60,3 +60,5 @@ def recognize_gesture(
 
     Returns:
         A string label for the detected gesture, or "Unknown" if
+        no known gesture pattern is matched.
+    """
