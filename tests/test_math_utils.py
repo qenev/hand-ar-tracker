@@ -48,3 +48,5 @@ def test_calculate_angle() -> None:
     pt_a = (1.0, 0.0, 0.0)
     pt_b = (0.0, 0.0, 0.0)
     pt_c = (0.0, 1.0, 0.0)
+    assert math.isclose(calculate_angle(pt_a, pt_b, pt_c), 90.0)
+
