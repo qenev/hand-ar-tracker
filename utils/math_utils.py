@@ -178,3 +178,6 @@ def vector_between(
     Returns:
         The direction vector from point_a to point_b as (x, y, z) tuple.
     """
+    return (
+        point_b[0] - point_a[0],
+        point_b[1] - point_a[1],
