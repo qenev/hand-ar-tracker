@@ -124,3 +124,5 @@ def test_recognize_gestures() -> None:
     assert recognize_gesture(make_fist_landmarks()) == "Fist"
     assert recognize_gesture(make_peace_landmarks()) == "Peace"
     assert recognize_gesture(make_pinch_landmarks()) == "Pinch"
+
+

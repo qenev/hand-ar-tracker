@@ -124,3 +124,5 @@ def test_midpoint() -> None:
     pt_b = (3.0, 4.0, 5.0)
     assert midpoint(pt_a, pt_b) == (2.0, 3.0, 4.0)
 
+
+def test_clamp() -> None:
