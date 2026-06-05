@@ -163,3 +163,8 @@ def initialize_tracker(config: Dict[str, Any]) -> HandTracker:
 
 def initialize_renderer(config: Dict[str, Any]) -> HandRenderer:
     """Create and configure the hand renderer instance.
+
+    Args:
+        config: Configuration dictionary containing renderer settings
+            under the 'renderer' key.
+
