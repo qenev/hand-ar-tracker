@@ -234,3 +234,7 @@ class HandRenderer:
         Places the gesture label above the middle finger MCP landmark
         with a semi-transparent background for readability.
 
+        Args:
+            frame: Input video frame as BGR NumPy array.
+            pixel_coords: List of pixel coordinate tuples.
+            gesture: Detected gesture name string.
