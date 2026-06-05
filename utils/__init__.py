@@ -22,3 +22,4 @@ __all__ = [
     "FPSCounter",
     "calculate_distance",
     "calculate_angle",
+    "normalize_vector",
