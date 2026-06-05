@@ -27,3 +27,4 @@ __all__ = [
     "smooth_landmarks",
     "list_available_devices",
     "select_device",
+    "get_device_label",
