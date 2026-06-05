@@ -148,3 +148,6 @@ def smooth_landmarks(
         previous: List of previous frame landmark positions, or None if
             this is the first frame.
         smoothing_factor: Weight for the current frame (0.0 to 1.0).
+            Higher values favor current frame data, lower values
+            produce smoother but more delayed tracking.
+
