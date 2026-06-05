@@ -208,3 +208,8 @@ def process_hands(
         The frame with all hand visualizations rendered.
     """
     results = tracker.process_frame(frame)
+    all_landmarks = tracker.extract_landmarks(results)
+    hand_labels = tracker.extract_handedness(results)
+    if len(all_landmarks) == 0:
+        frame = renderer.draw_no_hands_message(frame)
+        return frame
