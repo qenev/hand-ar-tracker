@@ -120,3 +120,5 @@ class HandTracker:
         """
         if results is None or results.multi_hand_landmarks is None:
             self.previous_landmarks.clear()
+            return []
+        all_hands: List[List[Tuple[float, float, float]]] = []
