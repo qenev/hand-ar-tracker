@@ -118,3 +118,7 @@ class HandRenderer:
         self,
         landmarks: List[Tuple[float, float, float]],
         width: int,
+        height: int,
+    ) -> List[Tuple[int, int]]:
+        """Convert normalized landmarks to pixel coordinates.
+
