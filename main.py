@@ -203,3 +203,8 @@ def process_hands(
         tracker: Configured HandTracker instance.
         renderer: Configured HandRenderer instance.
         config: Full configuration dictionary.
+
+    Returns:
+        The frame with all hand visualizations rendered.
+    """
+    results = tracker.process_frame(frame)
