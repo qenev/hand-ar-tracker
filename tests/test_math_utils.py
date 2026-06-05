@@ -68,3 +68,5 @@ def test_normalize_vector() -> None:
     assert normalize_vector(zero_vec) == (0.0, 0.0, 0.0)
 
 
+def test_landmark_to_pixel() -> None:
+    """Test normalized coordinates conversion to pixel coordinates."""
