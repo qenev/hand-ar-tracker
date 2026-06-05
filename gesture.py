@@ -102,3 +102,5 @@ def get_finger_states(
         pip_joint = landmarks[FINGER_PIP_INDICES[i]]
         extended = tip[1] < pip_joint[1]
         states.append(extended)
+    return states
+
