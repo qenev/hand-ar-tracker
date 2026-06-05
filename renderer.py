@@ -382,3 +382,7 @@ class HandRenderer:
 
         Creates a dark rectangle behind the text for improved
         readability against varying video backgrounds.
+
+        Args:
+            frame: Input video frame as BGR NumPy array.
+            text: Text string to render.
