@@ -132,3 +132,5 @@ def test_extended_finger_count() -> None:
     assert get_extended_finger_count(states) == 2
 
 
+def test_get_gesture_confidence() -> None:
+    """Test gesture confidence calculation."""
