@@ -93,3 +93,8 @@ def _merge_configs(
     """Recursively merge user config overrides into default config.
 
     For nested dictionaries, merges at each level. For other types,
+    the override value replaces the default.
+
+    Args:
+        defaults: Default configuration dictionary.
+        overrides: User-provided configuration overrides.
