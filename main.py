@@ -233,3 +233,8 @@ def _get_gesture(
         gesture_config: Gesture configuration with thresholds.
 
     Returns:
+        Gesture name string, or empty string if gestures are disabled.
+    """
+    if not gesture_config.get("enabled", True):
+        return ""
+    return recognize_gesture(
