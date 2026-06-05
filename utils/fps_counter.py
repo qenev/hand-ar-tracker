@@ -46,3 +46,5 @@ class FPSCounter:
         current_time = time.perf_counter()
         self.timestamps.append(current_time)
         self._frame_count += 1
+        current_fps = self.get_fps()
+        if current_fps > 0.0 and self._frame_count > 1:
