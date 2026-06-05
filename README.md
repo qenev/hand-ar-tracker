@@ -180,3 +180,16 @@ All configuration is managed through the `config.yaml` file in the project root.
 | `README.md`               | This file. Project documentation and usage guide.                           |
 
 ---
+
+## Gesture Reference
+
+The following five gestures are recognized when `gesture_recognition` is enabled in the configuration.
+
+| Gesture        | How to Trigger                                                                                      |
+|----------------|-----------------------------------------------------------------------------------------------------|
+| Pinch          | Touch the tip of the thumb to the tip of the index finger while keeping other fingers extended.      |
+| Fist           | Curl all five fingers into the palm so that no fingertips are extended.                              |
+| Open Hand      | Extend all five fingers fully with the palm facing the camera.                                       |
+| Peace          | Extend the index and middle fingers upward while curling the ring finger, pinky, and thumb.          |
+| Thumbs Up      | Extend the thumb upward while curling all four remaining fingers into the palm.                      |
+
