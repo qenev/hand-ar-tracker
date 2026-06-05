@@ -26,3 +26,7 @@ class HandRenderer:
         keypoint_color: BGR color tuple for keypoint dots.
         keypoint_radius: Pixel radius for keypoint circles.
         skeleton_thickness: Pixel thickness for skeleton lines.
+        show_fps: Whether to display the FPS counter overlay.
+        show_coordinates: Whether to display landmark coordinates.
+        show_gesture_label: Whether to display detected gesture names.
+        show_hand_label: Whether to display Left/Right hand labels.
