@@ -6,3 +6,7 @@ Integrates with PyTorch for device management.
 """
 
 import sys
+from typing import List, Dict, Optional
+
+try:
+    import torch
