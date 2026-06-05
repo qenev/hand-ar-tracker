@@ -64,3 +64,5 @@ class HandTracker:
             min_detection_confidence: Minimum confidence threshold for
                 the hand detection model. Range 0.0 to 1.0.
             min_tracking_confidence: Minimum confidence threshold for
+                the hand tracking model. Range 0.0 to 1.0.
+        """
