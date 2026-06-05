@@ -226,3 +226,7 @@ class HandRenderer:
     def _draw_gesture_label(
         self,
         frame: np.ndarray,
+        pixel_coords: List[Tuple[int, int]],
+        gesture: str,
+    ) -> np.ndarray:
+        """Draw the detected gesture name above the hand.
