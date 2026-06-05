@@ -138,3 +138,5 @@ class HandTracker:
                 containing 21 landmark positions.
 
         Returns:
+            A list of 21 (x, y, z) coordinate tuples.
+        """
