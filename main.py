@@ -193,3 +193,8 @@ def process_hands(
     renderer: HandRenderer,
     config: Dict[str, Any],
 ) -> np.ndarray:
+    """Process a single frame for hand detection and rendering.
+
+    Runs the full pipeline: detection, landmark extraction,
+    gesture recognition, and overlay rendering for all detected hands.
+
