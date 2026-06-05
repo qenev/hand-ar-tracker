@@ -110,3 +110,5 @@ class HandTracker:
         Converts the MediaPipe landmark protobuf objects into plain
         Python tuples for easier downstream processing.
 
+        Args:
+            results: MediaPipe results object from process_frame.
