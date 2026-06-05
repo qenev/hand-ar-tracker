@@ -52,3 +52,6 @@ def calculate_angle(
     point_b: Tuple[float, float, float],
     point_c: Tuple[float, float, float],
 ) -> float:
+    """Calculate the angle at point_b formed by points a, b, and c.
+
+    Uses the dot product formula to compute the angle in degrees
