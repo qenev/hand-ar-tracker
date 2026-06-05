@@ -136,3 +136,6 @@ def landmark_to_pixel(
 def smooth_landmarks(
     current: List[Tuple[float, float, float]],
     previous: Optional[List[Tuple[float, float, float]]],
+    smoothing_factor: float = 0.5,
+) -> List[Tuple[float, float, float]]:
+    """Apply exponential moving average smoothing to landmark positions.
