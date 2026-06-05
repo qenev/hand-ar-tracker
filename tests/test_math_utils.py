@@ -18,3 +18,5 @@ from utils.math_utils import (
     smooth_landmarks,
     vector_between,
     vector_magnitude,
+    dot_product,
+    cross_product,

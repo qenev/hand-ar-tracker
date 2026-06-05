@@ -18,3 +18,5 @@ def test_constants() -> None:
 
 @patch("mediapipe.solutions.hands.Hands")
 def test_tracker_initialization(mock_hands: MagicMock) -> None:
+    """Test HandTracker initialization with custom parameters."""
+    tracker = HandTracker(
