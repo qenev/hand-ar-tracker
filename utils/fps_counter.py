@@ -32,3 +32,5 @@ class FPSCounter:
                 readings but respond more slowly to changes.
         """
         self.window_size: int = max(1, window_size)
+        self.timestamps: deque[float] = deque(maxlen=self.window_size)
+        self.min_fps: float = float("inf")
