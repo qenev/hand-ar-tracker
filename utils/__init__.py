@@ -25,3 +25,4 @@ __all__ = [
     "normalize_vector",
     "landmark_to_pixel",
     "smooth_landmarks",
+    "list_available_devices",
