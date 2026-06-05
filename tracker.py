@@ -78,3 +78,5 @@ class HandTracker:
         )
         self.previous_landmarks: Dict[int, List[Tuple[float, float, float]]] = {}
 
+    def process_frame(
+        self,
