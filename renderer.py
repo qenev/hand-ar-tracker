@@ -258,3 +258,7 @@ class HandRenderer:
         pixel_coords: List[Tuple[int, int]],
     ) -> np.ndarray:
         """Draw coordinate labels next to key landmarks.
+
+        Shows the normalized (x, y, z) coordinates as small text
+        labels next to the fingertip landmarks only, to avoid
+        cluttering the display.
