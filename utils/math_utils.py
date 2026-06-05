@@ -151,3 +151,6 @@ def smooth_landmarks(
             Higher values favor current frame data, lower values
             produce smoother but more delayed tracking.
 
+    Returns:
+        Smoothed landmark positions as a list of (x, y, z) tuples.
+    """
