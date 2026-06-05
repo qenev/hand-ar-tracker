@@ -242,3 +242,7 @@ class HandRenderer:
         Returns:
             Frame with gesture label drawn.
         """
+        if len(pixel_coords) < 10:
+            return frame
+        anchor = pixel_coords[9]
+        text_position = (anchor[0] - 30, anchor[1] - 40)
