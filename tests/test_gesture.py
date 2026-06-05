@@ -110,3 +110,5 @@ def test_recognize_gesture_invalid() -> None:
 def test_get_finger_states() -> None:
     """Test individual finger extension states detection."""
     open_hand = make_open_hand_landmarks()
+    states = get_finger_states(open_hand)
+    assert states == [True, True, True, True, True]

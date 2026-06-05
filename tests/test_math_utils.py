@@ -110,3 +110,5 @@ def test_dot_product() -> None:
     vec_b = (4.0, 5.0, 6.0)
     assert math.isclose(dot_product(vec_a, vec_b), 32.0)
 
+
+def test_cross_product() -> None:
