@@ -4,3 +4,5 @@ Tests coordinate calculations, distance measurements, angles, vector normalizati
 and landmark smoothing operations.
 """
 
+import math
+from typing import List, Tuple
