@@ -30,3 +30,7 @@ def list_available_devices() -> List[Dict[str, str]]:
     devices: List[Dict[str, str]] = []
     devices.append({
         "index": 0,
+        "type": "cpu",
+        "name": "CPU",
+    })
+    if torch is not None:
