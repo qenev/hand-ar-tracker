@@ -350,3 +350,7 @@ class HandRenderer:
     ) -> np.ndarray:
         """Draw a message when no hands are detected.
 
+        Displays a centered message prompting the user to show
+        their hands to the camera.
+
+        Args:
