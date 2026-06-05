@@ -374,3 +374,7 @@ class HandRenderer:
     def _draw_text_with_background(
         self,
         frame: np.ndarray,
+        text: str,
+        position: Tuple[int, int],
+        scale: float = 0.5,
+    ) -> np.ndarray:
