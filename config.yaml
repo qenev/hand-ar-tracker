@@ -11,3 +11,4 @@ camera:
   fps: 30
 
 tracking:
+  # Maximum number of hands to detect and track simultaneously (1 or 2)
