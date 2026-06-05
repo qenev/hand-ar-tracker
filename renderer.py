@@ -266,3 +266,7 @@ class HandRenderer:
         Args:
             frame: Input video frame as BGR NumPy array.
             landmarks: List of (x, y, z) normalized coordinates.
+            pixel_coords: List of pixel coordinate tuples.
+
+        Returns:
+            Frame with coordinate labels drawn.
