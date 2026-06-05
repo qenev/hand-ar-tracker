@@ -61,3 +61,6 @@ def calculate_angle(
         point_a: First endpoint as (x, y, z) tuple.
         point_b: Vertex point as (x, y, z) tuple.
         point_c: Second endpoint as (x, y, z) tuple.
+
+    Returns:
+        The angle in degrees at point_b, clamped between 0 and 180.
