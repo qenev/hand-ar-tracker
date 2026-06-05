@@ -64,3 +64,5 @@ def recognize_gesture(
     """
     if len(landmarks) != 21:
         return "Unknown"
+    finger_states = get_finger_states(landmarks)
+    if _is_pinch(landmarks, pinch_threshold):
