@@ -40,3 +40,5 @@ class FPSCounter:
     def tick(self) -> None:
         """Record a new frame timestamp.
 
+        Should be called once per frame at the point where you want
+        to measure the frame rate. Updates internal statistics.
