@@ -136,3 +136,5 @@ def _is_pinch(
     Measures the 3D distance between the thumb tip and index finger
     tip landmarks and compares against the threshold.
 
+    Args:
+        landmarks: List of 21 (x, y, z) tuples for hand landmarks.
