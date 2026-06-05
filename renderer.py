@@ -318,3 +318,7 @@ class HandRenderer:
     def draw_device_label(
         self,
         frame: np.ndarray,
+        device_text: str,
+    ) -> np.ndarray:
+        """Draw the active device label in the top-right corner.
+
