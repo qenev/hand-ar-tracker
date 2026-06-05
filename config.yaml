@@ -9,3 +9,4 @@ camera:
   height: 720
   # Requested frame rate (FPS)
   fps: 30
+
