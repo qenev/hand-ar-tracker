@@ -40,3 +40,5 @@ FINGER_MCP_INDICES = [THUMB_MCP, INDEX_MCP, MIDDLE_MCP, RING_MCP, PINKY_MCP]
 
 
 def recognize_gesture(
+    landmarks: List[Tuple[float, float, float]],
+    pinch_threshold: float = 0.05,
