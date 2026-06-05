@@ -254,3 +254,7 @@ class HandRenderer:
     def _draw_coordinates(
         self,
         frame: np.ndarray,
+        landmarks: List[Tuple[float, float, float]],
+        pixel_coords: List[Tuple[int, int]],
+    ) -> np.ndarray:
+        """Draw coordinate labels next to key landmarks.
