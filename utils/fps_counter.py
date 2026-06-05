@@ -52,3 +52,5 @@ class FPSCounter:
 
     def _update_statistics(self, current_fps: float) -> None:
         """Update min and max FPS statistics.
+
+        Args:
