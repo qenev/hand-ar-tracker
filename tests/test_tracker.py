@@ -40,3 +40,5 @@ def test_extract_landmarks_empty(mock_hands: MagicMock) -> None:
 
 @patch("mediapipe.solutions.hands.Hands")
 def test_extract_handedness_empty(mock_hands: MagicMock) -> None:
+    """Test handedness extraction when no hands are detected."""
+    tracker = HandTracker()
