@@ -228,3 +228,8 @@ def _get_gesture(
 ) -> str:
     """Determine the gesture for a set of hand landmarks.
 
+    Args:
+        landmarks: List of 21 (x, y, z) coordinate tuples.
+        gesture_config: Gesture configuration with thresholds.
+
+    Returns:
