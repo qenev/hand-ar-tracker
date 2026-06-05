@@ -86,3 +86,5 @@ def get_finger_states(
     For the thumb, uses a horizontal distance comparison relative
     to the palm. For other fingers, compares tip position to PIP
     joint position along the y-axis.
+
+    Args:
