@@ -158,3 +158,7 @@ class HandRenderer:
                 start_point = pixel_coords[start_idx]
                 end_point = pixel_coords[end_idx]
                 cv2.line(
+                    frame,
+                    start_point,
+                    end_point,
+                    self.skeleton_color,
