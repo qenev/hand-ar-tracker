@@ -150,3 +150,5 @@ def _is_pinch(
 
 
 def _is_fist(
+    finger_states: List[bool],
+    threshold: float,
