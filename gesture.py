@@ -58,3 +58,5 @@ def recognize_gesture(
         fist_threshold: Minimum ratio of curled fingers to total
             fingers required to register as a fist.
 
+    Returns:
+        A string label for the detected gesture, or "Unknown" if
