@@ -47,3 +47,4 @@ gestures:
   fist_threshold: 0.85
 
 # Select device preference: "auto" (prompts on start), "cpu", "cuda:0", "mps", etc.
+device: auto
