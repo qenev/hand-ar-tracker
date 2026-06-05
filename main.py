@@ -223,3 +223,8 @@ def process_hands(
 
 
 def _get_gesture(
+    landmarks: list,
+    gesture_config: Dict[str, Any],
+) -> str:
+    """Determine the gesture for a set of hand landmarks.
+
