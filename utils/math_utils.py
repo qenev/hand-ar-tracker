@@ -49,3 +49,6 @@ def calculate_distance_2d(
 
 def calculate_angle(
     point_a: Tuple[float, float, float],
+    point_b: Tuple[float, float, float],
+    point_c: Tuple[float, float, float],
+) -> float:
