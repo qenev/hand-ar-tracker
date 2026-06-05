@@ -34,3 +34,7 @@ class HandRenderer:
     """
 
     def __init__(
+        self,
+        skeleton_color: Tuple[int, int, int] = (0, 255, 0),
+        keypoint_color: Tuple[int, int, int] = (0, 0, 255),
+        keypoint_radius: int = 6,
