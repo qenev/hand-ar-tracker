@@ -48,3 +48,5 @@ class FPSCounter:
         self._frame_count += 1
         current_fps = self.get_fps()
         if current_fps > 0.0 and self._frame_count > 1:
+            self._update_statistics(current_fps)
+
