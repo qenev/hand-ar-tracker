@@ -76,3 +76,16 @@ Follow these steps to set up the project from scratch:
    pip install -r requirements.txt
    ```
 
+4. **Verify installation**
+
+   ```bash
+   python -c "import cv2; import mediapipe; import torch; print('All dependencies installed successfully.')"
+   ```
+
+   If no errors are printed, the environment is ready.
+
+---
+
+## How to Run
+
+Start the application with the following command:
