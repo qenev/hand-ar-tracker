@@ -122,3 +122,5 @@ def _is_thumb_extended(
     thumb_tip = landmarks[THUMB_TIP]
     thumb_mcp = landmarks[THUMB_MCP]
     index_mcp = landmarks[INDEX_MCP]
+    thumb_tip_dist = abs(thumb_tip[0] - index_mcp[0])
+    thumb_mcp_dist = abs(thumb_mcp[0] - index_mcp[0])
