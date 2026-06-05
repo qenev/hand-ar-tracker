@@ -186,3 +186,7 @@ class HandRenderer:
         """
         for point in pixel_coords:
             cv2.circle(
+                frame,
+                point,
+                self.keypoint_radius,
+                self.keypoint_color,
