@@ -127,3 +127,6 @@ def landmark_to_pixel(
 
     Returns:
         A tuple of (pixel_x, pixel_y) as integers clamped to frame bounds.
+    """
+    pixel_x = int(min(max(landmark_x * frame_width, 0), frame_width - 1))
+    pixel_y = int(min(max(landmark_y * frame_height, 0), frame_height - 1))
