@@ -126,3 +126,5 @@ def test_recognize_gestures() -> None:
     assert recognize_gesture(make_pinch_landmarks()) == "Pinch"
 
 
+def test_extended_finger_count() -> None:
+    """Test counting extended fingers."""
