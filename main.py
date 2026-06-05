@@ -253,3 +253,8 @@ def run_main_loop(
     config: Dict[str, Any],
 ) -> None:
     """Execute the main webcam processing loop.
+
+    Continuously captures frames, processes them for hand detection
+    and gesture recognition, renders overlays, and displays results.
+    Exits on 'q' key press or Escape key.
+
