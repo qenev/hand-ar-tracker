@@ -24,3 +24,5 @@ def test_tracker_initialization(mock_hands: MagicMock) -> None:
         min_detection_confidence=0.8,
         min_tracking_confidence=0.7,
     )
+    assert tracker.max_hands == 1
+    assert tracker.min_detection_confidence == 0.8

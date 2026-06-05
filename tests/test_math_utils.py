@@ -24,3 +24,5 @@ from utils.math_utils import (
     clamp,
 )
 
+
+def test_calculate_distance() -> None:

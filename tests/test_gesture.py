@@ -24,3 +24,5 @@ def make_open_hand_landmarks() -> List[Tuple[float, float, float]]:
     """
     # Initialize with wrist and basic palm
     lms = [(0.0, 0.5, 0.0)] * 21
+    # INDEX
+    lms[5] = (0.1, 0.4, 0.0)  # INDEX_MCP
