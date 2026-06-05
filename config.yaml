@@ -6,3 +6,4 @@ camera:
   # Requested video width in pixels
   width: 1280
   # Requested video height in pixels
+  height: 720
