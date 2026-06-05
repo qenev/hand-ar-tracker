@@ -194,3 +194,5 @@ def _is_thumbs_up(
     thumb_mcp = landmarks[THUMB_MCP]
     thumb_points_up = thumb_tip[1] < thumb_mcp[1]
     return thumb_points_up
+
+
