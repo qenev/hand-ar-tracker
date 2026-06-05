@@ -103,3 +103,8 @@ def _merge_configs(
         Merged configuration dictionary with user values taking
         precedence over defaults.
     """
+    merged = defaults.copy()
+    for key, value in overrides.items():
+        if key in merged and isinstance(merged[key], dict) and isinstance(value, dict):
+            merged[key] = _merge_configs(merged[key], value)
+        else:
