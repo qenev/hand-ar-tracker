@@ -154,3 +154,7 @@ class HandRenderer:
             Frame with skeleton lines drawn.
         """
         for start_idx, end_idx in HAND_CONNECTIONS:
+            if start_idx < len(pixel_coords) and end_idx < len(pixel_coords):
+                start_point = pixel_coords[start_idx]
+                end_point = pixel_coords[end_idx]
+                cv2.line(
