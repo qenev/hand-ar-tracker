@@ -108,3 +108,5 @@ class HandTracker:
         """Extract landmark coordinates from MediaPipe results.
 
         Converts the MediaPipe landmark protobuf objects into plain
+        Python tuples for easier downstream processing.
+
