@@ -152,3 +152,5 @@ def _is_pinch(
 def _is_fist(
     finger_states: List[bool],
     threshold: float,
+) -> bool:
+    """Detect a fist gesture where most fingers are curled.
