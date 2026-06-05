@@ -50,3 +50,5 @@ class HandTracker:
             for smoothing purposes.
     """
 
+    def __init__(
+        self,
