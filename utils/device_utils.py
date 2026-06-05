@@ -94,3 +94,7 @@ def select_device(config_preference: str) -> "torch.device":
 
     Args:
         config_preference: Device preference string from config.yaml.
+            Use 'auto' for interactive selection, or a device string
+            like 'cpu', 'cuda:0', or 'mps' for direct selection.
+
+    Returns:
