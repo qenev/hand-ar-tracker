@@ -37,3 +37,16 @@ Hand AR Tracker is a real-time hand and finger tracking augmented reality system
 |-----------------|---------------------------------------------|
 | GPU             | Dedicated NVIDIA GPU with CUDA support      |
 | Camera          | 1080p webcam for higher fidelity tracking   |
+| RAM             | 8 GB or more                                |
+| CPU             | Intel i5 / AMD Ryzen 5 or better            |
+
+---
+
+## Installation
+
+Follow these steps to set up the project from scratch:
+
+1. **Clone the repository**
+
+   ```bash
+   git clone https://github.com/your-username/hand-ar-tracker.git
