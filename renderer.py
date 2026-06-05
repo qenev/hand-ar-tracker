@@ -82,3 +82,7 @@ class HandRenderer:
     ) -> np.ndarray:
         """Draw a complete hand visualization on the frame.
 
+        Renders the skeleton, keypoints, hand label, and gesture
+        label for a single detected hand.
+
+        Args:
