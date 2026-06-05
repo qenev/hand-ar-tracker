@@ -133,3 +133,8 @@ def initialize_camera(config: Dict[str, Any]) -> cv2.VideoCapture:
     if not cap.isOpened():
         print("[ERROR] Cannot open camera. Check camera index in config.yaml.")
         sys.exit(1)
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, cam_config["width"])
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, cam_config["height"])
+    cap.set(cv2.CAP_PROP_FPS, cam_config["fps"])
+    print(f"[INFO] Camera opened: index={cam_config['index']}, "
+          f"resolution={cam_config['width']}x{cam_config['height']}")
