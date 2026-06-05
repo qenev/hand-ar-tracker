@@ -118,3 +118,5 @@ def _is_thumb_extended(
 
     Returns:
         True if the thumb appears to be extended outward.
+    """
+    thumb_tip = landmarks[THUMB_TIP]
