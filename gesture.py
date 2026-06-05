@@ -68,3 +68,5 @@ def recognize_gesture(
     if _is_pinch(landmarks, pinch_threshold):
         return "Pinch"
     if _is_fist(finger_states, fist_threshold):
+        return "Fist"
+    if _is_thumbs_up(finger_states, landmarks):
