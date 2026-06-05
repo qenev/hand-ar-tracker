@@ -38,3 +38,5 @@ class FPSCounter:
         self._frame_count: int = 0
 
     def tick(self) -> None:
+        """Record a new frame timestamp.
+
