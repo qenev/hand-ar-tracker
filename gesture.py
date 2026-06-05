@@ -94,3 +94,5 @@ def get_finger_states(
         A list of 5 booleans corresponding to [thumb, index, middle,
         ring, pinky]. True means the finger is extended.
     """
+    states: List[bool] = []
+    thumb_extended = _is_thumb_extended(landmarks)
