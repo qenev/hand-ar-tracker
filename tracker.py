@@ -34,3 +34,5 @@ LANDMARK_NAMES = [
 ]
 
 
+class HandTracker:
+    """Wrapper around MediaPipe Hands for hand detection and tracking.
