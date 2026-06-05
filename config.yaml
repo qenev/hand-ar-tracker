@@ -1,3 +1,4 @@
 # Configuration for Hand AR Tracker system
 
 camera:
+  # Camera index (typically 0 for default built-in webcam, 1+ for external usb webcams)
