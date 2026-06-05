@@ -86,3 +86,5 @@ def test_smooth_landmarks() -> None:
     assert smoothed[0] == (0.5, 1.0, 1.5)
     assert smoothed[1] == (3.0, 3.5, 4.0)
 
+    # Mismatched lengths
+    mismatched_prev = [(0.0, 0.0, 0.0)]
