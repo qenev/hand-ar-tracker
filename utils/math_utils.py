@@ -94,3 +94,6 @@ def normalize_vector(
     Args:
         vector: The input vector as (x, y, z) tuple.
 
+    Returns:
+        A unit vector in the same direction. Returns (0, 0, 0) if
+        the input vector has zero magnitude.
