@@ -52,3 +52,5 @@ class HandTracker:
 
     def __init__(
         self,
+        max_hands: int = 2,
+        min_detection_confidence: float = 0.7,
