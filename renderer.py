@@ -30,3 +30,7 @@ class HandRenderer:
         show_coordinates: Whether to display landmark coordinates.
         show_gesture_label: Whether to display detected gesture names.
         show_hand_label: Whether to display Left/Right hand labels.
+        show_device_label: Whether to display the active device.
+    """
+
+    def __init__(
