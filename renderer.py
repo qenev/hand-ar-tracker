@@ -42,3 +42,7 @@ class HandRenderer:
         show_fps: bool = True,
         show_coordinates: bool = True,
         show_gesture_label: bool = True,
+        show_hand_label: bool = True,
+        show_device_label: bool = True,
+    ) -> None:
+        """Initialize the renderer with display configuration.
