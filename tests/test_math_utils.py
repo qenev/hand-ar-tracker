@@ -94,3 +94,5 @@ def test_smooth_landmarks() -> None:
 def test_vector_between() -> None:
     """Test computing a vector between two points."""
     pt_a = (1.0, 2.0, 3.0)
+    pt_b = (4.0, 6.0, 8.0)
+    assert vector_between(pt_a, pt_b) == (3.0, 4.0, 5.0)

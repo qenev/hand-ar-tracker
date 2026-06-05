@@ -94,3 +94,5 @@ def make_pinch_landmarks() -> List[Tuple[float, float, float]]:
     """Helper to generate mock landmarks for a pinch gesture.
 
     Thumb tip and Index tip are at the same location.
+    """
+    lms = make_open_hand_landmarks()
