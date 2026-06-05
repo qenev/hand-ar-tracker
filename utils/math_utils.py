@@ -88,3 +88,6 @@ def calculate_angle(
 
 def normalize_vector(
     vector: Tuple[float, float, float],
+) -> Tuple[float, float, float]:
+    """Normalize a 3D vector to unit length.
+
