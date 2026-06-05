@@ -128,3 +128,16 @@ Setting `device` to `"cuda"` or `"cpu"` in `config.yaml` bypasses the interactiv
 ```yaml
 device: "auto"   # Options: "auto", "cuda", "cpu"
 ```
+
+---
+
+## Configuration Reference
+
+All configuration is managed through the `config.yaml` file in the project root. Below is a complete reference of every supported field.
+
+| Field                     | Type    | Default   | Description                                                                 |
+|---------------------------|---------|-----------|-----------------------------------------------------------------------------|
+| `device`                  | string  | `"auto"`  | Device selection mode. Options: `"auto"`, `"cuda"`, `"cpu"`.                |
+| `camera_index`            | integer | `0`       | Index of the webcam device to use. `0` is typically the default camera.     |
+| `frame_width`             | integer | `1280`    | Capture width in pixels requested from the webcam.                          |
+| `frame_height`            | integer | `720`     | Capture height in pixels requested from the webcam.                         |
