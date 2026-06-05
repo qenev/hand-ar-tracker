@@ -342,3 +342,7 @@ class HandRenderer:
         frame = self._draw_text_with_background(
             frame, device_text, position, scale=0.6
         )
+        return frame
+
+    def draw_no_hands_message(
+        self,
