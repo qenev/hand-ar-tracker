@@ -100,3 +100,5 @@ class HandTracker:
         results = self.hands.process(rgb_frame)
         rgb_frame.flags.writeable = True
         return results
+
+    def extract_landmarks(
