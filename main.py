@@ -168,3 +168,8 @@ def initialize_renderer(config: Dict[str, Any]) -> HandRenderer:
         config: Configuration dictionary containing renderer settings
             under the 'renderer' key.
 
+    Returns:
+        A configured HandRenderer instance ready for frame rendering.
+    """
+    rend_config = config["renderer"]
+    renderer = HandRenderer(
