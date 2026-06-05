@@ -64,3 +64,5 @@ def test_normalize_vector() -> None:
     assert math.isclose(norm[1], 0.0)
     assert math.isclose(norm[2], 0.8)
 
+    zero_vec = (0.0, 0.0, 0.0)
+    assert normalize_vector(zero_vec) == (0.0, 0.0, 0.0)
