@@ -8,3 +8,4 @@ from utils.fps_counter import FPSCounter
 from utils.math_utils import (
     calculate_distance,
     calculate_angle,
+    normalize_vector,
