@@ -29,3 +29,4 @@ renderer:
   skeleton_thickness: 2
   # Show rolling average FPS counter on screen
   show_fps: true
+  # Show coordinates next to fingertip landmarks
