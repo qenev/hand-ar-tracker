@@ -88,3 +88,5 @@ class HandTracker:
         by MediaPipe, then runs the hand detection pipeline.
 
         Args:
+            frame: Input video frame as a NumPy array in BGR format
+                with shape (height, width, 3).
