@@ -145,3 +145,6 @@ def smooth_landmarks(
 
     Args:
         current: List of current frame landmark positions as (x, y, z) tuples.
+        previous: List of previous frame landmark positions, or None if
+            this is the first frame.
+        smoothing_factor: Weight for the current frame (0.0 to 1.0).
