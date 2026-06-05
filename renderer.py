@@ -174,3 +174,7 @@ class HandRenderer:
     ) -> np.ndarray:
         """Draw circular markers on each hand landmark.
 
+        Draws filled circles at each of the 21 hand keypoint positions
+        using the configured color and radius.
+
+        Args:
