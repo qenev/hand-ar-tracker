@@ -109,3 +109,6 @@ def normalize_vector(
 
 
 def landmark_to_pixel(
+    landmark_x: float,
+    landmark_y: float,
+    frame_width: int,
