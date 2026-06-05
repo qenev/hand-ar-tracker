@@ -90,3 +90,5 @@ class HandTracker:
         Args:
             frame: Input video frame as a NumPy array in BGR format
                 with shape (height, width, 3).
+
+        Returns:
