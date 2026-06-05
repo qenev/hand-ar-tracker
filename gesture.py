@@ -128,3 +128,5 @@ def _is_thumb_extended(
 
 
 def _is_pinch(
+    landmarks: List[Tuple[float, float, float]],
+    threshold: float,
