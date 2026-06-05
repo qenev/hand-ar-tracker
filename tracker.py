@@ -48,3 +48,5 @@ class HandTracker:
         hands: The underlying MediaPipe Hands solution instance.
         previous_landmarks: Stored landmarks from the previous frame
             for smoothing purposes.
+    """
+
