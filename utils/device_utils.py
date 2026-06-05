@@ -110,3 +110,7 @@ def select_device(config_preference: str) -> "torch.device":
 
 def _interactive_device_selection() -> "torch.device":
     """Display available devices and prompt user for selection.
+
+    Lists all detected devices with their indices and names, then
+    waits for user input to select a device by number.
+
