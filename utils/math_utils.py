@@ -40,3 +40,6 @@ def calculate_distance_2d(
         point_b: Second point as (x, y) tuple.
 
     Returns:
+        The Euclidean distance between the two points as a float.
+    """
+    dx = point_a[0] - point_b[0]
