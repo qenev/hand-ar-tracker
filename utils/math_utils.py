@@ -211,3 +211,6 @@ def dot_product(
         The scalar dot product of the two vectors.
     """
     return sum(a * b for a, b in zip(vector_a, vector_b))
+
+
+def cross_product(
