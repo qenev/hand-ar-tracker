@@ -39,3 +39,4 @@ renderer:
   show_device_label: true
 
 gestures:
+  # Enable or disable gesture recognition logic
