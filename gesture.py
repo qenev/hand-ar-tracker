@@ -140,3 +140,5 @@ def _is_pinch(
         landmarks: List of 21 (x, y, z) tuples for hand landmarks.
         threshold: Maximum distance to consider as a pinch.
 
+    Returns:
+        True if the thumb and index tips are closer than threshold.
