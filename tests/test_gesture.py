@@ -80,3 +80,5 @@ def make_fist_landmarks() -> List[Tuple[float, float, float]]:
 def make_peace_landmarks() -> List[Tuple[float, float, float]]:
     """Helper to generate mock landmarks for a peace sign.
 
+    Index and middle fingers are extended, while ring and pinky are curled.
+    """
