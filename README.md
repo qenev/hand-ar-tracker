@@ -193,3 +193,16 @@ The following five gestures are recognized when `gesture_recognition` is enabled
 | Peace          | Extend the index and middle fingers upward while curling the ring finger, pinky, and thumb.          |
 | Thumbs Up      | Extend the thumb upward while curling all four remaining fingers into the palm.                      |
 
+Gestures are evaluated per hand. When two hands are detected, each hand reports its own gesture independently.
+
+---
+
+## Running Tests
+
+Run the full test suite with pytest:
+
+```bash
+pytest tests/
+```
+
+### Expected output
