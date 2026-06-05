@@ -193,3 +193,6 @@ def vector_magnitude(vector: Tuple[float, float, float]) -> float:
 
     Returns:
         The magnitude of the vector as a float.
+    """
+    return math.sqrt(sum(v * v for v in vector))
+
