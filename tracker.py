@@ -84,3 +84,5 @@ class HandTracker:
     ) -> Optional[Any]:
         """Process a single video frame for hand detection.
 
+        Converts the frame from BGR to RGB color space as required
+        by MediaPipe, then runs the hand detection pipeline.
