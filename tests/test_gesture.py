@@ -84,3 +84,5 @@ def make_peace_landmarks() -> List[Tuple[float, float, float]]:
     """
     lms = make_fist_landmarks()
     # Extend INDEX
+    lms[8] = (0.1, 0.2, 0.0)  # INDEX_TIP
+    # Extend MIDDLE
