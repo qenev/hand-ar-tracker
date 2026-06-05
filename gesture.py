@@ -170,3 +170,5 @@ def _is_fist(
     return ratio >= threshold
 
 
+def _is_thumbs_up(
+    finger_states: List[bool],
