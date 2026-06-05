@@ -70,3 +70,5 @@ def test_normalize_vector() -> None:
 
 def test_landmark_to_pixel() -> None:
     """Test normalized coordinates conversion to pixel coordinates."""
+    width = 640
+    height = 480

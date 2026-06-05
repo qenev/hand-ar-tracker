@@ -70,3 +70,5 @@ def make_fist_landmarks() -> List[Tuple[float, float, float]]:
     lms[17] = (-0.2, 0.4, 0.0)  # PINKY_MCP
     lms[18] = (-0.2, 0.35, 0.0)  # PINKY_PIP
     lms[20] = (-0.2, 0.45, 0.0)  # PINKY_TIP
+    # THUMB
+    lms[1] = (0.2, 0.48, 0.0)  # THUMB_CMC
