@@ -154,3 +154,16 @@ All configuration is managed through the `config.yaml` file in the project root.
 | `connection_color`        | list    | `[0,255,0]` | BGR color for skeletal mesh lines. Default is green.                      |
 | `landmark_radius`         | integer | `5`       | Radius in pixels for each keypoint dot.                                     |
 | `connection_thickness`    | integer | `2`       | Line thickness in pixels for skeletal mesh connections.                      |
+| `flip_horizontal`         | boolean | `true`    | Whether to mirror the video feed horizontally for a natural mirror effect.  |
+
+---
+
+## Project Architecture
+
+| File / Directory          | Purpose                                                                     |
+|---------------------------|-----------------------------------------------------------------------------|
+| `main.py`                 | Application entry point. Initializes components and runs the main loop.     |
+| `config.yaml`             | YAML configuration file for all tunable parameters.                         |
+| `requirements.txt`        | Python package dependencies.                                                |
+| `hand_tracker.py`         | Core hand tracking module wrapping MediaPipe hand detection and landmarks.  |
+| `gesture_recognizer.py`   | Gesture recognition logic for classifying hand poses into named gestures.   |
