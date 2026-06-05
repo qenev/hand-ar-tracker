@@ -26,3 +26,4 @@ renderer:
   # Radius in pixels for drawing landmark keypoints
   keypoint_radius: 6
   # Line thickness in pixels for drawing skeleton lines
+  skeleton_thickness: 2
