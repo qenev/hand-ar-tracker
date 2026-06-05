@@ -186,3 +186,7 @@ def _is_device_available(device_type: str) -> bool:
         device_type: Device type string to check (e.g. 'cuda:0', 'mps').
 
     Returns:
+        True if the device is available and usable, False otherwise.
+    """
+    if torch is None:
+        return False
