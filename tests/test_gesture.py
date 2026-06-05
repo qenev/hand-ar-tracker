@@ -138,3 +138,5 @@ def test_get_gesture_confidence() -> None:
     # Distance is 0.0, confidence should be 1.0
     assert math.isclose(get_gesture_confidence(lms, "Pinch"), 1.0)
     assert get_gesture_confidence([], "Pinch") == 0.0
+    assert get_gesture_confidence(lms, "Fist") == 0.2
+    assert get_gesture_confidence(lms, "Open Hand") == 0.8
