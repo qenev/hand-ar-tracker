@@ -142,3 +142,5 @@ class HandTracker:
         """
         landmarks: List[Tuple[float, float, float]] = []
         for landmark in hand_landmarks.landmark:
+            landmarks.append((
+                landmark.x,
