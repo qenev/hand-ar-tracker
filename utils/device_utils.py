@@ -178,3 +178,7 @@ def _direct_device_selection(preference: str) -> "torch.device":
     )
     return _create_cpu_device()
 
+
+def _is_device_available(device_type: str) -> bool:
+    """Check if a specific device type is available on this system.
+
