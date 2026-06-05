@@ -66,3 +66,5 @@ class FPSCounter:
         """Calculate the current rolling average FPS.
 
         Computes the average frame rate over the timestamps stored
+        in the rolling window.
+
