@@ -150,3 +150,7 @@ class HandRenderer:
             frame: Input video frame as BGR NumPy array.
             pixel_coords: List of pixel coordinate tuples for each landmark.
 
+        Returns:
+            Frame with skeleton lines drawn.
+        """
+        for start_idx, end_idx in HAND_CONNECTIONS:
