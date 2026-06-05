@@ -14,3 +14,5 @@ class FPSCounter:
     """Rolling window FPS counter with statistics tracking.
 
     Maintains a deque of frame timestamps and computes the rolling
+    average frames per second over a configurable window size.
+
