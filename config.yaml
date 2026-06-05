@@ -37,3 +37,4 @@ renderer:
   show_hand_label: true
   # Show active compute device in top-right corner
   show_device_label: true
+
