@@ -63,3 +63,16 @@ Follow these steps to set up the project from scratch:
 
    - Windows:
      ```bash
+     venv\Scripts\activate
+     ```
+   - macOS / Linux:
+     ```bash
+     source venv/bin/activate
+     ```
+
+3. **Install dependencies**
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
