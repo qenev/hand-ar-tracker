@@ -10,3 +10,7 @@ from typing import List, Dict, Optional
 
 try:
     import torch
+except ImportError:
+    torch = None
+
+
