@@ -104,3 +104,5 @@ def get_finger_states(
         states.append(extended)
     return states
 
+
+def _is_thumb_extended(
