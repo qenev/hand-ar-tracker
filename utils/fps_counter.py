@@ -44,3 +44,5 @@ class FPSCounter:
         to measure the frame rate. Updates internal statistics.
         """
         current_time = time.perf_counter()
+        self.timestamps.append(current_time)
+        self._frame_count += 1
