@@ -96,3 +96,5 @@ def get_finger_states(
     """
     states: List[bool] = []
     thumb_extended = _is_thumb_extended(landmarks)
+    states.append(thumb_extended)
+    for i in range(1, 5):
