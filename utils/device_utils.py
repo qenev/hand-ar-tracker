@@ -194,3 +194,50 @@ def _is_device_available(device_type: str) -> bool:
         if not torch.cuda.is_available():
             return False
         parts = device_type.split(":")
+        if len(parts) == 2:
+            try:
+                idx = int(parts[1])
+                return idx < torch.cuda.device_count()
+            except ValueError:
+                return False
+        return True
+    if device_type == "mps":
+        return (
+            hasattr(torch.backends, "mps")
+            and torch.backends.mps.is_available()
+        )
+    return False
+
+
+def _create_cpu_device() -> "torch.device":
+    """Create and return a CPU torch.device object.
+
+    Returns:
+        A torch.device set to CPU. If PyTorch is not installed,
+        returns a SimpleNamespace mimic for compatibility.
+    """
+    if torch is not None:
+        return torch.device("cpu")
+    from types import SimpleNamespace
+    return SimpleNamespace(type="cpu")
+
+
+def get_device_label(device: "torch.device") -> str:
+    """Generate a human-readable label for the active compute device.
+
+    Creates a short label string suitable for display as an on-screen
+    overlay in the OpenCV window.
+
+    Args:
+        device: The active torch.device to generate a label for.
+
+    Returns:
+        A formatted string like 'Device: CPU' or 'Device: CUDA:0'
+        suitable for overlay display.
+    """
+    if torch is None or not hasattr(device, "type"):
+        return "Device: CPU"
+    device_type = str(device.type).upper()
+    if hasattr(device, "index") and device.index is not None:
+        return f"Device: {device_type}:{device.index}"
+    return f"Device: {device_type}"
