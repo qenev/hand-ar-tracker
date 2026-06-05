@@ -8,3 +8,5 @@ import pytest
 
 from tracker import HandTracker, LANDMARK_NAMES, HAND_CONNECTIONS
 
+
+def test_constants() -> None:

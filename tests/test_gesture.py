@@ -8,3 +8,5 @@ from typing import List, Tuple
 
 import pytest
 
+from gesture import (
+    recognize_gesture,
