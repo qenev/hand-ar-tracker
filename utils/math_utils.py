@@ -139,3 +139,6 @@ def smooth_landmarks(
     smoothing_factor: float = 0.5,
 ) -> List[Tuple[float, float, float]]:
     """Apply exponential moving average smoothing to landmark positions.
+
+    Reduces jitter in hand landmark positions by blending the current
+    frame landmarks with the previous frame using a weighted average.
