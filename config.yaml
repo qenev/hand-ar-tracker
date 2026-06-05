@@ -28,3 +28,4 @@ renderer:
   # Line thickness in pixels for drawing skeleton lines
   skeleton_thickness: 2
   # Show rolling average FPS counter on screen
+  show_fps: true
