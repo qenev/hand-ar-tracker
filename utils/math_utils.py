@@ -184,3 +184,6 @@ def vector_between(
         point_b[2] - point_a[2],
     )
 
+
+def vector_magnitude(vector: Tuple[float, float, float]) -> float:
+    """Calculate the magnitude (length) of a 3D vector.
