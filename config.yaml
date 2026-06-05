@@ -10,3 +10,4 @@ camera:
   # Requested frame rate (FPS)
   fps: 30
 
+tracking:
