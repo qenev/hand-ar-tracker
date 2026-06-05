@@ -190,3 +190,5 @@ def _is_thumbs_up(
     others_curled = all(not state for state in finger_states[1:])
     if not (thumb_extended and others_curled):
         return False
+    thumb_tip = landmarks[THUMB_TIP]
+    thumb_mcp = landmarks[THUMB_MCP]
