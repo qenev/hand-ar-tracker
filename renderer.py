@@ -62,3 +62,7 @@ class HandRenderer:
         self.keypoint_color = keypoint_color
         self.keypoint_radius = keypoint_radius
         self.skeleton_thickness = skeleton_thickness
+        self.show_fps = show_fps
+        self.show_coordinates = show_coordinates
+        self.show_gesture_label = show_gesture_label
+        self.show_hand_label = show_hand_label
