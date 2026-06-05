@@ -44,3 +44,5 @@ def test_calculate_distance_2d() -> None:
 
 
 def test_calculate_angle() -> None:
+    """Test angle calculation between three points."""
+    pt_a = (1.0, 0.0, 0.0)

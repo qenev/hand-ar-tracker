@@ -44,3 +44,5 @@ def test_extract_handedness_empty(mock_hands: MagicMock) -> None:
     tracker = HandTracker()
     assert tracker.extract_handedness(None) == []
 
+
+@patch("mediapipe.solutions.hands.Hands")

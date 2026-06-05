@@ -44,3 +44,5 @@ def make_open_hand_landmarks() -> List[Tuple[float, float, float]]:
     lms[1] = (0.2, 0.48, 0.0)  # THUMB_CMC
     lms[2] = (0.25, 0.46, 0.0)  # THUMB_MCP
     lms[4] = (0.35, 0.4, 0.0)  # THUMB_TIP
+    return lms
+
