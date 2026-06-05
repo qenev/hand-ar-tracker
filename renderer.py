@@ -314,3 +314,7 @@ class HandRenderer:
             frame, fps_text, position, scale=0.7
         )
         return frame
+
+    def draw_device_label(
+        self,
+        frame: np.ndarray,
