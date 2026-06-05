@@ -163,3 +163,6 @@ def smooth_landmarks(
         sz = smoothing_factor * curr[2] + (1.0 - smoothing_factor) * prev[2]
         smoothed.append((sx, sy, sz))
     return smoothed
+
+
+def vector_between(
