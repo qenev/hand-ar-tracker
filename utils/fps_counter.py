@@ -28,3 +28,5 @@ class FPSCounter:
 
         Args:
             window_size: Number of recent frames to use for calculating
+                the rolling average FPS. Larger values produce smoother
+                readings but respond more slowly to changes.
