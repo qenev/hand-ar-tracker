@@ -130,3 +130,5 @@ def test_extended_finger_count() -> None:
     """Test counting extended fingers."""
     states = [True, True, False, False, False]
     assert get_extended_finger_count(states) == 2
+
+
