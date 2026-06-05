@@ -126,3 +126,5 @@ class HandTracker:
             landmarks = self._parse_single_hand(hand_landmarks)
             all_hands.append(landmarks)
         return all_hands
+
+    def _parse_single_hand(
