@@ -42,3 +42,5 @@ def test_calculate_distance_2d() -> None:
     pt2 = (3.0, 4.0)
     assert math.isclose(calculate_distance_2d(pt1, pt2), 5.0)
 
+
+def test_calculate_angle() -> None:
