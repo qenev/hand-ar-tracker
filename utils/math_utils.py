@@ -79,3 +79,6 @@ def calculate_angle(
     magnitude_ba = math.sqrt(sum(v * v for v in vector_ba))
     magnitude_bc = math.sqrt(sum(v * v for v in vector_bc))
     if magnitude_ba == 0.0 or magnitude_bc == 0.0:
+        return 0.0
+    cosine = dot_product / (magnitude_ba * magnitude_bc)
+    cosine = max(-1.0, min(1.0, cosine))
