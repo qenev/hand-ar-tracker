@@ -33,3 +33,8 @@ def load_config(config_path: str = "config.yaml") -> Dict[str, Any]:
         A dictionary containing all configuration settings with
         defaults applied for any missing values.
     """
+    defaults = _get_default_config()
+    try:
+        with open(config_path, "r", encoding="utf-8") as config_file:
+            user_config = yaml.safe_load(config_file)
+        if user_config is None:
