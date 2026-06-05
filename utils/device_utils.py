@@ -34,3 +34,7 @@ def list_available_devices() -> List[Dict[str, str]]:
         "name": "CPU",
     })
     if torch is not None:
+        devices = _add_cuda_devices(devices)
+        devices = _add_mps_device(devices)
+    return devices
+
