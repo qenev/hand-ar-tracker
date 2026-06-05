@@ -150,3 +150,7 @@ def _prompt_device_selection(
             print(f"[INFO] Selected device: {devices[idx]['name']}")
             return torch.device(device_type)
     except (ValueError, IndexError, KeyboardInterrupt):
+        pass
+    print("[WARNING] Invalid selection, falling back to CPU.")
+    return _create_cpu_device()
+
