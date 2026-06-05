@@ -166,3 +166,7 @@ class HandRenderer:
                     cv2.LINE_AA,
                 )
         return frame
+
+    def _draw_keypoints(
+        self,
+        frame: np.ndarray,
