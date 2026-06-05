@@ -12,3 +12,5 @@ from utils.math_utils import calculate_distance, calculate_angle
 
 # MediaPipe hand landmark indices for reference.
 WRIST = 0
+THUMB_CMC = 1
+THUMB_MCP = 2
