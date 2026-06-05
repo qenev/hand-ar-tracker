@@ -166,3 +166,6 @@ def smooth_landmarks(
 
 
 def vector_between(
+    point_a: Tuple[float, float, float],
+    point_b: Tuple[float, float, float],
+) -> Tuple[float, float, float]:
