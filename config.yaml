@@ -31,3 +31,4 @@ renderer:
   show_fps: true
   # Show coordinates next to fingertip landmarks
   show_coordinates: true
+  # Show gesture name overlay near the hand
