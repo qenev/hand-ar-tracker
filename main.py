@@ -113,3 +113,8 @@ def _merge_configs(
 
 
 def initialize_camera(config: Dict[str, Any]) -> cv2.VideoCapture:
+    """Initialize the webcam video capture device.
+
+    Opens the camera specified in the config and sets the requested
+    resolution and frame rate.
+
