@@ -178,3 +178,8 @@ def initialize_renderer(config: Dict[str, Any]) -> HandRenderer:
         keypoint_radius=rend_config["keypoint_radius"],
         skeleton_thickness=rend_config["skeleton_thickness"],
         show_fps=rend_config["show_fps"],
+        show_coordinates=rend_config["show_coordinates"],
+        show_gesture_label=rend_config["show_gesture_label"],
+        show_hand_label=rend_config["show_hand_label"],
+        show_device_label=rend_config["show_device_label"],
+    )
