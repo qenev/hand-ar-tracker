@@ -46,3 +46,5 @@ class HandTracker:
         min_detection_confidence: Minimum confidence for initial detection.
         min_tracking_confidence: Minimum confidence for frame-to-frame tracking.
         hands: The underlying MediaPipe Hands solution instance.
+        previous_landmarks: Stored landmarks from the previous frame
+            for smoothing purposes.
