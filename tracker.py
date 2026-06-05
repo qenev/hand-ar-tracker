@@ -122,3 +122,5 @@ class HandTracker:
             self.previous_landmarks.clear()
             return []
         all_hands: List[List[Tuple[float, float, float]]] = []
+        for hand_landmarks in results.multi_hand_landmarks:
+            landmarks = self._parse_single_hand(hand_landmarks)
