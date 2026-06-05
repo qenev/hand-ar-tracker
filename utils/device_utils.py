@@ -174,3 +174,7 @@ def _direct_device_selection(preference: str) -> "torch.device":
         return torch.device(preference_lower)
     print(
         f"[WARNING] Device '{preference}' not available. "
+        f"Falling back to CPU."
+    )
+    return _create_cpu_device()
+
