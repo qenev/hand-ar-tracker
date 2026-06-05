@@ -42,3 +42,5 @@ class HandTracker:
     frames with optional landmark smoothing.
 
     Attributes:
+        max_hands: Maximum number of hands to detect simultaneously.
+        min_detection_confidence: Minimum confidence for initial detection.
