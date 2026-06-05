@@ -26,3 +26,5 @@ HAND_CONNECTIONS = [
 
 # Landmark names for coordinate display.
 LANDMARK_NAMES = [
+    "WRIST", "THUMB_CMC", "THUMB_MCP", "THUMB_IP", "THUMB_TIP",
+    "INDEX_MCP", "INDEX_PIP", "INDEX_DIP", "INDEX_TIP",
