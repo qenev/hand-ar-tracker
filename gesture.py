@@ -154,3 +154,5 @@ def _is_fist(
     threshold: float,
 ) -> bool:
     """Detect a fist gesture where most fingers are curled.
+
+    Counts the number of curled (non-extended) fingers and compares
