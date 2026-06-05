@@ -293,3 +293,41 @@ def cleanup(
 
     Properly releases the camera capture device, MediaPipe tracker
     resources, and all OpenCV windows.
+
+    Args:
+        cap: Video capture device to release.
+        tracker: Hand tracker instance to close.
+    """
+    cap.release()
+    tracker.release()
+    cv2.destroyAllWindows()
+    print("[INFO] Resources released. Application closed.")
+
+
+def main() -> None:
+    """Application entry point.
+
+    Loads configuration, initializes all components, runs the
+    main processing loop, and performs cleanup on exit.
+    """
+    print("Hand AR Tracker - Starting...")
+    config = load_config()
+    device = select_device(str(config.get("device", "auto")))
+    device_label = get_device_label(device)
+    cap = initialize_camera(config)
+    tracker = initialize_tracker(config)
+    renderer = initialize_renderer(config)
+    fps_counter = FPSCounter(window_size=30)
+    try:
+        run_main_loop(
+            cap, tracker, renderer,
+            fps_counter, device_label, config,
+        )
+    except KeyboardInterrupt:
+        print("\n[INFO] Interrupted by user.")
+    finally:
+        cleanup(cap, tracker)
+
+
+if __name__ == "__main__":
+    main()
