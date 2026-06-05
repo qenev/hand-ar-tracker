@@ -80,3 +80,5 @@ class FPSCounter:
         frame_count = len(self.timestamps) - 1
         return frame_count / time_span
 
+    def get_fps_string(self) -> str:
+        """Get a formatted string representation of the current FPS.
