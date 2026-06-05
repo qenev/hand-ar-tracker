@@ -50,3 +50,5 @@ def recognize_gesture(
     being performed. Checks gestures in priority order: pinch first,
     then fist, thumbs up, peace sign, and finally open hand.
 
+    Args:
+        landmarks: List of 21 (x, y, z) tuples representing hand
