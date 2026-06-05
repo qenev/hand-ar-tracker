@@ -294,3 +294,7 @@ class HandRenderer:
         self,
         frame: np.ndarray,
         fps_text: str,
+    ) -> np.ndarray:
+        """Draw the FPS counter in the top-left corner.
+
+        Renders the FPS string with a dark background rectangle
