@@ -20,3 +20,5 @@ class FPSCounter:
         window_size: Number of frames to include in the rolling average.
         timestamps: Deque of frame arrival timestamps.
         min_fps: Lowest FPS value observed since last reset.
+        max_fps: Highest FPS value observed since last reset.
+    """
