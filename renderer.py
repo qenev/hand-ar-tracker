@@ -130,3 +130,7 @@ class HandRenderer:
         Returns:
             List of (pixel_x, pixel_y) integer coordinate tuples.
         """
+        coords: List[Tuple[int, int]] = []
+        for lm in landmarks:
+            px, py = landmark_to_pixel(lm[0], lm[1], width, height)
+            coords.append((px, py))
