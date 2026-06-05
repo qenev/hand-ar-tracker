@@ -134,3 +134,7 @@ class HandRenderer:
         for lm in landmarks:
             px, py = landmark_to_pixel(lm[0], lm[1], width, height)
             coords.append((px, py))
+        return coords
+
+    def _draw_skeleton(
+        self,
