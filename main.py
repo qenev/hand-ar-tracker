@@ -8,3 +8,8 @@ the augmented reality overlay in real time.
 
 import sys
 from typing import Dict, Any, Optional
+
+import cv2
+import yaml
+import numpy as np
+
