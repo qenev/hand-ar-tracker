@@ -2,3 +2,5 @@
 
 Tests initialization, constants, and helper methods using mocks.
 """
+
+from unittest.mock import MagicMock, patch
