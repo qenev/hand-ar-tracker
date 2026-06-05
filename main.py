@@ -28,3 +28,8 @@ def load_config(config_path: str = "config.yaml") -> Dict[str, Any]:
 
     Args:
         config_path: Path to the YAML configuration file.
+
+    Returns:
+        A dictionary containing all configuration settings with
+        defaults applied for any missing values.
+    """
