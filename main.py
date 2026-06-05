@@ -123,3 +123,8 @@ def initialize_camera(config: Dict[str, Any]) -> cv2.VideoCapture:
             under the 'camera' key.
 
     Returns:
+        An opened cv2.VideoCapture object ready for frame capture.
+
+    Raises:
+        SystemExit: If the camera cannot be opened.
+    """
