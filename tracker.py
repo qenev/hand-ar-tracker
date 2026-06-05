@@ -102,3 +102,5 @@ class HandTracker:
         return results
 
     def extract_landmarks(
+        self,
+        results: Any,
