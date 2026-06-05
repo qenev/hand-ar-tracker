@@ -74,3 +74,5 @@ class FPSCounter:
         """
         if len(self.timestamps) < 2:
             return 0.0
+        time_span = self.timestamps[-1] - self.timestamps[0]
+        if time_span <= 0.0:
