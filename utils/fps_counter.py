@@ -84,3 +84,5 @@ class FPSCounter:
         """Get a formatted string representation of the current FPS.
 
         Returns:
+            A string like "FPS: 30.5" with one decimal place precision.
+        """
