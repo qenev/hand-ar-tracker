@@ -73,3 +73,8 @@ def _get_default_config() -> Dict[str, Any]:
             "skeleton_thickness": 2,
             "show_fps": True,
             "show_coordinates": True,
+            "show_gesture_label": True,
+            "show_hand_label": True,
+            "show_device_label": True,
+        },
+        "gestures": {
