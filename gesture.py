@@ -82,3 +82,5 @@ def get_finger_states(
     landmarks: List[Tuple[float, float, float]],
 ) -> List[bool]:
     """Determine the extended/curled state of each finger.
+
+    For the thumb, uses a horizontal distance comparison relative
