@@ -62,3 +62,5 @@ def test_normalize_vector() -> None:
     norm = normalize_vector(vec)
     assert math.isclose(norm[0], 0.6)
     assert math.isclose(norm[1], 0.0)
+    assert math.isclose(norm[2], 0.8)
+
