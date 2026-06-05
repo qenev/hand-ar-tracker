@@ -73,3 +73,6 @@ def calculate_angle(
     vector_bc = (
         point_c[0] - point_b[0],
         point_c[1] - point_b[1],
+        point_c[2] - point_b[2],
+    )
+    dot_product = sum(a * b for a, b in zip(vector_ba, vector_bc))
