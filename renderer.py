@@ -38,3 +38,7 @@ class HandRenderer:
         skeleton_color: Tuple[int, int, int] = (0, 255, 0),
         keypoint_color: Tuple[int, int, int] = (0, 0, 255),
         keypoint_radius: int = 6,
+        skeleton_thickness: int = 2,
+        show_fps: bool = True,
+        show_coordinates: bool = True,
+        show_gesture_label: bool = True,
