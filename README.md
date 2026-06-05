@@ -219,3 +219,16 @@ tests/test_tracker.py .....                                       [100%]
 
 ========================== 15 passed in 2.34s ==========================
 ```
+
+To run tests with verbose output:
+
+```bash
+pytest tests/ -v
+```
+
+To run a specific test file:
+
+```bash
+pytest tests/test_gesture.py
+```
+
