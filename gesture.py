@@ -138,3 +138,5 @@ def _is_pinch(
 
     Args:
         landmarks: List of 21 (x, y, z) tuples for hand landmarks.
+        threshold: Maximum distance to consider as a pinch.
+
