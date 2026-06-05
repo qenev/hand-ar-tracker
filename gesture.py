@@ -114,3 +114,5 @@ def _is_thumb_extended(
     thumb CMC joint compared to the index finger MCP position.
 
     Args:
+        landmarks: List of 21 (x, y, z) tuples for hand landmarks.
+
