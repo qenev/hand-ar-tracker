@@ -140,3 +140,5 @@ class HandTracker:
         Returns:
             A list of 21 (x, y, z) coordinate tuples.
         """
+        landmarks: List[Tuple[float, float, float]] = []
+        for landmark in hand_landmarks.landmark:
