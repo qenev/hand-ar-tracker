@@ -286,3 +286,7 @@ class HandRenderer:
                     0.35,
                     self._text_color,
                     1,
+                    cv2.LINE_AA,
+                )
+        return frame
+
