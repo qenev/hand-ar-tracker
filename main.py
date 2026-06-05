@@ -118,3 +118,8 @@ def initialize_camera(config: Dict[str, Any]) -> cv2.VideoCapture:
     Opens the camera specified in the config and sets the requested
     resolution and frame rate.
 
+    Args:
+        config: Configuration dictionary containing camera settings
+            under the 'camera' key.
+
+    Returns:
