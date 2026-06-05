@@ -94,3 +94,7 @@ class HandRenderer:
         Returns:
             The frame with hand visualization drawn on it.
         """
+        height, width = frame.shape[:2]
+        pixel_coords = self._compute_pixel_coords(
+            landmarks, width, height
+        )
