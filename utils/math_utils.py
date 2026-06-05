@@ -202,3 +202,6 @@ def dot_product(
     vector_b: Tuple[float, float, float],
 ) -> float:
     """Calculate the dot product of two 3D vectors.
+
+    Args:
+        vector_a: First vector as (x, y, z) tuple.
