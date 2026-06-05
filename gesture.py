@@ -48,3 +48,5 @@ def recognize_gesture(
 
     Analyzes the 21 hand landmarks to determine which gesture is
     being performed. Checks gestures in priority order: pinch first,
+    then fist, thumbs up, peace sign, and finally open hand.
+
