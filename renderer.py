@@ -218,3 +218,7 @@ class HandRenderer:
             return frame
         wrist = pixel_coords[0]
         text_position = (wrist[0] - 20, wrist[1] - 20)
+        frame = self._draw_text_with_background(
+            frame, label, text_position, scale=0.7
+        )
+        return frame
