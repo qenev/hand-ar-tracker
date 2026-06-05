@@ -64,3 +64,6 @@ def calculate_angle(
 
     Returns:
         The angle in degrees at point_b, clamped between 0 and 180.
+    """
+    vector_ba = (
+        point_a[0] - point_b[0],
