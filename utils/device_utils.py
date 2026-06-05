@@ -162,3 +162,7 @@ def _direct_device_selection(preference: str) -> "torch.device":
         preference: Device type string like 'cpu', 'cuda:0', or 'mps'.
 
     Returns:
+        The requested torch.device if available, otherwise CPU
+        with a warning message.
+    """
+    preference_lower = preference.lower().strip()
