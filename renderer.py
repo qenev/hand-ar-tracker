@@ -250,3 +250,7 @@ class HandRenderer:
             frame, gesture, text_position, scale=0.8
         )
         return frame
+
+    def _draw_coordinates(
+        self,
+        frame: np.ndarray,
