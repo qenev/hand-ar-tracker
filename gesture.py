@@ -78,3 +78,5 @@ def recognize_gesture(
     return "Unknown"
 
 
+def get_finger_states(
+    landmarks: List[Tuple[float, float, float]],
