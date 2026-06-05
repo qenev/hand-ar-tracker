@@ -366,3 +366,7 @@ class HandRenderer:
         )[0]
         x = (width - text_size[0]) // 2
         y = height - 30
+        frame = self._draw_text_with_background(
+            frame, message, (x, y), scale=0.7
+        )
+        return frame
