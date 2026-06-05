@@ -46,3 +46,7 @@ def _add_cuda_devices(
 
     Args:
         devices: Existing list of detected devices to append to.
+
+    Returns:
+        Updated device list with any CUDA devices appended.
+    """
