@@ -202,3 +202,7 @@ class HandRenderer:
         label: str,
     ) -> np.ndarray:
         """Draw the Left/Right hand label near the wrist.
+
+        Places a text label slightly above the wrist landmark
+        position with a dark background for readability.
+
