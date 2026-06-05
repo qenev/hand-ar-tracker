@@ -124,3 +124,6 @@ def landmark_to_pixel(
         landmark_y: Normalized y coordinate from MediaPipe (0.0 to 1.0).
         frame_width: Width of the video frame in pixels.
         frame_height: Height of the video frame in pixels.
+
+    Returns:
+        A tuple of (pixel_x, pixel_y) as integers clamped to frame bounds.
