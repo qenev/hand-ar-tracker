@@ -32,3 +32,5 @@ PINKY_MCP = 17
 PINKY_PIP = 18
 PINKY_DIP = 19
 PINKY_TIP = 20
+
+# Finger tip and pip index pairs for extension checking.
