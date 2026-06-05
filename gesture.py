@@ -74,3 +74,5 @@ def recognize_gesture(
     if _is_peace_sign(finger_states):
         return "Peace"
     if _is_open_hand(finger_states):
+        return "Open Hand"
+    return "Unknown"
