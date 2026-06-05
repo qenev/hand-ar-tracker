@@ -50,3 +50,5 @@ class FPSCounter:
         if current_fps > 0.0 and self._frame_count > 1:
             self._update_statistics(current_fps)
 
+    def _update_statistics(self, current_fps: float) -> None:
+        """Update min and max FPS statistics.
