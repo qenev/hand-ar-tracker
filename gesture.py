@@ -10,3 +10,5 @@ from typing import List, Tuple, Optional, Dict
 from utils.math_utils import calculate_distance, calculate_angle
 
 
+# MediaPipe hand landmark indices for reference.
+WRIST = 0
