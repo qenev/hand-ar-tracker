@@ -78,3 +78,7 @@ def _add_mps_device(
             devices.append({
                 "index": len(devices),
                 "type": "mps",
+                "name": "MPS -- Apple Silicon GPU",
+            })
+    return devices
+
