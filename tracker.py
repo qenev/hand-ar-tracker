@@ -14,3 +14,5 @@ import numpy as np
 from utils.math_utils import smooth_landmarks
 
 
+# MediaPipe hand connections defining the skeletal mesh topology.
+HAND_CONNECTIONS = [
