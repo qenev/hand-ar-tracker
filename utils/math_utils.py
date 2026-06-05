@@ -172,3 +172,6 @@ def vector_between(
     """Compute the vector from point_a to point_b.
 
     Args:
+        point_a: Starting point as (x, y, z) tuple.
+        point_b: Ending point as (x, y, z) tuple.
+
