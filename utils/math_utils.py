@@ -160,3 +160,6 @@ def smooth_landmarks(
     for curr, prev in zip(current, previous):
         sx = smoothing_factor * curr[0] + (1.0 - smoothing_factor) * prev[0]
         sy = smoothing_factor * curr[1] + (1.0 - smoothing_factor) * prev[1]
+        sz = smoothing_factor * curr[2] + (1.0 - smoothing_factor) * prev[2]
+        smoothed.append((sx, sy, sz))
+    return smoothed
