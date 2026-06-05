@@ -46,3 +46,6 @@ def calculate_distance_2d(
     dy = point_a[1] - point_b[1]
     return math.sqrt(dx * dx + dy * dy)
 
+
+def calculate_angle(
+    point_a: Tuple[float, float, float],
