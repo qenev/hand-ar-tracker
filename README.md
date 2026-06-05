@@ -102,3 +102,16 @@ python main.py
 4. A live video window opens showing the camera feed with hand tracking overlays.
 
 ### How to quit
+
+Press **q** or **ESC** at any time while the video window is focused to gracefully shut down the application. The webcam and all OpenCV windows will be released and destroyed automatically.
+
+---
+
+## GPU Selection
+
+The application includes a device selection system that determines whether PyTorch operations run on the GPU or CPU.
+
+### Automatic mode
+
+When `device` in `config.yaml` is set to `"auto"` (the default), the application checks for CUDA availability at startup. If a compatible GPU is detected, the user is prompted to confirm GPU usage. If declined, the system falls back to CPU.
+
