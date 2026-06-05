@@ -210,3 +210,7 @@ class HandRenderer:
             frame: Input video frame as BGR NumPy array.
             pixel_coords: List of pixel coordinate tuples.
             label: Hand label string ("Left" or "Right").
+
+        Returns:
+            Frame with hand label drawn.
+        """
