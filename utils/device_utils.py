@@ -134,3 +134,7 @@ def _prompt_device_selection(
 
     Args:
         devices: List of available device dictionaries with index,
+            type, and name fields.
+
+    Returns:
+        The selected torch.device based on user input. Falls back
