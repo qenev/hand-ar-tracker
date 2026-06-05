@@ -34,3 +34,6 @@ def calculate_distance_2d(
     point_b: Tuple[float, float],
 ) -> float:
     """Calculate the Euclidean distance between two 2D points.
+
+    Args:
+        point_a: First point as (x, y) tuple.
