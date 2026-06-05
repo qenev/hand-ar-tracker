@@ -174,3 +174,5 @@ def _is_thumbs_up(
     finger_states: List[bool],
     landmarks: List[Tuple[float, float, float]],
 ) -> bool:
+    """Detect a thumbs up gesture.
+
