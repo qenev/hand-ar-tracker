@@ -108,3 +108,5 @@ def test_dot_product() -> None:
     """Test computing dot product of two vectors."""
     vec_a = (1.0, 2.0, 3.0)
     vec_b = (4.0, 5.0, 6.0)
+    assert math.isclose(dot_product(vec_a, vec_b), 32.0)
+
