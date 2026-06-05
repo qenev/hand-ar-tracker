@@ -154,3 +154,6 @@ def smooth_landmarks(
     Returns:
         Smoothed landmark positions as a list of (x, y, z) tuples.
     """
+    if previous is None or len(previous) != len(current):
+        return current
+    smoothed = []
