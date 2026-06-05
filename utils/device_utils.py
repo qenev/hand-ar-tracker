@@ -42,3 +42,7 @@ def list_available_devices() -> List[Dict[str, str]]:
 def _add_cuda_devices(
     devices: List[Dict[str, str]],
 ) -> List[Dict[str, str]]:
+    """Add available CUDA GPU devices to the device list.
+
+    Args:
+        devices: Existing list of detected devices to append to.
