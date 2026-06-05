@@ -88,3 +88,8 @@ def _get_default_config() -> Dict[str, Any]:
 
 def _merge_configs(
     defaults: Dict[str, Any],
+    overrides: Dict[str, Any],
+) -> Dict[str, Any]:
+    """Recursively merge user config overrides into default config.
+
+    For nested dictionaries, merges at each level. For other types,
