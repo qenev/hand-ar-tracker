@@ -102,3 +102,7 @@ def select_device(config_preference: str) -> "torch.device":
     """
     if torch is None:
         print("[WARNING] PyTorch not available, using CPU.")
+        return _create_cpu_device()
+    if config_preference.lower() == "auto":
+        return _interactive_device_selection()
+    return _direct_device_selection(config_preference)
