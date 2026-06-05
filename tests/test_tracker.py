@@ -22,3 +22,5 @@ def test_tracker_initialization(mock_hands: MagicMock) -> None:
     tracker = HandTracker(
         max_hands=1,
         min_detection_confidence=0.8,
+        min_tracking_confidence=0.7,
+    )

@@ -22,3 +22,4 @@ try:
     mp.solutions = mock_solutions
     mock_solutions.hands = mock_hands
 except ImportError:
+    pass

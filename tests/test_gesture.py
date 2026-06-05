@@ -22,3 +22,5 @@ def make_open_hand_landmarks() -> List[Tuple[float, float, float]]:
     All fingertips are located above their respective PIP joints (y-coordinate is smaller),
     and the thumb is extended.
     """
+    # Initialize with wrist and basic palm
+    lms = [(0.0, 0.5, 0.0)] * 21
