@@ -82,3 +82,5 @@ class FPSCounter:
 
     def get_fps_string(self) -> str:
         """Get a formatted string representation of the current FPS.
+
+        Returns:
