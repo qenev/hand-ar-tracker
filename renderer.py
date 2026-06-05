@@ -110,3 +110,7 @@ class HandRenderer:
             )
         if self.show_coordinates:
             frame = self._draw_coordinates(
+                frame, landmarks, pixel_coords
+            )
+        return frame
+
