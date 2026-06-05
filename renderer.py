@@ -310,3 +310,7 @@ class HandRenderer:
         if not self.show_fps:
             return frame
         position = (10, 30)
+        frame = self._draw_text_with_background(
+            frame, fps_text, position, scale=0.7
+        )
+        return frame
