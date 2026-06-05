@@ -182,3 +182,5 @@ def _is_thumbs_up(
     Args:
         finger_states: List of 5 booleans for finger extension states.
         landmarks: List of 21 (x, y, z) tuples for hand landmarks.
+
+    Returns:
