@@ -24,3 +24,4 @@ __all__ = [
     "calculate_angle",
     "normalize_vector",
     "landmark_to_pixel",
+    "smooth_landmarks",
