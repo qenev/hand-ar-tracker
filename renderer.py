@@ -334,3 +334,7 @@ class HandRenderer:
         """
         if not self.show_device_label:
             return frame
+        text_size = cv2.getTextSize(
+            device_text, self._font, 0.6, 1
+        )[0]
+        width = frame.shape[1]
