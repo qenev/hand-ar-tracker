@@ -206,3 +206,7 @@ class HandRenderer:
         Places a text label slightly above the wrist landmark
         position with a dark background for readability.
 
+        Args:
+            frame: Input video frame as BGR NumPy array.
+            pixel_coords: List of pixel coordinate tuples.
+            label: Hand label string ("Left" or "Right").
