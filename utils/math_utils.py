@@ -22,3 +22,6 @@ def calculate_distance(
 
     Returns:
         The Euclidean distance between the two points as a float.
+    """
+    dx = point_a[0] - point_b[0]
+    dy = point_a[1] - point_b[1]
