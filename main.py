@@ -53,3 +53,8 @@ def _get_default_config() -> Dict[str, Any]:
 
     Returns:
         Dictionary with default values for all config sections.
+    """
+    return {
+        "camera": {
+            "index": 0,
+            "width": 1280,
