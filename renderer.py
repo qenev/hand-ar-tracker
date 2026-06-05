@@ -274,3 +274,7 @@ class HandRenderer:
         tip_indices = [4, 8, 12, 16, 20]
         for idx in tip_indices:
             if idx < len(landmarks) and idx < len(pixel_coords):
+                lm = landmarks[idx]
+                px, py = pixel_coords[idx]
+                coord_text = f"({lm[0]:.2f},{lm[1]:.2f})"
+                text_pos = (px + 10, py + 5)
