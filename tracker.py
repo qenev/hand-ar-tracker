@@ -148,3 +148,5 @@ class HandTracker:
                 landmark.z,
             ))
         return landmarks
+
+    def extract_handedness(
