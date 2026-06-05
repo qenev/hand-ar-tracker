@@ -36,3 +36,5 @@ def test_calculate_distance() -> None:
     assert math.isclose(calculate_distance(pt3, pt4), math.sqrt(12.0))
 
 
+def test_calculate_distance_2d() -> None:
+    """Test 2D Euclidean distance calculation."""

@@ -36,3 +36,5 @@ def test_extract_landmarks_empty(mock_hands: MagicMock) -> None:
     """Test landmarks extraction when no hands are detected."""
     tracker = HandTracker()
     assert tracker.extract_landmarks(None) == []
+
+
