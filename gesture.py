@@ -164,3 +164,5 @@ def _is_fist(
 
     Returns:
         True if enough fingers are curled to constitute a fist.
+    """
+    curled_count = sum(1 for state in finger_states if not state)
