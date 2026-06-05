@@ -98,3 +98,5 @@ class HandTracker:
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         rgb_frame.flags.writeable = False
         results = self.hands.process(rgb_frame)
+        rgb_frame.flags.writeable = True
+        return results
