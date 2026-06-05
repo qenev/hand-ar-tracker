@@ -298,3 +298,7 @@ class HandRenderer:
         """Draw the FPS counter in the top-left corner.
 
         Renders the FPS string with a dark background rectangle
+        for readability against any video content.
+
+        Args:
+            frame: Input video frame as BGR NumPy array.
