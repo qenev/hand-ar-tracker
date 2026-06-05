@@ -18,3 +18,8 @@ from renderer import HandRenderer
 from gesture import recognize_gesture
 from utils.fps_counter import FPSCounter
 from utils.device_utils import select_device, get_device_label
+
+
+def load_config(config_path: str = "config.yaml") -> Dict[str, Any]:
+    """Load and validate the configuration from a YAML file.
+
