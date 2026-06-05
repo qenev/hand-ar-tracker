@@ -114,3 +114,7 @@ class HandRenderer:
             )
         return frame
 
+    def _compute_pixel_coords(
+        self,
+        landmarks: List[Tuple[float, float, float]],
+        width: int,
