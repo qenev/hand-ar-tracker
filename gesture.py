@@ -56,3 +56,5 @@ def recognize_gesture(
         pinch_threshold: Maximum distance between thumb tip and index
             tip to register as a pinch gesture.
         fist_threshold: Minimum ratio of curled fingers to total
+            fingers required to register as a fist.
+
