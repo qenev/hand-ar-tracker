@@ -141,3 +141,16 @@ All configuration is managed through the `config.yaml` file in the project root.
 | `camera_index`            | integer | `0`       | Index of the webcam device to use. `0` is typically the default camera.     |
 | `frame_width`             | integer | `1280`    | Capture width in pixels requested from the webcam.                          |
 | `frame_height`            | integer | `720`     | Capture height in pixels requested from the webcam.                         |
+| `fps`                     | integer | `30`      | Target frames per second for the webcam capture.                            |
+| `max_hands`               | integer | `2`       | Maximum number of hands to detect simultaneously. Valid range: 1-2.         |
+| `detection_confidence`    | float   | `0.7`     | Minimum confidence threshold for initial hand detection. Range: 0.0-1.0.   |
+| `tracking_confidence`     | float   | `0.5`     | Minimum confidence threshold for hand landmark tracking. Range: 0.0-1.0.   |
+| `draw_landmarks`          | boolean | `true`    | Whether to draw red keypoint dots on detected landmarks.                    |
+| `draw_connections`        | boolean | `true`    | Whether to draw green skeletal mesh connections between landmarks.           |
+| `show_fps`                | boolean | `true`    | Whether to display the FPS counter on the video feed.                       |
+| `show_coordinates`        | boolean | `false`   | Whether to display pixel coordinates for each landmark.                     |
+| `gesture_recognition`     | boolean | `true`    | Whether to enable gesture recognition and display detected gestures.        |
+| `landmark_color`          | list    | `[0,0,255]` | BGR color for keypoint dots. Default is red.                              |
+| `connection_color`        | list    | `[0,255,0]` | BGR color for skeletal mesh lines. Default is green.                      |
+| `landmark_radius`         | integer | `5`       | Radius in pixels for each keypoint dot.                                     |
+| `connection_thickness`    | integer | `2`       | Line thickness in pixels for skeletal mesh connections.                      |

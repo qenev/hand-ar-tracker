@@ -141,3 +141,14 @@ dmypy.json
 cython_debug/
 
 # IDE / Editor config files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.vs/
+*.suo
+*.user
+*.sln
+*.db
+*.opendb
