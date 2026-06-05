@@ -4,3 +4,4 @@ camera:
   # Camera index (typically 0 for default built-in webcam, 1+ for external usb webcams)
   index: 0
   # Requested video width in pixels
+  width: 1280
