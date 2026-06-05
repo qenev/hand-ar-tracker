@@ -133,3 +133,6 @@ def landmark_to_pixel(
     return (pixel_x, pixel_y)
 
 
+def smooth_landmarks(
+    current: List[Tuple[float, float, float]],
+    previous: Optional[List[Tuple[float, float, float]]],
