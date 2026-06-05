@@ -190,3 +190,7 @@ def _is_device_available(device_type: str) -> bool:
     """
     if torch is None:
         return False
+    if device_type.startswith("cuda"):
+        if not torch.cuda.is_available():
+            return False
+        parts = device_type.split(":")
