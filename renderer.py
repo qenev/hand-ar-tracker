@@ -330,3 +330,7 @@ class HandRenderer:
             device_text: Device label string to display.
 
         Returns:
+            Frame with device label drawn.
+        """
+        if not self.show_device_label:
+            return frame
