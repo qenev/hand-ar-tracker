@@ -362,3 +362,7 @@ class HandRenderer:
         height, width = frame.shape[:2]
         message = "No hands detected - show hands to camera"
         text_size = cv2.getTextSize(
+            message, self._font, 0.7, 1
+        )[0]
+        x = (width - text_size[0]) // 2
+        y = height - 30
