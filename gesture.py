@@ -222,3 +222,5 @@ def _is_peace_sign(finger_states: List[bool]) -> bool:
 
 def _is_open_hand(finger_states: List[bool]) -> bool:
     """Detect an open hand gesture with all fingers extended.
+
+    Requires all five fingers including the thumb to be extended.
