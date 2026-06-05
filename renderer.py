@@ -142,3 +142,7 @@ class HandRenderer:
         pixel_coords: List[Tuple[int, int]],
     ) -> np.ndarray:
         """Draw the skeletal mesh connecting hand landmarks.
+
+        Draws lines between connected landmarks as defined by
+        the HAND_CONNECTIONS topology.
+
