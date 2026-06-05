@@ -56,3 +56,5 @@ class HandTracker:
         min_detection_confidence: float = 0.7,
         min_tracking_confidence: float = 0.6,
     ) -> None:
+        """Initialize the hand tracker with detection parameters.
+
