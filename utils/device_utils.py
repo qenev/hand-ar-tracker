@@ -118,3 +118,7 @@ def _interactive_device_selection() -> "torch.device":
         The selected torch.device, or CPU device if selection fails.
     """
     devices = list_available_devices()
+    print("\n--- Available Compute Devices ---")
+    for device_info in devices:
+        idx = device_info["index"]
+        name = device_info["name"]
