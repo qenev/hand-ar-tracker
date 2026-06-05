@@ -158,3 +158,5 @@ def _is_fist(
     Counts the number of curled (non-extended) fingers and compares
     the ratio to the threshold.
 
+    Args:
+        finger_states: List of 5 booleans for finger extension states.
