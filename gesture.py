@@ -88,3 +88,5 @@ def get_finger_states(
     joint position along the y-axis.
 
     Args:
+        landmarks: List of 21 (x, y, z) tuples for hand landmarks.
+
