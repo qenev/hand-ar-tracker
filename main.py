@@ -98,3 +98,8 @@ def _merge_configs(
     Args:
         defaults: Default configuration dictionary.
         overrides: User-provided configuration overrides.
+
+    Returns:
+        Merged configuration dictionary with user values taking
+        precedence over defaults.
+    """
