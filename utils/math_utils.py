@@ -190,3 +190,6 @@ def vector_magnitude(vector: Tuple[float, float, float]) -> float:
 
     Args:
         vector: Input vector as (x, y, z) tuple.
+
+    Returns:
+        The magnitude of the vector as a float.
