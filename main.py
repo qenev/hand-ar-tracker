@@ -288,3 +288,8 @@ def run_main_loop(
 def cleanup(
     cap: cv2.VideoCapture,
     tracker: HandTracker,
+) -> None:
+    """Release all resources and close windows.
+
+    Properly releases the camera capture device, MediaPipe tracker
+    resources, and all OpenCV windows.
