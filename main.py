@@ -153,3 +153,8 @@ def initialize_tracker(config: Dict[str, Any]) -> HandTracker:
     """
     track_config = config["tracking"]
     tracker = HandTracker(
+        max_hands=track_config["max_hands"],
+        min_detection_confidence=track_config["min_detection_confidence"],
+        min_tracking_confidence=track_config["min_tracking_confidence"],
+    )
+    print("[INFO] Hand tracker initialized.")
