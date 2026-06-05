@@ -26,3 +26,5 @@ class FPSCounter:
     def __init__(self, window_size: int = 30) -> None:
         """Initialize the FPS counter with a given window size.
 
+        Args:
+            window_size: Number of recent frames to use for calculating
