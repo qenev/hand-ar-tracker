@@ -230,3 +230,5 @@ def _is_open_hand(finger_states: List[bool]) -> bool:
 
     Returns:
         True if all fingers are extended in an open hand pose.
+    """
+    return all(finger_states)
