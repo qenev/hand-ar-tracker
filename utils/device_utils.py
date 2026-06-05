@@ -114,3 +114,7 @@ def _interactive_device_selection() -> "torch.device":
     Lists all detected devices with their indices and names, then
     waits for user input to select a device by number.
 
+    Returns:
+        The selected torch.device, or CPU device if selection fails.
+    """
+    devices = list_available_devices()
