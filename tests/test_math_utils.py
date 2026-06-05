@@ -90,3 +90,5 @@ def test_smooth_landmarks() -> None:
     mismatched_prev = [(0.0, 0.0, 0.0)]
     assert smooth_landmarks(curr, mismatched_prev) == curr
 
+
+def test_vector_between() -> None:
