@@ -346,3 +346,7 @@ class HandRenderer:
 
     def draw_no_hands_message(
         self,
+        frame: np.ndarray,
+    ) -> np.ndarray:
+        """Draw a message when no hands are detected.
+
