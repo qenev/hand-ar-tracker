@@ -126,3 +126,7 @@ class HandRenderer:
             landmarks: List of (x, y, z) normalized coordinates.
             width: Frame width in pixels.
             height: Frame height in pixels.
+
+        Returns:
+            List of (pixel_x, pixel_y) integer coordinate tuples.
+        """
