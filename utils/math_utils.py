@@ -157,3 +157,6 @@ def smooth_landmarks(
     if previous is None or len(previous) != len(current):
         return current
     smoothed = []
+    for curr, prev in zip(current, previous):
+        sx = smoothing_factor * curr[0] + (1.0 - smoothing_factor) * prev[0]
+        sy = smoothing_factor * curr[1] + (1.0 - smoothing_factor) * prev[1]
