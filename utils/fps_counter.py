@@ -10,3 +10,5 @@ from collections import deque
 from typing import Optional
 
 
+class FPSCounter:
+    """Rolling window FPS counter with statistics tracking.
