@@ -263,3 +263,8 @@ def run_main_loop(
         tracker: Configured hand tracker instance.
         renderer: Configured hand renderer instance.
         fps_counter: FPS counter for performance monitoring.
+        device_label: String label for the active compute device.
+        config: Full configuration dictionary.
+    """
+    print("[INFO] Starting main loop. Press 'q' or ESC to quit.")
+    window_name = "Hand AR Tracker"
