@@ -167,3 +167,16 @@ All configuration is managed through the `config.yaml` file in the project root.
 | `requirements.txt`        | Python package dependencies.                                                |
 | `hand_tracker.py`         | Core hand tracking module wrapping MediaPipe hand detection and landmarks.  |
 | `gesture_recognizer.py`   | Gesture recognition logic for classifying hand poses into named gestures.   |
+| `renderer.py`             | Rendering module for drawing landmarks, connections, and HUD elements.      |
+| `device_selector.py`      | GPU/CPU device selection and validation logic.                               |
+| `config_loader.py`        | YAML configuration loading and default value management.                    |
+| `utils.py`                | Shared utility functions (FPS calculation, coordinate formatting, etc.).     |
+| `tests/`                  | Directory containing unit tests for all modules.                            |
+| `tests/test_gesture.py`   | Tests for gesture recognition accuracy and edge cases.                      |
+| `tests/test_tracker.py`   | Tests for hand tracker initialization and landmark processing.              |
+| `tests/test_config.py`    | Tests for configuration loading, defaults, and validation.                  |
+| `assets/`                 | Static assets including demo screenshots and reference images.              |
+| `LICENSE`                 | MIT License file.                                                           |
+| `README.md`               | This file. Project documentation and usage guide.                           |
+
+---
