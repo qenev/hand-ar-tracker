@@ -152,3 +152,5 @@ class HandTracker:
     def extract_handedness(
         self,
         results: Any,
+    ) -> List[str]:
+        """Extract hand labels (Left/Right) from MediaPipe results.
