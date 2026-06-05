@@ -116,3 +116,5 @@ class HandTracker:
         Returns:
             A list of hands, where each hand is a list of 21
             (x, y, z) coordinate tuples in normalized space.
+            Returns an empty list if no hands are detected.
+        """
