@@ -154,3 +154,7 @@ def _prompt_device_selection(
     print("[WARNING] Invalid selection, falling back to CPU.")
     return _create_cpu_device()
 
+
+def _direct_device_selection(preference: str) -> "torch.device":
+    """Attempt to select a specific device by type string.
+
