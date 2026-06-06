@@ -142,7 +142,7 @@ All tunable parameters live in `config.yaml`. Below is the full reference:
 ### Renderer Settings (`renderer`)
 - `skeleton_color` (list, default `[0, 255, 0]`): BGR color for skeleton lines (green).
 - `keypoint_color` (list, default `[0, 0, 255]`): BGR color for landmark dots (red).
-- `keypoint_radius` (integer, default `8`): Radius of landmark dots.
+- `keypoint_radius` (integer, default `4`): Radius of landmark dots.
 - `skeleton_thickness` (integer, default `2`): Thickness of skeleton lines.
 - `show_fps` (boolean, default `true`): Display FPS counter.
 - `show_coordinates` (boolean, default `false`): Show coordinates for finger tips.

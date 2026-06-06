@@ -29,7 +29,7 @@ renderer:
   # BGR color values for landmark keypoints [Blue, Green, Red]
   keypoint_color: [0, 0, 255]
   # Radius in pixels for drawing landmark keypoints
-  keypoint_radius: 8
+  keypoint_radius: 4
   # Line thickness in pixels for drawing skeleton lines
   skeleton_thickness: 2
   # Show rolling average FPS counter on screen

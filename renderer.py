@@ -183,15 +183,6 @@ class HandRenderer:
             Frame with keypoint dots drawn.
         """
         for point in pixel_coords:
-            # White border ring for contrast
-            cv2.circle(
-                frame,
-                point,
-                self.keypoint_radius + 2,
-                (255, 255, 255),
-                1,
-                cv2.LINE_AA,
-            )
             # Main filled dot
             cv2.circle(
                 frame,
