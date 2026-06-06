@@ -201,37 +201,30 @@ def process_hands(
     clap_active: bool = False,
     time_val: float = 0.0,
 ) -> Tuple[np.ndarray, bool]:
-    """Process a single frame for hand detection and rendering.
-
-    Runs the full pipeline: detection, landmark extraction,
-    gesture recognition, and overlay rendering for all detected hands.
-    Also handles clap detection to toggle the holographic ribbon.
-
-    Args:
-        frame: Input video frame as BGR NumPy array.
-        tracker: Configured HandTracker instance.
-        renderer: Configured HandRenderer instance.
-        config: Full configuration dictionary.
-        show_gui: If True, renders the hand skeletal overlay.
-        clap_active: If True, renders the holographic ribbon between hands.
-        time_val: Animated time offset for the holographic wave texture.
-
-    Returns:
-        A tuple of (frame, clap_active).
-    """
+    """Process a single frame for hand detection and rendering."""
     if not hasattr(process_hands, "hands_close"):
         process_hands.hands_close = False
 
     results = tracker.process_frame(frame)
     all_landmarks = tracker.extract_landmarks(results)
     hand_labels = tracker.extract_handedness(results)
-    
-    # Pinch detection — both index finger tips (landmark 8) close together
-    if len(all_landmarks) == 2:
-        tip1 = all_landmarks[0][8]   # index tip, hand 0
-        tip2 = all_landmarks[1][8]   # index tip, hand 1
+
+    if len(all_landmarks) == 0:
+        if show_gui:
+            frame = renderer.draw_no_hands_message(frame)
+        return frame, clap_active
+
+    # Smooth ALL landmarks once here — reused for both ribbon and skeleton
+    smoothed_all = [
+        tracker.get_smoothed_landmarks(i, lm)
+        for i, lm in enumerate(all_landmarks)
+    ]
+
+    # Pinch detection — both index fingertips (landmark 8) close together
+    if len(smoothed_all) == 2:
+        tip1 = smoothed_all[0][8]
+        tip2 = smoothed_all[1][8]
         dist = math.sqrt((tip1[0] - tip2[0])**2 + (tip1[1] - tip2[1])**2)
-        
         if dist < 0.07:
             if not process_hands.hands_close:
                 clap_active = not clap_active
@@ -242,31 +235,21 @@ def process_hands(
     else:
         process_hands.hands_close = False
 
-    # Render holographic ribbon if two hands are detected and clap is active
-    if clap_active and len(all_landmarks) == 2:
-        # Sort hands horizontally to keep left/right mapping consistent
-        sorted_indices = sorted(range(len(all_landmarks)), key=lambda idx: all_landmarks[idx][0][0])
-        lm_left = all_landmarks[sorted_indices[0]]
-        lm_right = all_landmarks[sorted_indices[1]]
-        
-        smoothed_left = tracker.get_smoothed_landmarks(0, lm_left)
-        smoothed_right = tracker.get_smoothed_landmarks(1, lm_right)
-        
-        frame = renderer.draw_holographic_ribbon(frame, smoothed_left, smoothed_right, time_val)
-        
-    if len(all_landmarks) == 0:
-        if show_gui:
-            frame = renderer.draw_no_hands_message(frame)
-        return frame, clap_active
-        
+    # Render holographic ribbon (uses already-smoothed landmarks)
+    if clap_active and len(smoothed_all) == 2:
+        sorted_indices = sorted(range(len(smoothed_all)), key=lambda idx: smoothed_all[idx][0][0])
+        frame = renderer.draw_holographic_ribbon(
+            frame, smoothed_all[sorted_indices[0]], smoothed_all[sorted_indices[1]], time_val
+        )
+
+    # Draw skeleton overlay (uses same smoothed landmarks — no double smoothing)
     if show_gui:
         gesture_config = config["gestures"]
-        for i, landmarks in enumerate(all_landmarks):
-            smoothed = tracker.get_smoothed_landmarks(i, landmarks)
+        for i, smoothed in enumerate(smoothed_all):
             label = hand_labels[i] if i < len(hand_labels) else ""
             gesture = _get_gesture(smoothed, gesture_config)
             frame = renderer.draw_hand(frame, smoothed, label, gesture)
-            
+
     return frame, clap_active
 
 

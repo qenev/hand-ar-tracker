@@ -448,103 +448,106 @@ class HandRenderer:
         landmarks_right: List[Tuple[float, float, float]],
         time_val: float,
     ) -> np.ndarray:
-        """Draw a bending, wavy holographic ribbon between two hands."""
+        """Draw a bending holographic ribbon between two hands (fast single-warp version)."""
         h_frame, w_frame = frame.shape[:2]
-        
-        # Convert landmarks to pixel coordinates
+
         coords_left = self._compute_pixel_coords(landmarks_left, w_frame, h_frame)
         coords_right = self._compute_pixel_coords(landmarks_right, w_frame, h_frame)
-        
+
         if len(coords_left) < 21 or len(coords_right) < 21:
             return frame
-            
-        # Left hand points (wrist and middle finger tip)
-        left_top = np.array(coords_left[12], dtype=np.float32)
-        left_bot = np.array(coords_left[0], dtype=np.float32)
-        
-        # Right hand points (wrist and middle finger tip)
+
+        # Anchor points on each hand: fingertips (top) and wrist (bottom)
+        left_top  = np.array(coords_left[12],  dtype=np.float32)
+        left_bot  = np.array(coords_left[0],   dtype=np.float32)
         right_top = np.array(coords_right[12], dtype=np.float32)
-        right_bot = np.array(coords_right[0], dtype=np.float32)
-        
+        right_bot = np.array(coords_right[0],  dtype=np.float32)
+
+        # ── Build LUT and cached meshgrid once ────────────────────────────────
         if not hasattr(self, '_holographic_lut'):
             self._holographic_lut = self._create_holographic_lut()
-            
-        tex_w, tex_h = 400, 200
-        texture = self._generate_plasma_texture(tex_w, tex_h, time_val, self._holographic_lut)
-        
-        N = 35  # Number of horizontal slices for smooth bending
-        
-        vec = right_top - left_top
-        dist = np.linalg.norm(vec)
-        if dist > 0:
-            ux = vec[0] / dist
-            uy = vec[1] / dist
-            px, py = -uy, ux
-            if py < 0:
-                px, py = -px, -py
-        else:
-            px, py = 0, 1
-            
-        for i in range(N):
-            t0 = i / N
-            t1 = (i + 1) / N
-            
-            # Linear interpolation points
-            pt0 = (1 - t0) * left_top + t0 * right_top
-            pt1 = (1 - t1) * left_top + t1 * right_top
-            pb0 = (1 - t0) * left_bot + t0 * right_bot
-            pb1 = (1 - t1) * left_bot + t1 * right_bot
-            
-            # Physics-based sag (parabolic) + ripple wave
-            sag0 = np.sin(t0 * np.pi) * (dist * 0.15 + 20.0)
-            sag1 = np.sin(t1 * np.pi) * (dist * 0.15 + 20.0)
-            
-            ripple0 = np.sin(t0 * 6.0 - time_val * 6.0) * 12.0
-            ripple1 = np.sin(t1 * 6.0 - time_val * 6.0) * 12.0
-            
-            disp0 = sag0 + ripple0
-            disp1 = sag1 + ripple1
-            
-            p_top0 = pt0 + np.array([px * disp0, py * disp0], dtype=np.float32)
-            p_top1 = pt1 + np.array([px * disp1, py * disp1], dtype=np.float32)
-            p_bot0 = pb0 + np.array([px * disp0, py * disp0], dtype=np.float32)
-            p_bot1 = pb1 + np.array([px * disp1, py * disp1], dtype=np.float32)
-            
-            dst_quad = np.array([p_top0, p_top1, p_bot1, p_bot0], dtype=np.float32)
-            
-            x_min = int(np.min(dst_quad[:, 0]))
-            x_max = int(np.max(dst_quad[:, 0])) + 1
-            y_min = int(np.min(dst_quad[:, 1]))
-            y_max = int(np.max(dst_quad[:, 1])) + 1
-            
-            x_min = max(0, min(w_frame - 1, x_min))
-            x_max = max(0, min(w_frame, x_max))
-            y_min = max(0, min(h_frame - 1, y_min))
-            y_max = max(0, min(h_frame, y_max))
-            
-            if x_max > x_min and y_max > y_min:
-                dst_quad_local = dst_quad - np.array([x_min, y_min], dtype=np.float32)
-                src_quad = np.array([
-                    [t0 * tex_w, 0],
-                    [t1 * tex_w, 0],
-                    [t1 * tex_w, tex_h],
-                    [t0 * tex_w, tex_h]
-                ], dtype=np.float32)
-                
-                M = cv2.getPerspectiveTransform(src_quad, dst_quad_local)
-                crop_w = x_max - x_min
-                crop_h = y_max - y_min
-                
-                warped_slice = cv2.warpPerspective(texture, M, (crop_w, crop_h))
-                mask = np.zeros((crop_h, crop_w), dtype=np.uint8)
-                cv2.fillConvexPoly(mask, dst_quad_local.astype(np.int32), 255)
-                
-                cv2.copyTo(warped_slice, mask, frame[y_min:y_max, x_min:x_max])
-                
+
+        TEX_W, TEX_H = 160, 80          # small texture — fast
+        N = 20                          # curved edge sample points
+
+        if not hasattr(self, '_tex_xx'):
+            x = np.linspace(0, 12, TEX_W)
+            y = np.linspace(0, 8,  TEX_H)
+            self._tex_xx, self._tex_yy = np.meshgrid(x, y)
+
+        # ── Animate only the time-dependent parts ─────────────────────────────
+        tv = time_val
+        v = (
+            np.sin(self._tex_xx * 1.8 + np.cos(self._tex_yy * 1.0) + tv * 5.0)
+            + np.sin(self._tex_yy * 2.5 + np.sin(self._tex_xx * 0.7) + tv * 3.0)
+            + np.sin(np.sqrt((self._tex_xx - 6.0)**2 + (self._tex_yy - 4.0)**2) * 2.0 - tv * 4.0)
+            + 3.0
+        ) / 6.0
+        texture = self._holographic_lut[(np.clip(v, 0, 1) * 255).astype(np.uint8)]
+
+        # ── Build ribbon polygon (top edge + bottom edge) ─────────────────────
+        vec  = right_top - left_top
+        dist = float(np.linalg.norm(vec)) or 1.0
+        px   = -(vec[1] / dist)   # perpendicular unit vector
+        py   =  (vec[0] / dist)
+        if py < 0:
+            px, py = -px, -py
+
+        ts = np.linspace(0, 1, N)
+        sag    = np.sin(ts * np.pi) * (dist * 0.15 + 20.0)
+        ripple = np.sin(ts * 6.0 - tv * 6.0) * 10.0
+        disp   = sag + ripple
+
+        top_pts = (1 - ts)[:, None] * left_top + ts[:, None] * right_top \
+                  + disp[:, None] * np.array([px, py])
+        bot_pts = (1 - ts)[:, None] * left_bot  + ts[:, None] * right_bot  \
+                  + disp[:, None] * np.array([px, py])
+
+        # Full polygon for masking: top edge L→R then bottom edge R→L
+        poly = np.vstack([top_pts, bot_pts[::-1]]).astype(np.int32)
+
+        # ── Bounding box for the single warp ──────────────────────────────────
+        x0 = max(0, int(poly[:, 0].min()))
+        x1 = min(w_frame, int(poly[:, 0].max()) + 1)
+        y0 = max(0, int(poly[:, 1].min()))
+        y1 = min(h_frame, int(poly[:, 1].max()) + 1)
+        if x1 <= x0 or y1 <= y0:
+            return frame
+
+        bw, bh = x1 - x0, y1 - y0
+
+        # Map full ribbon bounding box → full texture via one perspective warp
+        src_corners = np.array([[0, 0], [TEX_W - 1, 0],
+                                 [TEX_W - 1, TEX_H - 1], [0, TEX_H - 1]], dtype=np.float32)
+        dst_corners = np.array([
+            top_pts[0]  - [x0, y0],
+            top_pts[-1] - [x0, y0],
+            bot_pts[-1] - [x0, y0],
+            bot_pts[0]  - [x0, y0],
+        ], dtype=np.float32)
+
+        M = cv2.getPerspectiveTransform(src_corners, dst_corners)
+        warped = cv2.warpPerspective(texture, M, (bw, bh))
+
+        # ── Polygon mask (only inside the curved ribbon) ───────────────────────
+        poly_local = poly - np.array([x0, y0], dtype=np.int32)
+        mask = np.zeros((bh, bw), dtype=np.uint8)
+        cv2.fillPoly(mask, [poly_local], 255)
+
+        # Edge fade: slightly erode mask for soft border
+        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
+        mask_soft = cv2.GaussianBlur(mask, (7, 7), 0)
+
+        # ── Blend onto frame with addWeighted ─────────────────────────────────
+        roi = frame[y0:y1, x0:x1]
+        alpha = mask_soft.astype(np.float32)[:, :, None] / 255.0
+        blended = (warped.astype(np.float32) * 0.65 + roi.astype(np.float32) * 0.35).astype(np.uint8)
+        frame[y0:y1, x0:x1] = (blended * alpha + roi * (1 - alpha)).astype(np.uint8)
+
         return frame
 
     def _create_holographic_lut(self) -> np.ndarray:
-        # Shape must be (256, 3) for 3-channel cv2.LUT
+        # Shape (256, 3) for fast fancy-indexing
         lut = np.zeros((256, 3), dtype=np.uint8)
         points = [
             (0.0,  [240, 240, 255]),
@@ -560,27 +563,10 @@ class HandRenderer:
             t = i / 255.0
             for idx in range(len(points) - 1):
                 t0, c0 = points[idx]
-                t1, c1 = points[idx+1]
+                t1, c1 = points[idx + 1]
                 if t0 <= t <= t1:
-                    factor = (t - t0) / (t1 - t0 + 1e-9)
-                    lut[i] = [
-                        int(c0[0] + factor * (c1[0] - c0[0])),
-                        int(c0[1] + factor * (c1[1] - c0[1])),
-                        int(c0[2] + factor * (c1[2] - c0[2])),
-                    ]
+                    f = (t - t0) / (t1 - t0 + 1e-9)
+                    lut[i] = [int(c0[j] + f * (c1[j] - c0[j])) for j in range(3)]
                     break
         return lut
 
-    def _generate_plasma_texture(self, w: int, h: int, time_val: float, lut: np.ndarray) -> np.ndarray:
-        x = np.linspace(0, 12, w)
-        y = np.linspace(0, 8, h)
-        xx, yy = np.meshgrid(x, y)
-        wave1 = np.sin(xx * 1.8 + np.cos(yy * 1.0) + time_val * 5.0)
-        wave2 = np.sin(yy * 2.5 + np.sin(xx * 0.7) + time_val * 3.0)
-        wave3 = np.sin(np.sqrt((xx - 6.0)**2 + (yy - 4.0)**2) * 2.0 - time_val * 4.0)
-        v = (wave1 + wave2 + wave3 + 3.0) / 6.0
-        # v is (h, w), single channel — apply LUT per channel manually
-        v_uint8 = (np.clip(v, 0, 1) * 255.0).astype(np.uint8)  # shape (h, w)
-        # Build BGR output using lut lookup
-        out = lut[v_uint8]  # shape (h, w, 3)
-        return out.astype(np.uint8)
