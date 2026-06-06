@@ -454,7 +454,7 @@ class HandRenderer:
         landmarks_right: List[Tuple[float, float, float]],
         time_val: float,
     ) -> np.ndarray:
-        """Draw a straight flat sheet with liquid-chrome metallic ripple texture between two hands (no sag, no physics)."""
+        """Apply a refraction, blur, and sqwiggle distortion effect to the background behind the ribbon."""
         h_frame, w_frame = frame.shape[:2]
 
         coords_left = self._compute_pixel_coords(landmarks_left, w_frame, h_frame)
@@ -469,30 +469,7 @@ class HandRenderer:
         right_top = np.array(coords_right[8], dtype=np.float32)
         right_bot = np.array(coords_right[4], dtype=np.float32)
 
-        # ── Build LUT and cached meshgrid once ────────────────────────────────
-        if not hasattr(self, '_holographic_lut'):
-            self._holographic_lut = self._create_holographic_lut()
-
-        TEX_W, TEX_H = 320, 160         # higher resolution for crisp chrome details
-
-        if not hasattr(self, '_tex_xx'):
-            x = np.linspace(0, 15, TEX_W)
-            y = np.linspace(0, 7,  TEX_H)
-            self._tex_xx, self._tex_yy = np.meshgrid(x, y)
-
-        # ── Liquid Chrome Wave Formula matching reference photo ───────────────
-        tv = time_val
-        dist_x = np.sin(self._tex_yy * 2.5 + tv * 5.0) * 0.8
-        dist_y = np.cos(self._tex_xx * 1.5 - tv * 3.5) * 0.5
-        v = (
-            np.sin((self._tex_xx + dist_x) * 4.5)
-            + np.cos((self._tex_yy + dist_y) * 2.8)
-            + 2.0
-        ) / 4.0
-        
-        texture = self._holographic_lut[(np.clip(v, 0, 1) * 255).astype(np.uint8)]
-
-        # Bounding box of the quad
+        # Polygon coordinates representing the ribbon (can taper to triangle on pinch)
         poly = np.array([left_top, right_top, right_bot, left_bot], dtype=np.int32)
         x0 = max(0, int(poly[:, 0].min()))
         x1 = min(w_frame, int(poly[:, 0].max()) + 1)
@@ -503,20 +480,43 @@ class HandRenderer:
 
         bw, bh = x1 - x0, y1 - y0
 
-        # Map full ribbon bounding box → full texture via one perspective warp
-        src_corners = np.array([[0, 0], [TEX_W - 1, 0],
-                                 [TEX_W - 1, TEX_H - 1], [0, TEX_H - 1]], dtype=np.float32)
-        dst_corners = np.array([
-            left_top  - [x0, y0],
-            right_top - [x0, y0],
-            right_bot - [x0, y0],
-            left_bot  - [x0, y0],
-        ], dtype=np.float32)
+        # Extract local background region (ROI)
+        roi = frame[y0:y1, x0:x1].copy()
 
-        M = cv2.getPerspectiveTransform(src_corners, dst_corners)
-        warped = cv2.warpPerspective(texture, M, (bw, bh))
+        # Apply high quality double blur to background
+        blurred_roi = cv2.GaussianBlur(roi, (25, 25), 0)
 
-        # ── Polygon mask for the straight quad ────────────────────────────────
+        # Create coordinate map for cv2.remap
+        grid_x, grid_y = np.meshgrid(np.arange(bw, dtype=np.float32), np.arange(bh, dtype=np.float32))
+
+        # ── Apply Sqwiggle Refraction Waves ────────────────────────────────────
+        tv = time_val
+        # Wave displacements
+        disp_x = np.sin(grid_y * 0.08 + tv * 10.0) * 16.0 + np.cos(grid_x * 0.04 - tv * 5.0) * 6.0
+        disp_y = np.cos(grid_x * 0.07 + tv * 8.0) * 12.0 + np.sin(grid_y * 0.05 + tv * 6.0) * 5.0
+
+        map_x = grid_x + disp_x
+        map_y = grid_y + disp_y
+
+        # Distort the blurred background
+        sqwiggled = cv2.remap(blurred_roi, map_x, map_y, cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
+
+        # ── Shimmer Color Tint ────────────────────────────────────────────────
+        if not hasattr(self, '_holographic_lut'):
+            self._holographic_lut = self._create_holographic_lut()
+        
+        # High-frequency shifting wave mapping to the rainbow/chrome LUT
+        v = (
+            np.sin(grid_x * 0.04 + np.sin(grid_y * 0.03 + tv * 6.0) * 1.5)
+            + np.cos(grid_y * 0.05 + tv * 4.0)
+            + 2.0
+        ) / 4.0
+        shimmer = self._holographic_lut[(np.clip(v, 0, 1) * 255).astype(np.uint8)]
+
+        # Blend distorted background with 22% iridescent shimmer
+        warped = cv2.addWeighted(sqwiggled, 0.78, shimmer, 0.22, 0)
+
+        # ── Polygon mask for the ribbon area ──────────────────────────────────
         poly_local = poly - np.array([x0, y0], dtype=np.int32)
         mask = np.zeros((bh, bw), dtype=np.uint8)
         cv2.fillPoly(mask, [poly_local], 255)
