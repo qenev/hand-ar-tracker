@@ -73,6 +73,12 @@ class HandRenderer:
         self._text_color = (255, 255, 255)
         self._bg_color = (0, 0, 0)
 
+        # Physics state for jiggly ribbon
+        self._last_hand_y = None
+        self._last_time = None
+        self._ribbon_pos = 0.0
+        self._ribbon_vel = 0.0
+
     def draw_hand(
         self,
         frame: np.ndarray,
@@ -495,7 +501,39 @@ class HandRenderer:
             px, py = -px, -py
 
         ts = np.linspace(0, 1, N)
-        sag    = np.sin(ts * np.pi) * (dist * 0.15 + 20.0)
+
+        # ── Physics simulation for jiggly sag ──────────────────────────────────
+        import time
+        current_time = time.time()
+        hand_y_center = (left_top[1] + right_top[1] + left_bot[1] + right_bot[1]) / 4.0
+
+        if self._last_time is None:
+            dt = 1.0 / 60.0
+            self._ribbon_pos = dist * 0.15 + 20.0
+        else:
+            dt = min(0.1, current_time - self._last_time)
+        self._last_time = current_time
+
+        target_sag = dist * 0.15 + 20.0
+
+        # Acceleration/movement forces from hand velocity changes
+        inertia_force = 0.0
+        if self._last_hand_y is not None:
+            hand_vel_y = (hand_y_center - self._last_hand_y) / dt
+            inertia_force = -hand_vel_y * 1.5
+        self._last_hand_y = hand_y_center
+
+        # Spring constant (k) and Damping factor (c)
+        k = 45.0
+        c = 4.5
+
+        force = -k * (self._ribbon_pos - target_sag) - c * self._ribbon_vel + inertia_force
+        self._ribbon_vel += force * dt
+        self._ribbon_vel = np.clip(self._ribbon_vel, -450.0, 450.0)
+        self._ribbon_pos += self._ribbon_vel * dt
+        self._ribbon_pos = max(5.0, min(dist * 1.2, self._ribbon_pos))
+
+        sag    = np.sin(ts * np.pi) * self._ribbon_pos
         ripple = np.sin(ts * 6.0 - tv * 6.0) * 10.0
         disp   = sag + ripple
 
