@@ -454,7 +454,7 @@ class HandRenderer:
         landmarks_right: List[Tuple[float, float, float]],
         time_val: float,
     ) -> np.ndarray:
-        """Apply a refraction, blur, and sqwiggle distortion effect to the background behind the ribbon."""
+        """Apply a crisp, high-frequency refraction and chrome ripple distortion matching the reference photo."""
         h_frame, w_frame = frame.shape[:2]
 
         coords_left = self._compute_pixel_coords(landmarks_left, w_frame, h_frame)
@@ -483,38 +483,41 @@ class HandRenderer:
         # Extract local background region (ROI)
         roi = frame[y0:y1, x0:x1].copy()
 
-        # Apply high quality double blur to background
-        blurred_roi = cv2.GaussianBlur(roi, (25, 25), 0)
+        # Very light anti-aliasing blur to preserve crisp background details
+        blurred_roi = cv2.GaussianBlur(roi, (3, 3), 0)
 
         # Create coordinate map for cv2.remap
         grid_x, grid_y = np.meshgrid(np.arange(bw, dtype=np.float32), np.arange(bh, dtype=np.float32))
 
-        # ── Apply Sqwiggle Refraction Waves ────────────────────────────────────
+        # ── Apply High-Frequency Sqwiggle Refraction Waves ─────────────────────
         tv = time_val
-        # Wave displacements
-        disp_x = np.sin(grid_y * 0.08 + tv * 10.0) * 16.0 + np.cos(grid_x * 0.04 - tv * 5.0) * 6.0
-        disp_y = np.cos(grid_x * 0.07 + tv * 8.0) * 12.0 + np.sin(grid_y * 0.05 + tv * 6.0) * 5.0
+        # Determine wave frequency vertically to get ~10-12 ripples
+        freq_y = (12.0 / max(10, bh)) * 2.0 * np.pi
+
+        # High-frequency horizontal sqwiggle waves matching the photo
+        disp_x = np.sin(grid_y * freq_y + tv * 12.0) * 25.0 + np.cos(grid_x * 0.05 - tv * 5.0) * 8.0
+        disp_y = np.cos(grid_x * 0.06 + tv * 8.0) * 6.0 + np.sin(grid_y * 0.05 + tv * 4.0) * 3.0
 
         map_x = grid_x + disp_x
         map_y = grid_y + disp_y
 
-        # Distort the blurred background
+        # Distort the crisp background
         sqwiggled = cv2.remap(blurred_roi, map_x, map_y, cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
 
-        # ── Shimmer Color Tint ────────────────────────────────────────────────
+        # ── Shimmer Color Tint matching the chrome wave fringes ────────────────
         if not hasattr(self, '_holographic_lut'):
             self._holographic_lut = self._create_holographic_lut()
         
-        # High-frequency shifting wave mapping to the rainbow/chrome LUT
+        # Color wave matching the refraction wave frequency
         v = (
-            np.sin(grid_x * 0.04 + np.sin(grid_y * 0.03 + tv * 6.0) * 1.5)
-            + np.cos(grid_y * 0.05 + tv * 4.0)
+            np.sin(grid_y * freq_y + tv * 12.0)
+            + np.cos(grid_x * 0.04 - tv * 3.0)
             + 2.0
         ) / 4.0
         shimmer = self._holographic_lut[(np.clip(v, 0, 1) * 255).astype(np.uint8)]
 
-        # Blend distorted background with 22% iridescent shimmer
-        warped = cv2.addWeighted(sqwiggled, 0.78, shimmer, 0.22, 0)
+        # Blend distorted background with 30% iridescent chrome/metallic shimmer
+        warped = cv2.addWeighted(sqwiggled, 0.70, shimmer, 0.30, 0)
 
         # ── Polygon mask for the ribbon area ──────────────────────────────────
         poly_local = poly - np.array([x0, y0], dtype=np.int32)
