@@ -468,7 +468,8 @@ class HandRenderer:
             self._holographic_lut = self._create_holographic_lut()
 
         TEX_W, TEX_H = 160, 80          # small texture — fast
-        N = 20                          # curved edge sample points
+        S = 12                          # number of horizontal slices
+        N = S + 1                       # curved edge sample points aligned with slices
 
         if not hasattr(self, '_tex_xx'):
             x = np.linspace(0, 12, TEX_W)
@@ -503,40 +504,47 @@ class HandRenderer:
         bot_pts = (1 - ts)[:, None] * left_bot  + ts[:, None] * right_bot  \
                   + disp[:, None] * np.array([px, py])
 
-        # Full polygon for masking: top edge L→R then bottom edge R→L
-        poly = np.vstack([top_pts, bot_pts[::-1]]).astype(np.int32)
+        # ── Draw Ribbon Segment by Segment ─────────────────────────────────────
+        # S slices is plenty for a smooth curved ribbon and runs extremely fast
+        for i in range(S):
+            t0 = i / S
+            t1 = (i + 1) / S
 
-        # ── Bounding box for the single warp ──────────────────────────────────
-        x0 = max(0, int(poly[:, 0].min()))
-        x1 = min(w_frame, int(poly[:, 0].max()) + 1)
-        y0 = max(0, int(poly[:, 1].min()))
-        y1 = min(h_frame, int(poly[:, 1].max()) + 1)
-        if x1 <= x0 or y1 <= y0:
-            return frame
+            # Extract corners for this slice
+            p_top0 = top_pts[i]
+            p_top1 = top_pts[i + 1]
+            p_bot1 = bot_pts[i + 1]
+            p_bot0 = bot_pts[i]
 
-        bw, bh = x1 - x0, y1 - y0
+            dst_quad = np.array([p_top0, p_top1, p_bot1, p_bot0], dtype=np.float32)
 
-        # Map full ribbon bounding box → full texture via one perspective warp
-        src_corners = np.array([[0, 0], [TEX_W - 1, 0],
-                                 [TEX_W - 1, TEX_H - 1], [0, TEX_H - 1]], dtype=np.float32)
-        dst_corners = np.array([
-            top_pts[0]  - [x0, y0],
-            top_pts[-1] - [x0, y0],
-            bot_pts[-1] - [x0, y0],
-            bot_pts[0]  - [x0, y0],
-        ], dtype=np.float32)
+            # Local bounding box for this slice
+            x_min = max(0, int(np.min(dst_quad[:, 0])))
+            x_max = min(w_frame, int(np.max(dst_quad[:, 0])) + 1)
+            y_min = max(0, int(np.min(dst_quad[:, 1])))
+            y_max = min(h_frame, int(np.max(dst_quad[:, 1])) + 1)
 
-        M = cv2.getPerspectiveTransform(src_corners, dst_corners)
-        warped = cv2.warpPerspective(texture, M, (bw, bh))
+            if x_max > x_min and y_max > y_min:
+                crop_w = x_max - x_min
+                crop_h = y_max - y_min
 
-        # ── Polygon mask (only inside the curved ribbon) — hard edge, no shadow ──
-        poly_local = poly - np.array([x0, y0], dtype=np.int32)
-        mask = np.zeros((bh, bw), dtype=np.uint8)
-        cv2.fillPoly(mask, [poly_local], 255)
+                dst_quad_local = dst_quad - np.array([x_min, y_min], dtype=np.float32)
+                src_quad = np.array([
+                    [t0 * (TEX_W - 1), 0],
+                    [t1 * (TEX_W - 1), 0],
+                    [t1 * (TEX_W - 1), TEX_H - 1],
+                    [t0 * (TEX_W - 1), TEX_H - 1]
+                ], dtype=np.float32)
 
-        # ── Opaque blend: no GaussianBlur, no halo ────────────────────────────
-        roi = frame[y0:y1, x0:x1].copy()
-        np.copyto(frame[y0:y1, x0:x1], warped, where=mask[:, :, None] > 0)
+                M = cv2.getPerspectiveTransform(src_quad, dst_quad_local)
+                warped_slice = cv2.warpPerspective(texture, M, (crop_w, crop_h))
+
+                # Hard mask for this slice
+                mask = np.zeros((crop_h, crop_w), dtype=np.uint8)
+                cv2.fillConvexPoly(mask, dst_quad_local.astype(np.int32), 255)
+
+                # Copy slice onto frame
+                cv2.copyTo(warped_slice, mask, frame[y_min:y_max, x_min:x_max])
 
         return frame
 
