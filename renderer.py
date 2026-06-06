@@ -457,11 +457,11 @@ class HandRenderer:
         if len(coords_left) < 21 or len(coords_right) < 21:
             return frame
 
-        # Anchor points on each hand: fingertips (top) and wrist (bottom)
-        left_top  = np.array(coords_left[12],  dtype=np.float32)
-        left_bot  = np.array(coords_left[0],   dtype=np.float32)
-        right_top = np.array(coords_right[12], dtype=np.float32)
-        right_bot = np.array(coords_right[0],  dtype=np.float32)
+        # Anchor points: index fingertip (8) top, thumb tip (4) bottom
+        left_top  = np.array(coords_left[8],  dtype=np.float32)
+        left_bot  = np.array(coords_left[4],  dtype=np.float32)
+        right_top = np.array(coords_right[8], dtype=np.float32)
+        right_bot = np.array(coords_right[4], dtype=np.float32)
 
         # ── Build LUT and cached meshgrid once ────────────────────────────────
         if not hasattr(self, '_holographic_lut'):
@@ -529,20 +529,14 @@ class HandRenderer:
         M = cv2.getPerspectiveTransform(src_corners, dst_corners)
         warped = cv2.warpPerspective(texture, M, (bw, bh))
 
-        # ── Polygon mask (only inside the curved ribbon) ───────────────────────
+        # ── Polygon mask (only inside the curved ribbon) — hard edge, no shadow ──
         poly_local = poly - np.array([x0, y0], dtype=np.int32)
         mask = np.zeros((bh, bw), dtype=np.uint8)
         cv2.fillPoly(mask, [poly_local], 255)
 
-        # Edge fade: slightly erode mask for soft border
-        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
-        mask_soft = cv2.GaussianBlur(mask, (7, 7), 0)
-
-        # ── Blend onto frame with addWeighted ─────────────────────────────────
-        roi = frame[y0:y1, x0:x1]
-        alpha = mask_soft.astype(np.float32)[:, :, None] / 255.0
-        blended = (warped.astype(np.float32) * 0.65 + roi.astype(np.float32) * 0.35).astype(np.uint8)
-        frame[y0:y1, x0:x1] = (blended * alpha + roi * (1 - alpha)).astype(np.uint8)
+        # ── Opaque blend: no GaussianBlur, no halo ────────────────────────────
+        roi = frame[y0:y1, x0:x1].copy()
+        np.copyto(frame[y0:y1, x0:x1], warped, where=mask[:, :, None] > 0)
 
         return frame
 
