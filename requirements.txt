@@ -1,6 +1,7 @@
-mediapipe==0.10.9
-opencv-python==4.9.0.80
+mediapipe==0.10.30
+opencv-python==4.8.1.78
 PyYAML==6.0.1
 numpy==1.26.4
-torch>=2.2.0
 pytest==8.1.1
+# PyTorch CUDA (for RTX 3050 GPU detection/labelling) - install separately:
+# pip install torch --index-url https://download.pytorch.org/whl/cu121

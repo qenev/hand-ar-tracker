@@ -8,8 +8,17 @@ with configurable confidence thresholds.
 from typing import List, Tuple, Optional, Dict, Any
 
 import cv2
-import mediapipe as mp
 import numpy as np
+
+try:
+    import mediapipe as mp
+    try:
+        from mediapipe.solutions import hands as mp_hands
+    except ImportError:
+        from mediapipe.python.solutions import hands as mp_hands
+except ImportError:
+    mp = None
+    mp_hands = None
 
 from utils.math_utils import smooth_landmarks
 
@@ -45,6 +54,7 @@ class HandTracker:
         max_hands: Maximum number of hands to detect simultaneously.
         min_detection_confidence: Minimum confidence for initial detection.
         min_tracking_confidence: Minimum confidence for frame-to-frame tracking.
+        model_complexity: MediaPipe model complexity (0=lite, 1=full).
         hands: The underlying MediaPipe Hands solution instance.
         previous_landmarks: Stored landmarks from the previous frame
             for smoothing purposes.
@@ -55,6 +65,7 @@ class HandTracker:
         max_hands: int = 2,
         min_detection_confidence: float = 0.7,
         min_tracking_confidence: float = 0.6,
+        model_complexity: int = 1,
     ) -> None:
         """Initialize the hand tracker with detection parameters.
 
@@ -65,17 +76,31 @@ class HandTracker:
                 the hand detection model. Range 0.0 to 1.0.
             min_tracking_confidence: Minimum confidence threshold for
                 the hand tracking model. Range 0.0 to 1.0.
+            model_complexity: MediaPipe model complexity.
+                0 = lite (fast), 1 = full (accurate). Default is 1.
         """
         self.max_hands: int = max_hands
         self.min_detection_confidence: float = min_detection_confidence
         self.min_tracking_confidence: float = min_tracking_confidence
-        self._mp_hands = mp.solutions.hands
-        self.hands = self._mp_hands.Hands(
-            static_image_mode=False,
-            max_num_hands=self.max_hands,
-            min_detection_confidence=self.min_detection_confidence,
-            min_tracking_confidence=self.min_tracking_confidence,
-        )
+        self.model_complexity: int = model_complexity
+
+        # Determine if MediaPipe is available; if not, use OpenCV fallback
+        self.use_opencv: bool = mp is None
+        if self.use_opencv:
+            # OpenCV fallback does not require initialization
+            self._last_opencv_landmarks: list = []
+            self._last_opencv_handedness: list = []
+            print("[INFO] MediaPipe not available – using OpenCV hand detection fallback.")
+        else:
+            self._mp_hands = mp_hands
+            self.hands = self._mp_hands.Hands(
+                static_image_mode=False,
+                max_num_hands=self.max_hands,
+                model_complexity=self.model_complexity,
+                min_detection_confidence=self.min_detection_confidence,
+                min_tracking_confidence=self.min_tracking_confidence,
+            )
+            print(f"[INFO] MediaPipe Hands initialised (model_complexity={model_complexity}).")
         self.previous_landmarks: Dict[int, List[Tuple[float, float, float]]] = {}
 
     def process_frame(
@@ -95,11 +120,20 @@ class HandTracker:
             The MediaPipe results object containing detected hands,
             or None if processing fails.
         """
-        rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-        rgb_frame.flags.writeable = False
-        results = self.hands.process(rgb_frame)
-        rgb_frame.flags.writeable = True
-        return results
+        if self.use_opencv:
+            # OpenCV fallback: detect hand and store landmarks
+            from utils.opencv_hand_detection import detect_hand
+            landmarks = detect_hand(frame)
+            # Store for later extraction
+            self._last_opencv_landmarks = landmarks
+            self._last_opencv_handedness = ["Hand"] * len(landmarks)  # placeholder label
+            return None  # No MediaPipe results
+        else:
+            rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            rgb_frame.flags.writeable = False
+            results = self.hands.process(rgb_frame)
+            rgb_frame.flags.writeable = True
+            return results
 
     def extract_landmarks(
         self,
@@ -118,6 +152,9 @@ class HandTracker:
             (x, y, z) coordinate tuples in normalized space.
             Returns an empty list if no hands are detected.
         """
+        if self.use_opencv:
+            # Return landmarks from OpenCV detection
+            return self._last_opencv_landmarks
         if results is None or results.multi_hand_landmarks is None:
             self.previous_landmarks.clear()
             return []
@@ -167,6 +204,9 @@ class HandTracker:
             same order as the detected hands. Returns an empty list
             if no hands are detected.
         """
+        if self.use_opencv:
+            # Return placeholder handedness for each detected hand
+            return self._last_opencv_handedness
         if results is None or results.multi_handedness is None:
             return []
         labels: List[str] = []
@@ -179,7 +219,7 @@ class HandTracker:
         self,
         hand_index: int,
         current_landmarks: List[Tuple[float, float, float]],
-        smoothing_factor: float = 0.5,
+        smoothing_factor: float = 0.7,
     ) -> List[Tuple[float, float, float]]:
         """Apply temporal smoothing to hand landmarks.
 
@@ -191,6 +231,7 @@ class HandTracker:
                 previous frame state.
             current_landmarks: Current frame landmark positions.
             smoothing_factor: Blending weight for current frame.
+                Higher = more responsive, lower = smoother.
 
         Returns:
             Smoothed landmark positions as a list of (x, y, z) tuples.
@@ -227,5 +268,6 @@ class HandTracker:
         Should be called when the tracker is no longer needed
         to free GPU memory and processing resources.
         """
-        self.hands.close()
+        if not self.use_opencv:
+            self.hands.close()
         self.previous_landmarks.clear()

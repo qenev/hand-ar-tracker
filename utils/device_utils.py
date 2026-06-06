@@ -1,11 +1,12 @@
 """Compute device detection and selection utilities.
 
 Provides functions to detect available compute devices (CPU, CUDA, MPS),
-present a selection prompt to the user, and manage device fallback logic.
-Integrates with PyTorch for device management.
+present an interactive selection prompt at startup, and manage device
+fallback logic. The user can choose which discrete GPU to use.
 """
 
 import sys
+import subprocess
 from typing import List, Dict, Optional
 
 try:
@@ -14,180 +15,169 @@ except ImportError:
     torch = None
 
 
+# ---------------------------------------------------------------------------
+# Public API
+# ---------------------------------------------------------------------------
+
 def list_available_devices() -> List[Dict[str, str]]:
     """Detect and list all available compute devices on the system.
 
-    Queries PyTorch to find CPU, CUDA (NVIDIA GPU), and MPS (Apple
-    Silicon GPU) devices. Each device is returned with an index,
-    type identifier, and human-readable name.
+    Queries PyTorch (for CUDA) and falls back to nvidia-smi for GPU
+    name resolution. CPU is always included as option 0.
 
     Returns:
-        A list of dictionaries, each containing:
-            - index: Integer index for device selection.
-            - type: Device type string (cpu, cuda, mps).
-            - name: Human-readable device name.
+        A list of dicts, each with keys: index (int), type (str), name (str).
     """
     devices: List[Dict[str, str]] = []
-    devices.append({
-        "index": 0,
-        "type": "cpu",
-        "name": "CPU",
-    })
-    if torch is not None:
-        devices = _add_cuda_devices(devices)
-        devices = _add_mps_device(devices)
-    return devices
-
-
-def _add_cuda_devices(
-    devices: List[Dict[str, str]],
-) -> List[Dict[str, str]]:
-    """Add available CUDA GPU devices to the device list.
-
-    Args:
-        devices: Existing list of detected devices to append to.
-
-    Returns:
-        Updated device list with any CUDA devices appended.
-    """
-    if torch is not None and torch.cuda.is_available():
-        cuda_count = torch.cuda.device_count()
-        for i in range(cuda_count):
-            device_name = torch.cuda.get_device_name(i)
-            devices.append({
-                "index": len(devices),
-                "type": f"cuda:{i}",
-                "name": f"CUDA:{i} -- {device_name}",
-            })
-    return devices
-
-
-def _add_mps_device(
-    devices: List[Dict[str, str]],
-) -> List[Dict[str, str]]:
-    """Add Apple Silicon MPS device if available.
-
-    Args:
-        devices: Existing list of detected devices to append to.
-
-    Returns:
-        Updated device list with MPS device appended if available.
-    """
-    if torch is not None and hasattr(torch.backends, "mps"):
-        if torch.backends.mps.is_available():
-            devices.append({
-                "index": len(devices),
-                "type": "mps",
-                "name": "MPS -- Apple Silicon GPU",
-            })
+    devices.append({"index": 0, "type": "cpu", "name": "CPU (no GPU acceleration)"})
+    devices = _add_cuda_devices(devices)
+    devices = _add_mps_device(devices)
     return devices
 
 
 def select_device(config_preference: str) -> "torch.device":
-    """Select a compute device based on config preference.
+    """Select a compute device based on the config preference.
 
-    Handles three modes:
-    - 'auto': Displays available devices and prompts user to select one.
-    - Specific device string (e.g. 'cpu', 'cuda:0', 'mps'): Attempts
-      to use the specified device directly.
-    - Falls back to CPU if the requested device is unavailable.
+    Modes:
+    - 'auto'     → Interactive numbered list shown at startup.
+    - 'cuda:0'   → Directly use that CUDA device (with availability check).
+    - 'cpu'      → Force CPU.
 
     Args:
-        config_preference: Device preference string from config.yaml.
-            Use 'auto' for interactive selection, or a device string
-            like 'cpu', 'cuda:0', or 'mps' for direct selection.
+        config_preference: Value from config.yaml under the 'device' key.
 
     Returns:
-        A torch.device object representing the selected compute device.
+        A torch.device (or CPU-compatible SimpleNamespace if torch absent).
     """
     if torch is None:
-        print("[WARNING] PyTorch not available, using CPU.")
+        print("[WARNING] PyTorch not installed – defaulting to CPU.")
         return _create_cpu_device()
-    if config_preference.lower() == "auto":
+
+    preference = config_preference.strip().lower()
+
+    if preference == "auto":
         return _interactive_device_selection()
-    return _direct_device_selection(config_preference)
+    return _direct_device_selection(preference)
 
 
-def _interactive_device_selection() -> "torch.device":
-    """Display available devices and prompt user for selection.
+def get_device_label(device) -> str:
+    """Generate a human-readable on-screen label for the active device.
 
-    Lists all detected devices with their indices and names, then
-    waits for user input to select a device by number.
+    Args:
+        device: A torch.device or SimpleNamespace with a .type attribute.
 
     Returns:
-        The selected torch.device, or CPU device if selection fails.
+        E.g. 'GPU: RTX 3050 Laptop (CUDA:0)' or 'Device: CPU'.
     """
+    if torch is None or not hasattr(device, "type"):
+        return "Device: CPU"
+
+    dtype = str(device.type).lower()
+
+    if dtype.startswith("cuda"):
+        idx = device.index if device.index is not None else 0
+        try:
+            name = torch.cuda.get_device_name(idx)
+            return f"GPU: {name} (CUDA:{idx})"
+        except Exception:
+            return f"GPU: CUDA:{idx}"
+
+    if dtype == "mps":
+        return "GPU: Apple Silicon (MPS)"
+
+    return "Device: CPU"
+
+
+# ---------------------------------------------------------------------------
+# Internal helpers
+# ---------------------------------------------------------------------------
+
+def _add_cuda_devices(devices: List[Dict[str, str]]) -> List[Dict[str, str]]:
+    """Append all available NVIDIA CUDA devices to the list."""
+    if torch is None:
+        return devices
+    if not torch.cuda.is_available():
+        return devices
+    for i in range(torch.cuda.device_count()):
+        try:
+            name = torch.cuda.get_device_name(i)
+        except Exception:
+            name = f"CUDA device {i}"
+        devices.append({
+            "index": len(devices),
+            "type": f"cuda:{i}",
+            "name": f"NVIDIA {name} (CUDA:{i})",
+        })
+    return devices
+
+
+def _add_mps_device(devices: List[Dict[str, str]]) -> List[Dict[str, str]]:
+    """Append Apple Silicon MPS device if available."""
+    if torch is None:
+        return devices
+    if hasattr(torch.backends, "mps") and torch.backends.mps.is_available():
+        devices.append({
+            "index": len(devices),
+            "type": "mps",
+            "name": "Apple Silicon GPU (MPS)",
+        })
+    return devices
+
+
+def _interactive_device_selection():
+    """Print available devices and prompt the user to pick one."""
     devices = list_available_devices()
-    print("\n--- Available Compute Devices ---")
-    for device_info in devices:
-        idx = device_info["index"]
-        name = device_info["name"]
-        print(f"  [{idx}] {name}")
-    print("---------------------------------")
-    return _prompt_device_selection(devices)
 
+    print("\n+----------------------------------------------+")
+    print("|    Hand AR Tracker -- GPU Selection          |")
+    print("+----------------------------------------------+")
+    for dev in devices:
+        marker = "   "
+        if dev["type"].startswith("cuda"):
+            marker = "[*]"  # highlight GPUs
+        line = f"| {marker} [{dev['index']}] {dev['name']}"
+        print(f"{line:<48}|")
+    print("+----------------------------------------------+")
 
-def _prompt_device_selection(
-    devices: List[Dict[str, str]],
-) -> "torch.device":
-    """Prompt the user to select a device by index number.
+    # Default: first CUDA device, or 0 (CPU)
+    default_idx = 0
+    for dev in devices:
+        if dev["type"].startswith("cuda"):
+            default_idx = dev["index"]
+            break
 
-    Args:
-        devices: List of available device dictionaries with index,
-            type, and name fields.
-
-    Returns:
-        The selected torch.device based on user input. Falls back
-        to CPU on invalid input or errors.
-    """
     try:
-        choice = input("Select device by number [0]: ").strip()
-        if choice == "":
-            choice = "0"
-        idx = int(choice)
-        if 0 <= idx < len(devices):
-            device_type = devices[idx]["type"]
-            print(f"[INFO] Selected device: {devices[idx]['name']}")
-            return torch.device(device_type)
-    except (ValueError, IndexError, KeyboardInterrupt):
-        pass
-    print("[WARNING] Invalid selection, falling back to CPU.")
-    return _create_cpu_device()
+        raw = input(f"Select device number [{default_idx}]: ").strip()
+        chosen = int(raw) if raw else default_idx
+        if 0 <= chosen < len(devices):
+            selected = devices[chosen]
+            print(f"[INFO] Using: {selected['name']}\n")
+            return torch.device(selected["type"])
+        else:
+            print(f"[WARNING] Invalid choice, using default [{default_idx}].\n")
+            selected = devices[default_idx]
+            return torch.device(selected["type"])
+    except (ValueError, KeyboardInterrupt):
+        print(f"\n[WARNING] No valid input -- using default [{default_idx}].\n")
+        return torch.device(devices[default_idx]["type"])
 
 
-def _direct_device_selection(preference: str) -> "torch.device":
-    """Attempt to select a specific device by type string.
-
-    Args:
-        preference: Device type string like 'cpu', 'cuda:0', or 'mps'.
-
-    Returns:
-        The requested torch.device if available, otherwise CPU
-        with a warning message.
-    """
-    preference_lower = preference.lower().strip()
-    if preference_lower == "cpu":
-        print("[INFO] Using CPU as specified in config.")
+def _direct_device_selection(preference: str):
+    """Use a device specified directly in config (e.g. 'cuda:0')."""
+    if preference == "cpu":
+        print("[INFO] Config set to CPU.")
         return _create_cpu_device()
-    if _is_device_available(preference_lower):
-        print(f"[INFO] Using device: {preference_lower}")
-        return torch.device(preference_lower)
-    print(
-        f"[WARNING] Device '{preference}' not available. "
-        f"Falling back to CPU."
-    )
+
+    if _is_cuda_available(preference):
+        print(f"[INFO] Config device: {preference.upper()}")
+        return torch.device(preference)
+
+    print(f"[WARNING] Device '{preference}' not available – falling back to CPU.")
     return _create_cpu_device()
 
 
-def _is_device_available(device_type: str) -> bool:
-    """Check if a specific device type is available on this system.
-
-    Args:
-        device_type: Device type string to check (e.g. 'cuda:0', 'mps').
-
-    Returns:
-        True if the device is available and usable, False otherwise.
-    """
+def _is_cuda_available(device_type: str) -> bool:
+    """Check whether a given CUDA device string is usable."""
     if torch is None:
         return False
     if device_type.startswith("cuda"):
@@ -196,48 +186,18 @@ def _is_device_available(device_type: str) -> bool:
         parts = device_type.split(":")
         if len(parts) == 2:
             try:
-                idx = int(parts[1])
-                return idx < torch.cuda.device_count()
+                return int(parts[1]) < torch.cuda.device_count()
             except ValueError:
                 return False
         return True
     if device_type == "mps":
-        return (
-            hasattr(torch.backends, "mps")
-            and torch.backends.mps.is_available()
-        )
+        return hasattr(torch.backends, "mps") and torch.backends.mps.is_available()
     return False
 
 
-def _create_cpu_device() -> "torch.device":
-    """Create and return a CPU torch.device object.
-
-    Returns:
-        A torch.device set to CPU. If PyTorch is not installed,
-        returns a SimpleNamespace mimic for compatibility.
-    """
+def _create_cpu_device():
+    """Return a CPU device (uses SimpleNamespace when torch is absent)."""
     if torch is not None:
         return torch.device("cpu")
     from types import SimpleNamespace
-    return SimpleNamespace(type="cpu")
-
-
-def get_device_label(device: "torch.device") -> str:
-    """Generate a human-readable label for the active compute device.
-
-    Creates a short label string suitable for display as an on-screen
-    overlay in the OpenCV window.
-
-    Args:
-        device: The active torch.device to generate a label for.
-
-    Returns:
-        A formatted string like 'Device: CPU' or 'Device: CUDA:0'
-        suitable for overlay display.
-    """
-    if torch is None or not hasattr(device, "type"):
-        return "Device: CPU"
-    device_type = str(device.type).upper()
-    if hasattr(device, "index") and device.index is not None:
-        return f"Device: {device_type}:{device.index}"
-    return f"Device: {device_type}"
+    return SimpleNamespace(type="cpu", index=None)

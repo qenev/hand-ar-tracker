@@ -1,22 +1,27 @@
 # Configuration for Hand AR Tracker system
 
 camera:
-  # Camera index (typically 0 for default built-in webcam, 1+ for external usb webcams)
+  # Camera index (typically 0 for default built-in webcam, 1+ for external USB webcams)
   index: 0
   # Requested video width in pixels
   width: 1280
   # Requested video height in pixels
   height: 720
   # Requested frame rate (FPS)
-  fps: 30
+  fps: 60
+  # Flip the camera 180 degrees (rotate upside-down) — useful if your camera is mounted inverted
+  rotate_180: true
 
 tracking:
   # Maximum number of hands to detect and track simultaneously (1 or 2)
   max_hands: 2
   # Minimum confidence value ([0.0, 1.0]) for hand detection to be considered successful
-  min_detection_confidence: 0.7
+  # Higher = fewer false positives but requires clearer view of the hand
+  min_detection_confidence: 0.8
   # Minimum confidence value ([0.0, 1.0]) for hand landmarks to be tracked successfully
-  min_tracking_confidence: 0.6
+  min_tracking_confidence: 0.7
+  # MediaPipe model complexity: 0 = lite/fast, 1 = full/accurate (recommended)
+  model_complexity: 1
 
 renderer:
   # BGR color values for skeleton connections [Blue, Green, Red]
@@ -24,27 +29,33 @@ renderer:
   # BGR color values for landmark keypoints [Blue, Green, Red]
   keypoint_color: [0, 0, 255]
   # Radius in pixels for drawing landmark keypoints
-  keypoint_radius: 6
+  keypoint_radius: 8
   # Line thickness in pixels for drawing skeleton lines
   skeleton_thickness: 2
   # Show rolling average FPS counter on screen
   show_fps: true
   # Show coordinates next to fingertip landmarks
-  show_coordinates: true
+  show_coordinates: false
   # Show gesture name overlay near the hand
-  show_gesture_label: true
+  show_gesture_label: false
   # Show Left/Right hand labels near the wrist
-  show_hand_label: true
+  show_hand_label: false
   # Show active compute device in top-right corner
   show_device_label: true
 
 gestures:
   # Enable or disable gesture recognition logic
-  enabled: true
+  enabled: false
   # Maximum distance threshold between thumb tip and index tip to detect a pinch gesture
   pinch_threshold: 0.05
   # Minimum ratio of curled fingers to total fingers to detect a fist gesture
   fist_threshold: 0.85
 
-# Select device preference: "auto" (prompts on start), "cpu", "cuda:0", "mps", etc.
-device: auto
+# GPU / compute device selection:
+#   "auto"    → prompt at startup to let you choose from available GPUs
+#   "cuda:0"  → NVIDIA GPU #0 (your RTX 3050 Laptop)
+#   "cuda:1"  → NVIDIA GPU #1 (if you have a second GPU)
+#   "cpu"     → force CPU only
+# Note: MediaPipe runs its own optimised CPU pipeline internally.
+# Setting cuda:0 makes the app display the GPU label and future torch inference uses that device.
+device: cuda:0

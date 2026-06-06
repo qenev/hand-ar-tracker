@@ -1,8 +1,8 @@
 """OpenCV rendering module for hand tracking visualization.
 
-Draws skeletal mesh connections, keypoint dots, gesture labels,
-FPS overlay, coordinate display, hand labels, and device info
-onto video frames using OpenCV drawing primitives.
+Draws skeletal mesh connections and keypoint dots onto video frames
+using OpenCV drawing primitives, matching the clean skeleton-only
+style (red circles + green lines) shown in the reference photo.
 """
 
 from typing import List, Tuple, Optional, Dict, Any
@@ -17,9 +17,10 @@ from tracker import HAND_CONNECTIONS, LANDMARK_NAMES
 class HandRenderer:
     """Renders hand tracking visualization overlays on video frames.
 
-    Draws the skeletal mesh, keypoint markers, text labels, and
-    diagnostic information onto OpenCV frames based on detected
-    hand landmarks and configuration settings.
+    Draws the skeletal mesh and keypoint markers onto OpenCV frames
+    based on detected hand landmarks and configuration settings.
+    The default style matches the reference photo: bright red filled
+    circles on each landmark, connected by bright green lines.
 
     Attributes:
         skeleton_color: BGR color tuple for skeleton lines.
@@ -27,7 +28,6 @@ class HandRenderer:
         keypoint_radius: Pixel radius for keypoint circles.
         skeleton_thickness: Pixel thickness for skeleton lines.
         show_fps: Whether to display the FPS counter overlay.
-        show_coordinates: Whether to display landmark coordinates.
         show_gesture_label: Whether to display detected gesture names.
         show_hand_label: Whether to display Left/Right hand labels.
         show_device_label: Whether to display the active device.
@@ -37,12 +37,12 @@ class HandRenderer:
         self,
         skeleton_color: Tuple[int, int, int] = (0, 255, 0),
         keypoint_color: Tuple[int, int, int] = (0, 0, 255),
-        keypoint_radius: int = 6,
+        keypoint_radius: int = 8,
         skeleton_thickness: int = 2,
         show_fps: bool = True,
-        show_coordinates: bool = True,
-        show_gesture_label: bool = True,
-        show_hand_label: bool = True,
+        show_coordinates: bool = False,
+        show_gesture_label: bool = False,
+        show_hand_label: bool = False,
         show_device_label: bool = True,
     ) -> None:
         """Initialize the renderer with display configuration.
@@ -82,8 +82,9 @@ class HandRenderer:
     ) -> np.ndarray:
         """Draw a complete hand visualization on the frame.
 
-        Renders the skeleton, keypoints, hand label, and gesture
-        label for a single detected hand.
+        Renders the skeleton lines first (under the dots), then the
+        filled keypoint circles on top, for a clean layered look
+        matching the reference photo.
 
         Args:
             frame: Input video frame as BGR NumPy array.
@@ -95,23 +96,19 @@ class HandRenderer:
             The frame with hand visualization drawn on it.
         """
         height, width = frame.shape[:2]
-        pixel_coords = self._compute_pixel_coords(
-            landmarks, width, height
-        )
+        pixel_coords = self._compute_pixel_coords(landmarks, width, height)
+
+        # Draw skeleton lines first so dots render on top
         frame = self._draw_skeleton(frame, pixel_coords)
+        # Draw filled keypoint circles on top of lines
         frame = self._draw_keypoints(frame, pixel_coords)
+
         if self.show_hand_label and hand_label:
-            frame = self._draw_hand_label(
-                frame, pixel_coords, hand_label
-            )
+            frame = self._draw_hand_label(frame, pixel_coords, hand_label)
         if self.show_gesture_label and gesture_label:
-            frame = self._draw_gesture_label(
-                frame, pixel_coords, gesture_label
-            )
+            frame = self._draw_gesture_label(frame, pixel_coords, gesture_label)
         if self.show_coordinates:
-            frame = self._draw_coordinates(
-                frame, landmarks, pixel_coords
-            )
+            frame = self._draw_coordinates(frame, landmarks, pixel_coords)
         return frame
 
     def _compute_pixel_coords(
@@ -143,8 +140,8 @@ class HandRenderer:
     ) -> np.ndarray:
         """Draw the skeletal mesh connecting hand landmarks.
 
-        Draws lines between connected landmarks as defined by
-        the HAND_CONNECTIONS topology.
+        Draws anti-aliased lines between connected landmarks as defined
+        by the HAND_CONNECTIONS topology.
 
         Args:
             frame: Input video frame as BGR NumPy array.
@@ -175,7 +172,8 @@ class HandRenderer:
         """Draw circular markers on each hand landmark.
 
         Draws filled circles at each of the 21 hand keypoint positions
-        using the configured color and radius.
+        using the configured color and radius, with a thin white border
+        to improve visibility against any background.
 
         Args:
             frame: Input video frame as BGR NumPy array.
@@ -185,6 +183,16 @@ class HandRenderer:
             Frame with keypoint dots drawn.
         """
         for point in pixel_coords:
+            # White border ring for contrast
+            cv2.circle(
+                frame,
+                point,
+                self.keypoint_radius + 2,
+                (255, 255, 255),
+                1,
+                cv2.LINE_AA,
+            )
+            # Main filled dot
             cv2.circle(
                 frame,
                 point,
@@ -203,9 +211,6 @@ class HandRenderer:
     ) -> np.ndarray:
         """Draw the Left/Right hand label near the wrist.
 
-        Places a text label slightly above the wrist landmark
-        position with a dark background for readability.
-
         Args:
             frame: Input video frame as BGR NumPy array.
             pixel_coords: List of pixel coordinate tuples.
@@ -217,7 +222,7 @@ class HandRenderer:
         if len(pixel_coords) == 0:
             return frame
         wrist = pixel_coords[0]
-        text_position = (wrist[0] - 20, wrist[1] - 20)
+        text_position = (wrist[0] - 20, wrist[1] + 30)
         frame = self._draw_text_with_background(
             frame, label, text_position, scale=0.7
         )
@@ -230,9 +235,6 @@ class HandRenderer:
         gesture: str,
     ) -> np.ndarray:
         """Draw the detected gesture name above the hand.
-
-        Places the gesture label above the middle finger MCP landmark
-        with a semi-transparent background for readability.
 
         Args:
             frame: Input video frame as BGR NumPy array.
@@ -258,10 +260,6 @@ class HandRenderer:
         pixel_coords: List[Tuple[int, int]],
     ) -> np.ndarray:
         """Draw coordinate labels next to key landmarks.
-
-        Shows the normalized (x, y, z) coordinates as small text
-        labels next to the fingertip landmarks only, to avoid
-        cluttering the display.
 
         Args:
             frame: Input video frame as BGR NumPy array.
@@ -297,9 +295,6 @@ class HandRenderer:
     ) -> np.ndarray:
         """Draw the FPS counter in the top-left corner.
 
-        Renders the FPS string with a dark background rectangle
-        for readability against any video content.
-
         Args:
             frame: Input video frame as BGR NumPy array.
             fps_text: Formatted FPS string to display.
@@ -315,15 +310,62 @@ class HandRenderer:
         )
         return frame
 
+    def draw_flip_button(
+        self,
+        frame: np.ndarray,
+        rotate_180: bool,
+    ) -> Tuple[np.ndarray, Tuple[Tuple[int, int], Tuple[int, int]]]:
+        """Draw a clickable button next to the FPS counter to flip the camera.
+
+        Args:
+            frame: Input video frame as BGR NumPy array.
+            rotate_180: Current state of the 180-degree rotation.
+
+        Returns:
+            A tuple of (frame, (btn_top_left, btn_bottom_right)) where the
+            coordinates define the bounding box of the interactive button.
+        """
+        btn_text = "Flip 180: ON" if rotate_180 else "Flip 180: OFF"
+        scale = 0.6
+        thickness = 1
+        text_size = cv2.getTextSize(btn_text, self._font, scale, thickness)[0]
+        
+        pad_x = 10
+        pad_y = 6
+        x_min = 140
+        y_min = 10
+        x_max = x_min + text_size[0] + 2 * pad_x
+        y_max = y_min + text_size[1] + 2 * pad_y
+        
+        # BGR: Red border/accent if active, grey if inactive
+        overlay = frame.copy()
+        bg_color = (0, 0, 180) if rotate_180 else (60, 60, 60)
+        cv2.rectangle(overlay, (x_min, y_min), (x_max, y_max), bg_color, cv2.FILLED)
+        cv2.addWeighted(overlay, 0.6, frame, 0.4, 0, frame)
+        
+        border_color = (0, 0, 255) if rotate_180 else (180, 180, 180)
+        cv2.rectangle(frame, (x_min, y_min), (x_max, y_max), border_color, 1, cv2.LINE_AA)
+        
+        text_x = x_min + pad_x
+        text_y = y_max - pad_y - 2
+        cv2.putText(
+            frame,
+            btn_text,
+            (text_x, text_y),
+            self._font,
+            scale,
+            (255, 255, 255),
+            thickness,
+            cv2.LINE_AA,
+        )
+        return frame, ((x_min, y_min), (x_max, y_max))
+
     def draw_device_label(
         self,
         frame: np.ndarray,
         device_text: str,
     ) -> np.ndarray:
         """Draw the active device label in the top-right corner.
-
-        Shows which compute device (CPU/CUDA/MPS) is currently
-        active as a text overlay.
 
         Args:
             frame: Input video frame as BGR NumPy array.
@@ -350,9 +392,6 @@ class HandRenderer:
     ) -> np.ndarray:
         """Draw a message when no hands are detected.
 
-        Displays a centered message prompting the user to show
-        their hands to the camera.
-
         Args:
             frame: Input video frame as BGR NumPy array.
 
@@ -360,7 +399,7 @@ class HandRenderer:
             Frame with the informational message drawn.
         """
         height, width = frame.shape[:2]
-        message = "No hands detected - show hands to camera"
+        message = "No hands detected – show hands to camera"
         text_size = cv2.getTextSize(
             message, self._font, 0.7, 1
         )[0]
@@ -379,9 +418,6 @@ class HandRenderer:
         scale: float = 0.5,
     ) -> np.ndarray:
         """Draw text with a semi-transparent dark background.
-
-        Creates a dark rectangle behind the text for improved
-        readability against varying video backgrounds.
 
         Args:
             frame: Input video frame as BGR NumPy array.

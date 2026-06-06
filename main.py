@@ -59,26 +59,28 @@ def _get_default_config() -> Dict[str, Any]:
             "index": 0,
             "width": 1280,
             "height": 720,
-            "fps": 30,
+            "fps": 60,
+            "rotate_180": True,
         },
         "tracking": {
             "max_hands": 2,
-            "min_detection_confidence": 0.7,
-            "min_tracking_confidence": 0.6,
+            "min_detection_confidence": 0.8,
+            "min_tracking_confidence": 0.7,
+            "model_complexity": 1,
         },
         "renderer": {
             "skeleton_color": [0, 255, 0],
             "keypoint_color": [0, 0, 255],
-            "keypoint_radius": 6,
+            "keypoint_radius": 8,
             "skeleton_thickness": 2,
             "show_fps": True,
-            "show_coordinates": True,
-            "show_gesture_label": True,
-            "show_hand_label": True,
+            "show_coordinates": False,
+            "show_gesture_label": False,
+            "show_hand_label": False,
             "show_device_label": True,
         },
         "gestures": {
-            "enabled": True,
+            "enabled": False,
             "pinch_threshold": 0.05,
             "fist_threshold": 0.85,
         },
@@ -156,6 +158,7 @@ def initialize_tracker(config: Dict[str, Any]) -> HandTracker:
         max_hands=track_config["max_hands"],
         min_detection_confidence=track_config["min_detection_confidence"],
         min_tracking_confidence=track_config["min_tracking_confidence"],
+        model_complexity=track_config.get("model_complexity", 1),
     )
     print("[INFO] Hand tracker initialized.")
     return tracker
@@ -175,12 +178,12 @@ def initialize_renderer(config: Dict[str, Any]) -> HandRenderer:
     renderer = HandRenderer(
         skeleton_color=tuple(rend_config["skeleton_color"]),
         keypoint_color=tuple(rend_config["keypoint_color"]),
-        keypoint_radius=rend_config["keypoint_radius"],
+        keypoint_radius=rend_config.get("keypoint_radius", 8),
         skeleton_thickness=rend_config["skeleton_thickness"],
         show_fps=rend_config["show_fps"],
-        show_coordinates=rend_config["show_coordinates"],
-        show_gesture_label=rend_config["show_gesture_label"],
-        show_hand_label=rend_config["show_hand_label"],
+        show_coordinates=rend_config.get("show_coordinates", False),
+        show_gesture_label=rend_config.get("show_gesture_label", False),
+        show_hand_label=rend_config.get("show_hand_label", False),
         show_device_label=rend_config["show_device_label"],
     )
     print("[INFO] Renderer initialized.")
@@ -267,17 +270,41 @@ def run_main_loop(
         config: Full configuration dictionary.
     """
     print("[INFO] Starting main loop. Press 'q' or ESC to quit.")
+    rotate_180 = config.get("camera", {}).get("rotate_180", False)
     window_name = "Hand AR Tracker"
     cv2.namedWindow(window_name, cv2.WINDOW_NORMAL)
+
+    # Store button coordinates for interactive click detection
+    btn_bbox = [140, 10, 260, 35]
+
+    def on_mouse(event, x, y, flags, param):
+        nonlocal rotate_180
+        if event == cv2.EVENT_LBUTTONDOWN:
+            if btn_bbox[0] <= x <= btn_bbox[2] and btn_bbox[1] <= y <= btn_bbox[3]:
+                rotate_180 = not rotate_180
+                print(f"[INFO] Camera rotation toggled. Active: {rotate_180}")
+
+    cv2.setMouseCallback(window_name, on_mouse)
+
     while True:
         success, frame = cap.read()
         if not success:
             print("[WARNING] Failed to capture frame, retrying...")
             continue
+        # Mirror horizontally (standard webcam view)
         frame = cv2.flip(frame, 1)
+        # Optional 180-degree rotation for upside-down cameras
+        if rotate_180:
+            frame = cv2.rotate(frame, cv2.ROTATE_180)
         fps_counter.tick()
         frame = process_hands(frame, tracker, renderer, config)
         frame = renderer.draw_fps(frame, fps_counter.get_fps_string())
+        
+        # Render flip button and update its exact bounding box
+        frame, bbox = renderer.draw_flip_button(frame, rotate_180)
+        btn_bbox[0], btn_bbox[1] = bbox[0]
+        btn_bbox[2], btn_bbox[3] = bbox[1]
+
         frame = renderer.draw_device_label(frame, device_label)
         cv2.imshow(window_name, frame)
         key = cv2.waitKey(1) & 0xFF
