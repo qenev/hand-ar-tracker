@@ -454,7 +454,7 @@ class HandRenderer:
         landmarks_right: List[Tuple[float, float, float]],
         time_val: float,
     ) -> np.ndarray:
-        """Draw a bending holographic ribbon between two hands (fast single-warp version)."""
+        """Draw a straight flat sheet with liquid-chrome metallic ripple texture between two hands (no sag, no physics)."""
         h_frame, w_frame = frame.shape[:2]
 
         coords_left = self._compute_pixel_coords(landmarks_left, w_frame, h_frame)
@@ -473,131 +473,72 @@ class HandRenderer:
         if not hasattr(self, '_holographic_lut'):
             self._holographic_lut = self._create_holographic_lut()
 
-        TEX_W, TEX_H = 160, 80          # small texture — fast
-        S = 12                          # number of horizontal slices
-        N = S + 1                       # curved edge sample points aligned with slices
+        TEX_W, TEX_H = 320, 160         # higher resolution for crisp chrome details
 
         if not hasattr(self, '_tex_xx'):
-            x = np.linspace(0, 12, TEX_W)
-            y = np.linspace(0, 8,  TEX_H)
+            x = np.linspace(0, 15, TEX_W)
+            y = np.linspace(0, 7,  TEX_H)
             self._tex_xx, self._tex_yy = np.meshgrid(x, y)
 
-        # ── Animate only the time-dependent parts ─────────────────────────────
+        # ── Liquid Chrome Wave Formula matching reference photo ───────────────
         tv = time_val
+        dist_x = np.sin(self._tex_yy * 2.5 + tv * 5.0) * 0.8
+        dist_y = np.cos(self._tex_xx * 1.5 - tv * 3.5) * 0.5
         v = (
-            np.sin(self._tex_xx * 1.8 + np.cos(self._tex_yy * 1.0) + tv * 5.0)
-            + np.sin(self._tex_yy * 2.5 + np.sin(self._tex_xx * 0.7) + tv * 3.0)
-            + np.sin(np.sqrt((self._tex_xx - 6.0)**2 + (self._tex_yy - 4.0)**2) * 2.0 - tv * 4.0)
-            + 3.0
-        ) / 6.0
+            np.sin((self._tex_xx + dist_x) * 4.5)
+            + np.cos((self._tex_yy + dist_y) * 2.8)
+            + 2.0
+        ) / 4.0
+        
         texture = self._holographic_lut[(np.clip(v, 0, 1) * 255).astype(np.uint8)]
 
-        # ── Build ribbon polygon (top edge + bottom edge) ─────────────────────
-        vec  = right_top - left_top
-        dist = float(np.linalg.norm(vec)) or 1.0
-        px   = -(vec[1] / dist)   # perpendicular unit vector
-        py   =  (vec[0] / dist)
-        if py < 0:
-            px, py = -px, -py
+        # Bounding box of the quad
+        poly = np.array([left_top, right_top, right_bot, left_bot], dtype=np.int32)
+        x0 = max(0, int(poly[:, 0].min()))
+        x1 = min(w_frame, int(poly[:, 0].max()) + 1)
+        y0 = max(0, int(poly[:, 1].min()))
+        y1 = min(h_frame, int(poly[:, 1].max()) + 1)
+        if x1 <= x0 or y1 <= y0:
+            return frame
 
-        ts = np.linspace(0, 1, N)
+        bw, bh = x1 - x0, y1 - y0
 
-        # ── Physics simulation for jiggly sag ──────────────────────────────────
-        import time
-        current_time = time.time()
-        hand_y_center = (left_top[1] + right_top[1] + left_bot[1] + right_bot[1]) / 4.0
+        # Map full ribbon bounding box → full texture via one perspective warp
+        src_corners = np.array([[0, 0], [TEX_W - 1, 0],
+                                 [TEX_W - 1, TEX_H - 1], [0, TEX_H - 1]], dtype=np.float32)
+        dst_corners = np.array([
+            left_top  - [x0, y0],
+            right_top - [x0, y0],
+            right_bot - [x0, y0],
+            left_bot  - [x0, y0],
+        ], dtype=np.float32)
 
-        if self._last_time is None:
-            dt = 1.0 / 60.0
-            self._ribbon_pos = dist * 0.15 + 20.0
-        else:
-            dt = min(0.1, current_time - self._last_time)
-        self._last_time = current_time
+        M = cv2.getPerspectiveTransform(src_corners, dst_corners)
+        warped = cv2.warpPerspective(texture, M, (bw, bh))
 
-        target_sag = dist * 0.15 + 20.0
+        # ── Polygon mask for the straight quad ────────────────────────────────
+        poly_local = poly - np.array([x0, y0], dtype=np.int32)
+        mask = np.zeros((bh, bw), dtype=np.uint8)
+        cv2.fillPoly(mask, [poly_local], 255)
 
-        # Acceleration/movement forces from hand velocity changes
-        inertia_force = 0.0
-        if self._last_hand_y is not None:
-            hand_vel_y = (hand_y_center - self._last_hand_y) / dt
-            inertia_force = -hand_vel_y * 1.5
-        self._last_hand_y = hand_y_center
-
-        # Spring constant (k) and Damping factor (c)
-        k = 45.0
-        c = 4.5
-
-        force = -k * (self._ribbon_pos - target_sag) - c * self._ribbon_vel + inertia_force
-        self._ribbon_vel += force * dt
-        self._ribbon_vel = np.clip(self._ribbon_vel, -450.0, 450.0)
-        self._ribbon_pos += self._ribbon_vel * dt
-        self._ribbon_pos = max(5.0, min(dist * 1.2, self._ribbon_pos))
-
-        sag    = np.sin(ts * np.pi) * self._ribbon_pos
-        ripple = np.sin(ts * 6.0 - tv * 6.0) * 10.0
-        disp   = sag + ripple
-
-        top_pts = (1 - ts)[:, None] * left_top + ts[:, None] * right_top \
-                  + disp[:, None] * np.array([px, py])
-        bot_pts = (1 - ts)[:, None] * left_bot  + ts[:, None] * right_bot  \
-                  + disp[:, None] * np.array([px, py])
-
-        # ── Draw Ribbon Segment by Segment ─────────────────────────────────────
-        # S slices is plenty for a smooth curved ribbon and runs extremely fast
-        for i in range(S):
-            t0 = i / S
-            t1 = (i + 1) / S
-
-            # Extract corners for this slice
-            p_top0 = top_pts[i]
-            p_top1 = top_pts[i + 1]
-            p_bot1 = bot_pts[i + 1]
-            p_bot0 = bot_pts[i]
-
-            dst_quad = np.array([p_top0, p_top1, p_bot1, p_bot0], dtype=np.float32)
-
-            # Local bounding box for this slice
-            x_min = max(0, int(np.min(dst_quad[:, 0])))
-            x_max = min(w_frame, int(np.max(dst_quad[:, 0])) + 1)
-            y_min = max(0, int(np.min(dst_quad[:, 1])))
-            y_max = min(h_frame, int(np.max(dst_quad[:, 1])) + 1)
-
-            if x_max > x_min and y_max > y_min:
-                crop_w = x_max - x_min
-                crop_h = y_max - y_min
-
-                dst_quad_local = dst_quad - np.array([x_min, y_min], dtype=np.float32)
-                src_quad = np.array([
-                    [t0 * (TEX_W - 1), 0],
-                    [t1 * (TEX_W - 1), 0],
-                    [t1 * (TEX_W - 1), TEX_H - 1],
-                    [t0 * (TEX_W - 1), TEX_H - 1]
-                ], dtype=np.float32)
-
-                M = cv2.getPerspectiveTransform(src_quad, dst_quad_local)
-                warped_slice = cv2.warpPerspective(texture, M, (crop_w, crop_h))
-
-                # Hard mask for this slice
-                mask = np.zeros((crop_h, crop_w), dtype=np.uint8)
-                cv2.fillConvexPoly(mask, dst_quad_local.astype(np.int32), 255)
-
-                # Copy slice onto frame
-                cv2.copyTo(warped_slice, mask, frame[y_min:y_max, x_min:x_max])
+        # Draw onto frame
+        np.copyto(frame[y0:y1, x0:x1], warped, where=mask[:, :, None] > 0)
 
         return frame
 
     def _create_holographic_lut(self) -> np.ndarray:
-        # Shape (256, 3) for fast fancy-indexing
+        # Metallic/chrome palette with reflections matching the photo
         lut = np.zeros((256, 3), dtype=np.uint8)
         points = [
-            (0.0,  [240, 240, 255]),
-            (0.15, [60,  180, 255]),
-            (0.3,  [20,  60,  220]),
-            (0.45, [200, 30,  200]),
-            (0.6,  [255, 120, 20]),
-            (0.75, [200, 220, 30]),
-            (0.9,  [80,  255, 200]),
-            (1.0,  [240, 240, 255]),
+            (0.0,  [245, 245, 245]),  # Bright Silver-white
+            (0.12, [80,  85,  90]),   # Dark steel grey
+            (0.25, [30,  150, 225]),  # Gold
+            (0.38, [15,  15,  20]),   # Near-black shadow
+            (0.5,  [230, 140, 35]),   # Chrome Blue
+            (0.62, [190, 190, 195]), # Mid silver
+            (0.75, [75,  85,  205]),  # Copper / Rose gold
+            (0.88, [20,  20,  25]),   # Dark reflection
+            (1.0,  [245, 245, 245]),  # Bright Silver-white
         ]
         for i in range(256):
             t = i / 255.0
