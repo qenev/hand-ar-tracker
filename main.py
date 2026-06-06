@@ -71,7 +71,7 @@ def _get_default_config() -> Dict[str, Any]:
         "renderer": {
             "skeleton_color": [0, 255, 0],
             "keypoint_color": [0, 0, 255],
-            "keypoint_radius": 4,
+            "keypoint_radius": 6,
             "skeleton_thickness": 2,
             "show_fps": True,
             "show_coordinates": False,
