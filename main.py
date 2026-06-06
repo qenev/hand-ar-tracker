@@ -7,7 +7,9 @@ the augmented reality overlay in real time.
 """
 
 import sys
-from typing import Dict, Any, Optional
+import time
+import math
+from typing import Dict, Any, Optional, Tuple
 
 import cv2
 import yaml
@@ -195,34 +197,77 @@ def process_hands(
     tracker: HandTracker,
     renderer: HandRenderer,
     config: Dict[str, Any],
-) -> np.ndarray:
+    show_gui: bool = True,
+    clap_active: bool = False,
+    time_val: float = 0.0,
+) -> Tuple[np.ndarray, bool]:
     """Process a single frame for hand detection and rendering.
 
     Runs the full pipeline: detection, landmark extraction,
     gesture recognition, and overlay rendering for all detected hands.
+    Also handles clap detection to toggle the holographic ribbon.
 
     Args:
         frame: Input video frame as BGR NumPy array.
         tracker: Configured HandTracker instance.
         renderer: Configured HandRenderer instance.
         config: Full configuration dictionary.
+        show_gui: If True, renders the hand skeletal overlay.
+        clap_active: If True, renders the holographic ribbon between hands.
+        time_val: Animated time offset for the holographic wave texture.
 
     Returns:
-        The frame with all hand visualizations rendered.
+        A tuple of (frame, clap_active).
     """
+    if not hasattr(process_hands, "hands_close"):
+        process_hands.hands_close = False
+
     results = tracker.process_frame(frame)
     all_landmarks = tracker.extract_landmarks(results)
     hand_labels = tracker.extract_handedness(results)
+    
+    # Pinch detection — both index finger tips (landmark 8) close together
+    if len(all_landmarks) == 2:
+        tip1 = all_landmarks[0][8]   # index tip, hand 0
+        tip2 = all_landmarks[1][8]   # index tip, hand 1
+        dist = math.sqrt((tip1[0] - tip2[0])**2 + (tip1[1] - tip2[1])**2)
+        
+        if dist < 0.07:
+            if not process_hands.hands_close:
+                clap_active = not clap_active
+                process_hands.hands_close = True
+                print(f"[INFO] Pinch detected! Holographic ribbon: {'ON' if clap_active else 'OFF'}")
+        elif dist > 0.14:
+            process_hands.hands_close = False
+    else:
+        process_hands.hands_close = False
+
+    # Render holographic ribbon if two hands are detected and clap is active
+    if clap_active and len(all_landmarks) == 2:
+        # Sort hands horizontally to keep left/right mapping consistent
+        sorted_indices = sorted(range(len(all_landmarks)), key=lambda idx: all_landmarks[idx][0][0])
+        lm_left = all_landmarks[sorted_indices[0]]
+        lm_right = all_landmarks[sorted_indices[1]]
+        
+        smoothed_left = tracker.get_smoothed_landmarks(0, lm_left)
+        smoothed_right = tracker.get_smoothed_landmarks(1, lm_right)
+        
+        frame = renderer.draw_holographic_ribbon(frame, smoothed_left, smoothed_right, time_val)
+        
     if len(all_landmarks) == 0:
-        frame = renderer.draw_no_hands_message(frame)
-        return frame
-    gesture_config = config["gestures"]
-    for i, landmarks in enumerate(all_landmarks):
-        smoothed = tracker.get_smoothed_landmarks(i, landmarks)
-        label = hand_labels[i] if i < len(hand_labels) else ""
-        gesture = _get_gesture(smoothed, gesture_config)
-        frame = renderer.draw_hand(frame, smoothed, label, gesture)
-    return frame
+        if show_gui:
+            frame = renderer.draw_no_hands_message(frame)
+        return frame, clap_active
+        
+    if show_gui:
+        gesture_config = config["gestures"]
+        for i, landmarks in enumerate(all_landmarks):
+            smoothed = tracker.get_smoothed_landmarks(i, landmarks)
+            label = hand_labels[i] if i < len(hand_labels) else ""
+            gesture = _get_gesture(smoothed, gesture_config)
+            frame = renderer.draw_hand(frame, smoothed, label, gesture)
+            
+    return frame, clap_active
 
 
 def _get_gesture(
@@ -276,9 +321,15 @@ def run_main_loop(
 
     # Store button coordinates for interactive click detection
     btn_bbox = [140, 10, 260, 35]
+    show_gui = True      # FPS, flip button, device label
+    show_skeleton = True # Hand skeleton dots and lines
+    clap_active = False
 
     def on_mouse(event, x, y, flags, param):
         nonlocal rotate_180
+        # Only handle clicks if GUI is visible
+        if not show_gui:
+            return
         if event == cv2.EVENT_LBUTTONDOWN:
             if btn_bbox[0] <= x <= btn_bbox[2] and btn_bbox[1] <= y <= btn_bbox[3]:
                 rotate_180 = not rotate_180
@@ -296,20 +347,42 @@ def run_main_loop(
         # Optional 180-degree rotation for upside-down cameras
         if rotate_180:
             frame = cv2.rotate(frame, cv2.ROTATE_180)
-        fps_counter.tick()
-        frame = process_hands(frame, tracker, renderer, config)
-        frame = renderer.draw_fps(frame, fps_counter.get_fps_string())
         
-        # Render flip button and update its exact bounding box
-        frame, bbox = renderer.draw_flip_button(frame, rotate_180)
-        btn_bbox[0], btn_bbox[1] = bbox[0]
-        btn_bbox[2], btn_bbox[3] = bbox[1]
+        fps_counter.tick()
+        
+        # Process hands, detect pinches, and render skeletons/ribbon
+        frame, clap_active = process_hands(
+            frame, tracker, renderer, config,
+            show_gui=show_skeleton, clap_active=clap_active, time_val=time.time()
+        )
+        
+        if show_gui:
+            frame = renderer.draw_fps(frame, fps_counter.get_fps_string())
+            
+            # Render flip button and update its exact bounding box
+            frame, bbox = renderer.draw_flip_button(frame, rotate_180)
+            btn_bbox[0], btn_bbox[1] = bbox[0]
+            btn_bbox[2], btn_bbox[3] = bbox[1]
 
-        frame = renderer.draw_device_label(frame, device_label)
+            frame = renderer.draw_device_label(frame, device_label)
+            
         cv2.imshow(window_name, frame)
-        key = cv2.waitKey(1) & 0xFF
-        if key == ord("q") or key == 27:
-            break
+        
+        # Capture keyboard input (waitKeyEx captures extended keys)
+        key = cv2.waitKeyEx(1)
+        if key != -1:
+            ascii_key = key & 0xFF
+            # q = quit
+            if ascii_key == ord("q"):
+                break
+            # ESC = toggle hand skeleton visibility
+            if ascii_key == 27:
+                show_skeleton = not show_skeleton
+                print(f"[INFO] Skeleton visibility: {'ON' if show_skeleton else 'OFF'}")
+            # Delete = toggle all GUI (HUD: FPS, flip button, device label)
+            if key in [3014656, 46, 127, 65535, 0x2E0000]:
+                show_gui = not show_gui
+                print(f"[INFO] HUD visibility: {'ON' if show_gui else 'OFF'}")
 
 
 def cleanup(
