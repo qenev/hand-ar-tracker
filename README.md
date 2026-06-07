@@ -276,7 +276,7 @@ device: auto   # "auto" | "cuda:0" | "cpu"
 
 | File | Purpose |
 |------|---------|
-| `main.py` | Entry point, main loop, wink detection, snap detection, mode routing |
+| `main.py` | Entry point, main loop, wink detection, spacebar toggle, mode routing |
 | `tracker.py` | MediaPipe Hands wrapper + FaceMesh + SelfieSegmentation |
 | `renderer.py` | All OpenCV drawing: skeleton, ribbon (ASCII + real), HUD |
 | `ascii_processor.py` | Vectorised ASCII art renderer (CLAHE + char tiles) |
