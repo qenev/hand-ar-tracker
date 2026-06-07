@@ -303,4 +303,4 @@ device: auto   # "auto" | "cuda:0" | "cpu"
 
 ## License
 
-MIT License — see [LICENSE](LICENSE) for details.
+MIT License - see [LICENSE](LICENSE) for details.
