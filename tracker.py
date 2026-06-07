@@ -125,34 +125,70 @@ class HandTracker:
         return results
 
     def segment_frame(self, frame: np.ndarray) -> np.ndarray:
-        """Run selfie segmentation and background subtraction to detect person + objects."""
-        # 1. Selfie segmentation for the person
+        """Segment foreground (person) from background using MediaPipe SelfieSegmentation.
+
+        Pipeline:
+          1. Run MediaPipe SelfieSegmentation → raw float confidence map.
+          2. Gaussian blur the confidence map to smooth sub-pixel noise.
+          3. Temporal EMA blend with the previous mask to eliminate flicker.
+          4. Threshold at 0.55 confidence (slightly strict to cut noisy edges).
+          5. Morphological close with a large kernel → fills body holes
+             (armpits, gaps between arms, clothing gaps, etc.).
+          6. Morphological open with a small kernel → removes isolated noise blobs.
+          7. Final feather / dilate to recover any edge pixels cut by the threshold.
+
+        Returns:
+            uint8 mask, same spatial size as frame: 255 = foreground, 0 = background.
+        """
+        h, w = frame.shape[:2]
+
         rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         rgb_frame.flags.writeable = False
         results = self.selfie.process(rgb_frame)
         rgb_frame.flags.writeable = True
-        
-        person_mask = np.zeros((frame.shape[0], frame.shape[1]), dtype=np.uint8)
-        if results.segmentation_mask is not None:
-            person_mask = (results.segmentation_mask * 255).astype(np.uint8)
-            _, person_mask = cv2.threshold(person_mask, 128, 255, cv2.THRESH_BINARY)
 
-        # 2. Background subtraction to detect objects
-        if not hasattr(self, "bg_subtractor"):
-            self.bg_subtractor = cv2.createBackgroundSubtractorMOG2(
-                history=300, varThreshold=16, detectShadows=False
-            )
-        
-        fg_mask = self.bg_subtractor.apply(frame, learningRate=0.005)
-        
-        # Clean background noise using morphological opening/closing
-        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
-        fg_mask = cv2.morphologyEx(fg_mask, cv2.MORPH_CLOSE, kernel)
-        fg_mask = cv2.morphologyEx(fg_mask, cv2.MORPH_OPEN, kernel)
+        if results.segmentation_mask is None:
+            self._prev_seg_mask = np.zeros((h, w), dtype=np.float32)
+            return np.zeros((h, w), dtype=np.uint8)
 
-        # Combine person mask and object foreground mask
-        combined_mask = cv2.bitwise_or(person_mask, fg_mask)
-        return combined_mask
+        # ── 1. Gaussian blur on raw float confidence map ─────────────────────
+        # Softens pixel-level noise in the segmentation output before we threshold.
+        raw: np.ndarray = results.segmentation_mask.astype(np.float32)
+        raw = cv2.GaussianBlur(raw, (11, 11), 0)
+
+        # ── 2. Temporal EMA smoothing ─────────────────────────────────────────
+        # Blend 70 % current + 30 % previous to damp per-frame flicker.
+        if not hasattr(self, "_prev_seg_mask") or self._prev_seg_mask.shape != raw.shape:
+            self._prev_seg_mask = raw
+        blended: np.ndarray = 0.70 * raw + 0.30 * self._prev_seg_mask
+        self._prev_seg_mask = blended
+
+        # ── 3. Threshold ──────────────────────────────────────────────────────
+        # 0.55 × 255 ≈ 140 — slightly stricter than the old 128 so noisy edge
+        # pixels with low confidence are rejected rather than included.
+        thresh_val = int(0.55 * 255)
+        mask_u8 = (blended * 255).clip(0, 255).astype(np.uint8)
+        _, mask = cv2.threshold(mask_u8, thresh_val, 255, cv2.THRESH_BINARY)
+
+        # ── 4. Fill holes (large closing) ─────────────────────────────────────
+        # A 21×21 ellipse kernel fills armpits, gaps between arms and torso,
+        # and other body cavities that the model rates as background.
+        fill_kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (21, 21))
+        mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, fill_kernel)
+
+        # ── 5. Remove isolated noise blobs (small opening) ───────────────────
+        # A 7×7 open removes pepper-noise specks that survived the threshold.
+        noise_kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (7, 7))
+        mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, noise_kernel)
+
+        # ── 6. Recover lost edge pixels (slight dilation) ────────────────────
+        # The stricter threshold can eat into the person's outline slightly;
+        # a 3-pixel dilation compensates without reintroducing background noise.
+        edge_kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
+        mask = cv2.dilate(mask, edge_kernel, iterations=1)
+
+        return mask
+
 
     def extract_landmarks(
         self,
