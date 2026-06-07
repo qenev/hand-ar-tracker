@@ -1,6 +1,6 @@
 # Hand AR Tracker
 
-*Real-time hand and finger tracking augmented reality system built with Python.*
+*Real-time hand AR system with ASCII art effects, holographic ribbon, and gesture controls — built with Python + MediaPipe.*
 
 ---
 
@@ -11,32 +11,34 @@
 3. [Hardware Requirements](#hardware-requirements)
 4. [Installation](#installation)
 5. [Quick Start](#quick-start)
-6. [Configuration](#configuration)
-7. [Running the Application](#running-the-application)
-8. [Gestures Reference](#gestures-reference)
-9. [Project Architecture](#project-architecture)
-10. [Running Tests](#running-tests)
-11. [Contributing](#contributing)
-12. [License](#license)
+6. [Gesture Controls](#gesture-controls)
+7. [Keyboard Controls](#keyboard-controls)
+8. [Effect Modes](#effect-modes)
+9. [Configuration](#configuration)
+10. [Project Architecture](#project-architecture)
+11. [License](#license)
 
 ---
 
 ## Overview
 
-Hand AR Tracker captures video from a standard webcam, detects and tracks both hands simultaneously using **Google MediaPipe**, and renders a **green skeletal mesh** connecting all 21 hand landmarks per hand. Each landmark is highlighted with a **red dot**. The system also includes optional **gesture recognition** for five common gestures and displays a live FPS counter and optional landmark coordinates.
+Hand AR Tracker captures your webcam feed and overlays real-time augmented reality effects driven entirely by **hand gestures**, **finger snaps**, and **eye winks** — no buttons, no keyboard, just your body.
+
+The core effect is a **holographic ASCII ribbon** that stretches between your two hands, rendering your silhouette as scrolling ASCII scanlines against a black background. A **snap gesture** inverts the entire effect, and a **double wink** locks the ribbon's position in 3D space.
 
 ---
 
 ## Features
 
-- Dual‑hand tracking with up to two hands simultaneously.
-- 21 landmarks per hand, following the MediaPipe hand model.
-- Green skeletal mesh overlay and red keypoint dots.
-- Real‑time FPS counter and optional coordinate display.
-- Configurable via `config.yaml` (device selection, confidence thresholds, colors, display options, etc.).
-- Optional gesture recognition: Pinch, Fist, Open Hand, Peace, Thumbs Up.
-- Graceful handling of 0, 1, or 2 hands in view.
-- Supports CPU and CUDA‑enabled GPU execution.
+- 🖐 **Dual-hand tracking** — up to two hands simultaneously via MediaPipe Hands
+- ✨ **Holographic ASCII ribbon** — scanline particle effect renders your silhouette as ASCII art between both hands
+- 🔄 **Snap-to-reverse** — snap your fingers to flip the effect: real video inside ribbon, ASCII art outside
+- 😉 **Double-wink lock** — wink twice in one second to freeze the ribbon position in space
+- 🎯 **Person + object segmentation** — MediaPipe Selfie Segmentation + background subtraction
+- 📟 **Live FPS counter** with rolling average
+- 🖱 **Click-to-flip** camera rotation button in the HUD
+- ⚡ Auto GPU/CPU selection (CUDA or CPU)
+- 🎨 Fully configurable via `config.yaml`
 
 ---
 
@@ -46,194 +48,230 @@ Hand AR Tracker captures video from a standard webcam, detects and tracks both h
 
 | Component | Requirement |
 |-----------|-------------|
-| Camera    | Any USB webcam |
+| Camera    | Any USB/built-in webcam |
 | Python    | 3.10+ |
-| RAM       | 4 GB |
-| CPU       | Modern x86_64 or ARM |
-| OS        | Windows 10+, macOS 12+, Linux |
+| RAM       | 4 GB |
+| OS        | Windows 10+, macOS 12+, Linux |
 
 ### Recommended
 
 | Component | Recommendation |
-|-----------|-----------------|
+|-----------|----------------|
 | GPU       | NVIDIA GPU with CUDA |
-| Camera    | 1080p webcam |
-| RAM       | 8 GB+ |
-| CPU       | Intel i5 / AMD Ryzen 5 or better |
+| Camera    | 1080p webcam at 60 fps |
+| RAM       | 8 GB+ |
+| CPU       | AMD Ryzen 5 / Intel i5 or better |
 
 ---
 
 ## Installation
 
-1. **Clone the repository**
+### Windows (one-click)
 
+1. **Clone the repo**
    ```bash
-   git clone https://github.com/your-username/hand-ar-tracker.git
+   git clone https://github.com/qenev/hand-ar-tracker.git
    cd hand-ar-tracker
    ```
 
-2. **Create a virtual environment**
-
-   ```bash
-   python -m venv venv
+2. **Run the installer** — creates the virtual environment and installs all dependencies:
+   ```
+   install.bat
    ```
 
-3. **Activate the environment**
-
-   - Windows:
-     ```bash
-     venv\Scripts\activate
-     ```
-   - macOS / Linux:
-     ```bash
-     source venv/bin/activate
-     ```
-
-4. **Install dependencies**
-
-   ```bash
-   pip install -r requirements.txt
+3. **Launch the tracker:**
+   ```
+   start.bat
    ```
 
-5. **Verify installation**
+### Manual installation
 
-   ```bash
-   python -c "import cv2, mediapipe, torch; print('Dependencies OK')"
-   ```
+```bash
+git clone https://github.com/qenev/hand-ar-tracker.git
+cd hand-ar-tracker
+
+python -m venv venv
+
+# Windows
+venv\Scripts\activate
+# macOS / Linux
+source venv/bin/activate
+
+pip install -r requirements.txt
+
+python main.py
+```
 
 ---
 
 ## Quick Start
 
-Run the demo with a single command:
-
 ```bash
-python main.py
+start.bat        # Windows one-click launch
+# or
+python main.py   # manual
 ```
 
-The application will:
+The app opens your webcam. Show **both hands** to the camera to start.
 
-1. Load `config.yaml` (or use defaults).
-2. Detect GPU/CPU based on the `device` setting.
-3. Open the webcam feed and overlay hand landmarks.
-4. Display FPS, optional coordinates, and recognized gestures.
+---
 
-Press **q** or **ESC** to exit gracefully.
+## Gesture Controls
+
+All effects are controlled entirely by **body gestures** — no keyboard required for the AR effects.
+
+### 🤌 Double Pinch Touch — Toggle Ribbon ON/OFF
+
+Bring both hands in front of the camera, **pinch** your thumb and index finger together on **each hand simultaneously**, then touch the two pinched fingertips together.
+
+- **First double-pinch:** Ribbon turns **ON** (ASCII scanline effect between hands)
+- **Second double-pinch:** Ribbon turns **OFF**
+- If either hand leaves frame while the ribbon is off, the effect auto-resets
+
+```
+Both hands visible → pinch both → touch pinched tips together → toggle
+```
+
+### 👌 Snap — Reverse the Effect
+
+Snap your fingers on either hand (bring your **thumb tip** and **middle fingertip** together then release quickly).
+
+| Without Snap (default) | With Snap (reversed) |
+|---|---|
+| Ribbon ON → ASCII scanlines on your silhouette | Ribbon ON → Real video inside ribbon, ASCII art everywhere outside |
+| Ribbon OFF → Normal camera | Ribbon OFF → Full-frame ASCII art on black background |
+
+Snap again to revert back to normal mode.
+
+### 😉 Double Wink — Lock / Unlock Ribbon Position
+
+Wink **one eye** (not both — a full blink won't count) **twice within 1 second** to lock the ribbon at its current position in space. The ribbon will stay frozen even if you move your hands away.
+
+- **Double-wink while ribbon is ON:** Position locks. You can lower your hands — the ribbon stays.
+- **Double-wink while ribbon is locked:** Unlocks the ribbon so it follows your hands again.
+
+---
+
+## Keyboard Controls
+
+| Key | Action |
+|-----|--------|
+| **Q** | Quit the application |
+| **ESC** | Toggle hand skeleton visibility (dots + lines) on/off |
+| **Delete** | Toggle the entire HUD (FPS counter, flip button, device label) on/off |
+
+### HUD — On-screen Controls
+
+| Element | Location | Action |
+|---------|----------|--------|
+| **FPS counter** | Top-left | Live rolling-average frame rate |
+| **Flip 180 button** | Top-center (clickable) | Click to rotate camera 180° for upside-down mounts |
+| **Device label** | Top-right | Shows `CUDA` or `CPU` |
+
+---
+
+## Effect Modes
+
+### Default Mode (no snap)
+
+```
+Ribbon OFF:  Normal camera feed
+Ribbon ON:   Your silhouette rendered as scrolling ASCII scanlines
+             between your two hands, against a black background.
+             Rest of frame is plain black.
+```
+
+### Reversed Mode (after snap)
+
+```
+Ribbon OFF:  Full frame converted to ASCII art on black background
+Ribbon ON:   Inside ribbon = clear real video
+             Outside ribbon = ASCII art
+             (No border — clean hard edge)
+```
+
+### Locked Ribbon (after double wink)
+
+The ribbon polygon stays fixed in screen-space at the position captured when the wink fired. Works in both default and reversed modes.
 
 ---
 
 ## Configuration
 
-All tunable parameters live in `config.yaml`. Below is the full reference:
+All settings live in `config.yaml`.
 
-### Camera Settings (`camera`)
-- `index` (integer, default `0`): Webcam index.
-- `width` (integer, default `1280`): Capture width in pixels.
-- `height` (integer, default `720`): Capture height in pixels.
-- `fps` (integer, default `60`): Target frame rate.
-- `rotate_180` (boolean, default `true`): Flip the camera 180 degrees (upside down).
+### Camera
 
-### Tracking Settings (`tracking`)
-- `max_hands` (integer, default `2`): Max hands to detect and track (1 or 2).
-- `min_detection_confidence` (float, default `0.8`): Confidence threshold for initial detection.
-- `min_tracking_confidence` (float, default `0.7`): Confidence threshold for frame-to-frame tracking.
-- `model_complexity` (integer, default `1`): MediaPipe model complexity (0 = lite, 1 = full/accurate).
-
-### Renderer Settings (`renderer`)
-- `skeleton_color` (list, default `[0, 255, 0]`): BGR color for skeleton lines (green).
-- `keypoint_color` (list, default `[0, 0, 255]`): BGR color for landmark dots (red).
-- `keypoint_radius` (integer, default `6`): Radius of landmark dots.
-- `skeleton_thickness` (integer, default `2`): Thickness of skeleton lines.
-- `show_fps` (boolean, default `true`): Display FPS counter.
-- `show_coordinates` (boolean, default `false`): Show coordinates for finger tips.
-- `show_gesture_label` (boolean, default `false`): Show detected gesture names.
-- `show_hand_label` (boolean, default `false`): Show Left/Right hand labels.
-- `show_device_label` (boolean, default `true`): Show active compute device.
-
-### Gestures Settings (`gestures`)
-- `enabled` (boolean, default `false`): Enable/disable gesture recognition.
-- `pinch_threshold` (float, default `0.05`): Distance threshold for pinching.
-- `fist_threshold` (float, default `0.85`): Ratio threshold for fist gesture.
-
-### General Settings
-- `device` (string, default `"cuda:0"`): Active device. Use `"auto"` to choose at startup, `"cuda:0"` to force Nvidia GPU, or `"cpu"`.
-
----
-
-## Running the Application
-
-```bash
-python main.py
+```yaml
+camera:
+  index: 0          # webcam index (0 = default)
+  width: 1280
+  height: 720
+  fps: 60
+  rotate_180: false  # true if camera is mounted upside-down
 ```
 
-### Command‑line Options
+### Tracking
 
-| Option | Description |
-|--------|-------------|
-| `--config PATH` | Path to an alternative configuration file. |
-| `--no-gpu`      | Force CPU execution even if a GPU is available. |
-| `--debug`       | Enable verbose debug logging to the console. |
+```yaml
+tracking:
+  max_hands: 2
+  min_detection_confidence: 0.8
+  min_tracking_confidence: 0.7
+  model_complexity: 1   # 0 = lite/fast, 1 = full/accurate
+```
 
----
+### Renderer
 
-## Gestures Reference
+```yaml
+renderer:
+  skeleton_color: [0, 255, 0]     # BGR — green
+  keypoint_color: [0, 0, 255]     # BGR — red
+  keypoint_radius: 6
+  skeleton_thickness: 2
+  show_fps: true
+  show_coordinates: false
+  show_gesture_label: false
+  show_hand_label: false
+  show_device_label: true
+```
 
-| Gesture | Description |
-|---------|-------------|
-| **Pinch** | Thumb tip touches index fingertip; other fingers extended. |
-| **Fist** | All fingers curled into the palm. |
-| **Open Hand** | All fingers fully extended, palm facing camera. |
-| **Peace** | Index and middle fingers extended; others curled. |
-| **Thumbs Up** | Thumb extended upward; remaining fingers curled. |
+### Gestures
 
-When two hands are present, each hand reports its own gesture independently.
+```yaml
+gestures:
+  enabled: false         # enable named gesture labels (Pinch, Fist, etc.)
+  pinch_threshold: 0.05  # thumb-to-index distance to count as a pinch
+  fist_threshold: 0.85
+```
+
+### Device
+
+```yaml
+device: auto   # "auto" | "cuda:0" | "cpu"
+```
 
 ---
 
 ## Project Architecture
 
-| Path | Purpose |
+| File | Purpose |
 |------|---------|
-| `main.py` | Entry point, sets up components and main loop. |
-| `config.yaml` | Default configuration values. |
-| `requirements.txt` | Python package dependencies. |
-| `tracker.py` | MediaPipe hand detection and landmark extraction. |
-| `gesture.py` | Gesture classification logic. |
-| `renderer.py` | Rendering of landmarks, connections, HUD elements. |
-| `utils/` | Helper utilities (FPS calculation, etc.). |
-| `tests/` | Unit tests for all modules. |
-| `assets/` | Demo screenshots and reference images. |
-
----
-
-## Running Tests
-
-```bash
-pytest tests/
-```
-
-All tests should pass. For verbose output:
-
-```bash
-pytest -v tests/
-```
-
----
-
-## Contributing
-
-Contributions are welcome! Please follow these steps:
-
-1. Fork the repository.
-2. Create a feature branch (`git checkout -b feature/my‑feature`).
-3. Make your changes, ensuring code style consistency (PEP 8).
-4. Add or update tests as needed.
-5. Run the full test suite.
-6. Submit a Pull Request with a clear description of changes.
+| `main.py` | Entry point, main loop, wink detection, snap detection, mode routing |
+| `tracker.py` | MediaPipe Hands wrapper + FaceMesh + SelfieSegmentation |
+| `renderer.py` | All OpenCV drawing: skeleton, ribbon (ASCII + real), HUD |
+| `ascii_processor.py` | Vectorised ASCII art renderer (CLAHE + char tiles) |
+| `gesture.py` | Per-hand gesture classification |
+| `config.yaml` | All runtime configuration |
+| `utils/fps_counter.py` | Rolling-window FPS counter |
+| `utils/device_utils.py` | GPU/CPU auto-detection |
+| `utils/math_utils.py` | Landmark smoothing and coordinate helpers |
+| `install.bat` | One-click Windows dependency installer |
+| `start.bat` | One-click Windows launcher |
+| `assets/` | Reference images and ASCII character data |
 
 ---
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
+MIT License — see [LICENSE](LICENSE) for details.

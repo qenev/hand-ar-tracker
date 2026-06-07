@@ -12,6 +12,10 @@ import numpy as np
 
 from utils.math_utils import landmark_to_pixel
 from tracker import HAND_CONNECTIONS, LANDMARK_NAMES
+from ascii_processor import AsciiProcessor as _AsciiProcessor
+
+# Shared ASCII processor for ribbon effect
+_ribbon_ascii = _AsciiProcessor()
 
 
 class HandRenderer:
@@ -447,14 +451,64 @@ class HandRenderer:
         )
         return frame
 
+    def draw_real_ribbon_border(
+        self,
+        frame: np.ndarray,
+        landmarks_left: List[Tuple[float, float, float]],
+        landmarks_right: List[Tuple[float, float, float]],
+    ) -> np.ndarray:
+        """Reverse mode: inside ribbon = real video, outside = ASCII art.
+
+        Converts the full frame to ASCII, then restores the original
+        pixels inside the ribbon polygon so the ribbon area is clear.
+        No border is drawn.
+
+        Args:
+            frame: Input video frame as BGR NumPy array.
+            landmarks_left: Left-hand landmark list.
+            landmarks_right: Right-hand landmark list.
+
+        Returns:
+            Composite frame: ASCII outside ribbon, real video inside.
+        """
+        h_frame, w_frame = frame.shape[:2]
+        coords_left  = self._compute_pixel_coords(landmarks_left,  w_frame, h_frame)
+        coords_right = self._compute_pixel_coords(landmarks_right, w_frame, h_frame)
+
+        if len(coords_left) < 21 or len(coords_right) < 21:
+            # Fall back to full ASCII if ribbon coords aren't ready
+            return _ribbon_ascii.ascii_full_frame(frame)
+
+        left_top  = np.array(coords_left[8],  dtype=np.int32)
+        left_bot  = np.array(coords_left[4],  dtype=np.int32)
+        right_top = np.array(coords_right[8], dtype=np.int32)
+        right_bot = np.array(coords_right[4], dtype=np.int32)
+
+        poly = np.array([left_top, right_top, right_bot, left_bot], dtype=np.int32)
+
+        # Build ribbon mask (255 = inside ribbon)
+        mask = np.zeros((h_frame, w_frame), dtype=np.uint8)
+        cv2.fillPoly(mask, [poly], 255)
+
+        # Convert entire frame to ASCII art
+        ascii_frame = _ribbon_ascii.ascii_full_frame(frame)
+
+        # Paste real video back inside the ribbon area
+        # np.where broadcasts (H,W,1) mask over 3 channels
+        mask3 = mask[:, :, np.newaxis]
+        result = np.where(mask3 > 0, frame, ascii_frame).astype(np.uint8)
+
+        return result
+
     def draw_holographic_ribbon(
         self,
         frame: np.ndarray,
         landmarks_left: List[Tuple[float, float, float]],
         landmarks_right: List[Tuple[float, float, float]],
         time_val: float,
+        full_person_mask: np.ndarray,
     ) -> np.ndarray:
-        """Apply a crisp, high-frequency refraction and chrome ripple distortion matching the reference photo."""
+        """Apply the scanline effect on people/foreground using MediaPipe's segmentation mask and space backdrop on walls, matching 1:1."""
         h_frame, w_frame = frame.shape[:2]
 
         coords_left = self._compute_pixel_coords(landmarks_left, w_frame, h_frame)
@@ -463,13 +517,11 @@ class HandRenderer:
         if len(coords_left) < 21 or len(coords_right) < 21:
             return frame
 
-        # Anchor points: index fingertip (8) top, thumb tip (4) bottom
         left_top  = np.array(coords_left[8],  dtype=np.float32)
         left_bot  = np.array(coords_left[4],  dtype=np.float32)
         right_top = np.array(coords_right[8], dtype=np.float32)
         right_bot = np.array(coords_right[4], dtype=np.float32)
 
-        # Polygon coordinates representing the ribbon (can taper to triangle on pinch)
         poly = np.array([left_top, right_top, right_bot, left_bot], dtype=np.int32)
         x0 = max(0, int(poly[:, 0].min()))
         x1 = min(w_frame, int(poly[:, 0].max()) + 1)
@@ -480,77 +532,74 @@ class HandRenderer:
 
         bw, bh = x1 - x0, y1 - y0
 
-        # Extract local background region (ROI)
-        roi = frame[y0:y1, x0:x1].copy()
-
-        # Very light anti-aliasing blur to preserve crisp background details
-        blurred_roi = cv2.GaussianBlur(roi, (3, 3), 0)
-
-        # Create coordinate map for cv2.remap
-        grid_x, grid_y = np.meshgrid(np.arange(bw, dtype=np.float32), np.arange(bh, dtype=np.float32))
-
-        # ── Apply High-Frequency Sqwiggle Refraction Waves ─────────────────────
-        tv = time_val
-        # Determine wave frequency vertically to get ~10-12 ripples
-        freq_y = (12.0 / max(10, bh)) * 2.0 * np.pi
-
-        # High-frequency horizontal sqwiggle waves matching the photo
-        disp_x = np.sin(grid_y * freq_y + tv * 12.0) * 25.0 + np.cos(grid_x * 0.05 - tv * 5.0) * 8.0
-        disp_y = np.cos(grid_x * 0.06 + tv * 8.0) * 6.0 + np.sin(grid_y * 0.05 + tv * 4.0) * 3.0
-
-        map_x = grid_x + disp_x
-        map_y = grid_y + disp_y
-
-        # Distort the crisp background
-        sqwiggled = cv2.remap(blurred_roi, map_x, map_y, cv2.INTER_LINEAR, borderMode=cv2.BORDER_REPLICATE)
-
-        # ── Shimmer Color Tint matching the chrome wave fringes ────────────────
-        if not hasattr(self, '_holographic_lut'):
-            self._holographic_lut = self._create_holographic_lut()
-        
-        # Color wave matching the refraction wave frequency
-        v = (
-            np.sin(grid_y * freq_y + tv * 12.0)
-            + np.cos(grid_x * 0.04 - tv * 3.0)
-            + 2.0
-        ) / 4.0
-        shimmer = self._holographic_lut[(np.clip(v, 0, 1) * 255).astype(np.uint8)]
-
-        # Blend distorted background with 30% iridescent chrome/metallic shimmer
-        warped = cv2.addWeighted(sqwiggled, 0.70, shimmer, 0.30, 0)
-
-        # ── Polygon mask for the ribbon area ──────────────────────────────────
+        # Create localized masks for ribbon pane
         poly_local = poly - np.array([x0, y0], dtype=np.int32)
         mask = np.zeros((bh, bw), dtype=np.uint8)
         cv2.fillPoly(mask, [poly_local], 255)
 
-        # Draw onto frame
-        np.copyto(frame[y0:y1, x0:x1], warped, where=mask[:, :, None] > 0)
+        # ── 1. Create Space Backdrop (Navy Background + Starfield) ────────────
+        pane = np.zeros((bh, bw, 3), dtype=np.uint8)
+        pane[:] = (32, 28, 24) # Dark slate/navy space backing (matching 1st photo)
+        
+        # Add a much sparser space background starfield (matching the photo)
+        np.random.seed(42)
+        noise = np.random.rand(bh, bw)
+        stars_mask = (noise > 0.9985)
+        pane[stars_mask] = (240, 240, 255)
+
+        # ── 2. Crop the high-quality MediaPipe segmentation mask ─────────────
+        person_mask_global = full_person_mask[y0:y1, x0:x1]
+        
+        # Ensure it's thresholded properly and limited inside the ribbon pane
+        _, person_mask = cv2.threshold(person_mask_global, 128, 255, cv2.THRESH_BINARY)
+        person_mask = cv2.bitwise_and(person_mask, mask)
+
+        # ── 3. Render Blue Glowing Scanline Particle Effect ON the Person Silhouette ────
+        y_indices, x_indices = np.where(person_mask > 0)
+        if len(x_indices) > 0:
+            # Multi-frequency scanline pattern
+            scanline = np.abs(np.sin(y_indices * 0.45 - time_val * 12.0))
+            
+            # Seed-less random noise generator per frame to make points dynamically buzz/vibrate
+            vibe_x = (np.random.randn(len(x_indices)) * 2.0).astype(np.int32)
+            vibe_y = (np.random.randn(len(y_indices)) * 0.8).astype(np.int32)
+            
+            # Wavy horizontal distortion mapping (1:1 with photo)
+            wave_displacement = np.sin(y_indices * 0.15 + time_val * 8.0) * 4.0
+            
+            # Apply displacement + vibration noise
+            warped_x = np.clip(x_indices + wave_displacement.astype(np.int32) + vibe_x, 0, bw - 1)
+            warped_y = np.clip(y_indices + vibe_y, 0, bh - 1)
+            
+            # Restrict points so we only draw ~40% of the pixels as individual point-cloud particles
+            rand_filter = np.random.rand(len(x_indices))
+            draw_mask = (rand_filter > 0.60) & (scanline > 0.3)
+            
+            wx = warped_x[draw_mask]
+            wy = warped_y[draw_mask]
+            
+            # Map blue/cyan intensities
+            intensity = scanline[draw_mask] * 0.8 + 0.2
+            blue_val = (255 * intensity).astype(np.uint8)
+            cyan_val = (210 * intensity).astype(np.uint8)
+            
+            pane[wy, wx, 0] = np.maximum(pane[wy, wx, 0], blue_val)
+            pane[wy, wx, 1] = np.maximum(pane[wy, wx, 1], cyan_val)
+            pane[wy, wx, 2] = np.maximum(pane[wy, wx, 2], 0)
+
+        # ── 4. Convert the pane to ASCII before blending ──────────────────────
+        pane = _ribbon_ascii.ascii_full_frame(pane, color=(180, 255, 220))
+
+        # Mask the ASCII pane so only the person's silhouette contains text, and the rest of the pane is plain black (0, 0, 0)
+        pane = cv2.bitwise_and(pane, pane, mask=person_mask)
+
+        # ── 5. Copy the ASCII pane directly over the ROI to keep the background plain black ────
+        roi = frame[y0:y1, x0:x1]
+        np.copyto(roi, pane, where=mask[:, :, None] > 0)
+
+        # ── 5. Glowing Cyan Outer Ribbon Border ────────────────────────────────
+        contours_ribbon, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        cv2.drawContours(roi, contours_ribbon, -1, (255, 245, 130), 2, cv2.LINE_AA) # Cyan-blue boundary
+        cv2.drawContours(roi, contours_ribbon, -1, (255, 255, 255), 1, cv2.LINE_AA) # Outer white hairline
 
         return frame
-
-    def _create_holographic_lut(self) -> np.ndarray:
-        # Metallic/chrome palette with reflections matching the photo
-        lut = np.zeros((256, 3), dtype=np.uint8)
-        points = [
-            (0.0,  [245, 245, 245]),  # Bright Silver-white
-            (0.12, [80,  85,  90]),   # Dark steel grey
-            (0.25, [30,  150, 225]),  # Gold
-            (0.38, [15,  15,  20]),   # Near-black shadow
-            (0.5,  [230, 140, 35]),   # Chrome Blue
-            (0.62, [190, 190, 195]), # Mid silver
-            (0.75, [75,  85,  205]),  # Copper / Rose gold
-            (0.88, [20,  20,  25]),   # Dark reflection
-            (1.0,  [245, 245, 245]),  # Bright Silver-white
-        ]
-        for i in range(256):
-            t = i / 255.0
-            for idx in range(len(points) - 1):
-                t0, c0 = points[idx]
-                t1, c1 = points[idx + 1]
-                if t0 <= t <= t1:
-                    f = (t - t0) / (t1 - t0 + 1e-9)
-                    lut[i] = [int(c0[j] + f * (c1[j] - c0[j])) for j in range(3)]
-                    break
-        return lut
-

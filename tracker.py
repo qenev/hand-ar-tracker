@@ -10,20 +10,46 @@ from typing import List, Tuple, Optional, Dict, Any
 import cv2
 import numpy as np
 
-try:
-    import mediapipe as mp
+_MP_AVAILABLE = False
+mp = None
+mp_hands = None
+mp_selfie = None
+
+
+def _load_mediapipe_hands() -> bool:
+    """Import MediaPipe Hands from any supported module path.
+
+    Returns:
+        True when MediaPipe Hands is available, False otherwise.
+    """
+    global mp, mp_hands, mp_selfie, _MP_AVAILABLE
     try:
-        from mediapipe.solutions import hands as mp_hands
+        import mediapipe as mp_module
+        mp = mp_module
     except ImportError:
-        from mediapipe.python.solutions import hands as mp_hands
-except ImportError:
-    mp = None
-    mp_hands = None
+        return False
+
+    for loader in (
+        lambda: (mp.solutions.hands, mp.solutions.selfie_segmentation),
+        lambda: (
+            __import__("mediapipe.python.solutions.hands", fromlist=["Hands"]),
+            __import__("mediapipe.python.solutions.selfie_segmentation", fromlist=["SelfieSegmentation"])
+        ),
+    ):
+        try:
+            mp_hands, mp_selfie = loader()
+            _MP_AVAILABLE = True
+            return True
+        except (AttributeError, ImportError, ModuleNotFoundError):
+            continue
+    return False
+
+
+_load_mediapipe_hands()
 
 from utils.math_utils import smooth_landmarks
 
 
-# MediaPipe hand connections defining the skeletal mesh topology.
 HAND_CONNECTIONS = [
     (0, 1), (1, 2), (2, 3), (3, 4),
     (0, 5), (5, 6), (6, 7), (7, 8),
@@ -33,7 +59,6 @@ HAND_CONNECTIONS = [
     (5, 9), (9, 13), (13, 17),
 ]
 
-# Landmark names for coordinate display.
 LANDMARK_NAMES = [
     "WRIST", "THUMB_CMC", "THUMB_MCP", "THUMB_IP", "THUMB_TIP",
     "INDEX_MCP", "INDEX_PIP", "INDEX_DIP", "INDEX_TIP",
@@ -44,21 +69,7 @@ LANDMARK_NAMES = [
 
 
 class HandTracker:
-    """Wrapper around MediaPipe Hands for hand detection and tracking.
-
-    Provides a simplified interface for processing video frames,
-    extracting hand landmarks, and managing tracking state across
-    frames with optional landmark smoothing.
-
-    Attributes:
-        max_hands: Maximum number of hands to detect simultaneously.
-        min_detection_confidence: Minimum confidence for initial detection.
-        min_tracking_confidence: Minimum confidence for frame-to-frame tracking.
-        model_complexity: MediaPipe model complexity (0=lite, 1=full).
-        hands: The underlying MediaPipe Hands solution instance.
-        previous_landmarks: Stored landmarks from the previous frame
-            for smoothing purposes.
-    """
+    """Wrapper around MediaPipe Hands for hand detection and tracking."""
 
     def __init__(
         self,
@@ -67,94 +78,87 @@ class HandTracker:
         min_tracking_confidence: float = 0.6,
         model_complexity: int = 1,
     ) -> None:
-        """Initialize the hand tracker with detection parameters.
+        """Initialize the hand tracker with detection parameters."""
+        if not _MP_AVAILABLE or mp_hands is None:
+            raise RuntimeError(
+                "MediaPipe Hands is not available. "
+                "Run install.bat to install mediapipe==0.10.14."
+            )
 
-        Args:
-            max_hands: Maximum number of hands to detect per frame.
-                Valid range is 1 to 2.
-            min_detection_confidence: Minimum confidence threshold for
-                the hand detection model. Range 0.0 to 1.0.
-            min_tracking_confidence: Minimum confidence threshold for
-                the hand tracking model. Range 0.0 to 1.0.
-            model_complexity: MediaPipe model complexity.
-                0 = lite (fast), 1 = full (accurate). Default is 1.
-        """
         self.max_hands: int = max_hands
         self.min_detection_confidence: float = min_detection_confidence
         self.min_tracking_confidence: float = min_tracking_confidence
         self.model_complexity: int = model_complexity
 
-        # Determine if MediaPipe is available; if not, use OpenCV fallback
-        self.use_opencv: bool = mp is None
-        if self.use_opencv:
-            # OpenCV fallback does not require initialization
-            self._last_opencv_landmarks: list = []
-            self._last_opencv_handedness: list = []
-            print("[INFO] MediaPipe not available – using OpenCV hand detection fallback.")
-        else:
-            self._mp_hands = mp_hands
-            self.hands = self._mp_hands.Hands(
-                static_image_mode=False,
-                max_num_hands=self.max_hands,
-                model_complexity=self.model_complexity,
-                min_detection_confidence=self.min_detection_confidence,
-                min_tracking_confidence=self.min_tracking_confidence,
-            )
-            print(f"[INFO] MediaPipe Hands initialised (model_complexity={model_complexity}).")
+        self.hands = mp_hands.Hands(
+            static_image_mode=False,
+            max_num_hands=self.max_hands,
+            model_complexity=self.model_complexity,
+            min_detection_confidence=self.min_detection_confidence,
+            min_tracking_confidence=self.min_tracking_confidence,
+        )
+        # Initialize SelfieSegmentation model
+        self.selfie = mp_selfie.SelfieSegmentation(model_selection=0) # 0 for general/fast model
+        # Initialize FaceMesh solution for facial landmarks
+        self.face_mesh = mp.solutions.face_mesh.FaceMesh(
+            static_image_mode=False,
+            max_num_faces=1,
+            refine_landmarks=True,
+            min_detection_confidence=0.5,
+            min_tracking_confidence=0.5,
+        )
+        self.previous_face_landmarks: List[Tuple[float, float]] = []
+        # Store previous hand landmarks for smoothing (keyed by hand index)
         self.previous_landmarks: Dict[int, List[Tuple[float, float, float]]] = {}
 
-    def process_frame(
-        self,
-        frame: np.ndarray,
-    ) -> Optional[Any]:
-        """Process a single video frame for hand detection.
+        print(
+            f"[INFO] MediaPipe Hands & SelfieSegmentation initialised "
+            f"(model_complexity={model_complexity})."
+        )
 
-        Converts the frame from BGR to RGB color space as required
-        by MediaPipe, then runs the hand detection pipeline.
+    def process_frame(self, frame: np.ndarray) -> Optional[Any]:
+        """Process a single video frame for hand detection."""
+        rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        rgb_frame.flags.writeable = False
+        results = self.hands.process(rgb_frame)
+        rgb_frame.flags.writeable = True
+        return results
 
-        Args:
-            frame: Input video frame as a NumPy array in BGR format
-                with shape (height, width, 3).
+    def segment_frame(self, frame: np.ndarray) -> np.ndarray:
+        """Run selfie segmentation and background subtraction to detect person + objects."""
+        # 1. Selfie segmentation for the person
+        rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        rgb_frame.flags.writeable = False
+        results = self.selfie.process(rgb_frame)
+        rgb_frame.flags.writeable = True
+        
+        person_mask = np.zeros((frame.shape[0], frame.shape[1]), dtype=np.uint8)
+        if results.segmentation_mask is not None:
+            person_mask = (results.segmentation_mask * 255).astype(np.uint8)
+            _, person_mask = cv2.threshold(person_mask, 128, 255, cv2.THRESH_BINARY)
 
-        Returns:
-            The MediaPipe results object containing detected hands,
-            or None if processing fails.
-        """
-        if self.use_opencv:
-            # OpenCV fallback: detect hand and store landmarks
-            from utils.opencv_hand_detection import detect_hand
-            landmarks = detect_hand(frame)
-            # Store for later extraction
-            self._last_opencv_landmarks = landmarks
-            self._last_opencv_handedness = ["Hand"] * len(landmarks)  # placeholder label
-            return None  # No MediaPipe results
-        else:
-            rgb_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            rgb_frame.flags.writeable = False
-            results = self.hands.process(rgb_frame)
-            rgb_frame.flags.writeable = True
-            return results
+        # 2. Background subtraction to detect objects
+        if not hasattr(self, "bg_subtractor"):
+            self.bg_subtractor = cv2.createBackgroundSubtractorMOG2(
+                history=300, varThreshold=16, detectShadows=False
+            )
+        
+        fg_mask = self.bg_subtractor.apply(frame, learningRate=0.005)
+        
+        # Clean background noise using morphological opening/closing
+        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
+        fg_mask = cv2.morphologyEx(fg_mask, cv2.MORPH_CLOSE, kernel)
+        fg_mask = cv2.morphologyEx(fg_mask, cv2.MORPH_OPEN, kernel)
+
+        # Combine person mask and object foreground mask
+        combined_mask = cv2.bitwise_or(person_mask, fg_mask)
+        return combined_mask
 
     def extract_landmarks(
         self,
         results: Any,
     ) -> List[List[Tuple[float, float, float]]]:
-        """Extract landmark coordinates from MediaPipe results.
-
-        Converts the MediaPipe landmark protobuf objects into plain
-        Python tuples for easier downstream processing.
-
-        Args:
-            results: MediaPipe results object from process_frame.
-
-        Returns:
-            A list of hands, where each hand is a list of 21
-            (x, y, z) coordinate tuples in normalized space.
-            Returns an empty list if no hands are detected.
-        """
-        if self.use_opencv:
-            # Return landmarks from OpenCV detection
-            return self._last_opencv_landmarks
+        """Extract landmark coordinates from MediaPipe results."""
         if results is None or results.multi_hand_landmarks is None:
             self.previous_landmarks.clear()
             return []
@@ -168,45 +172,14 @@ class HandTracker:
         self,
         hand_landmarks: Any,
     ) -> List[Tuple[float, float, float]]:
-        """Parse landmarks for a single detected hand.
-
-        Args:
-            hand_landmarks: MediaPipe hand landmarks protobuf object
-                containing 21 landmark positions.
-
-        Returns:
-            A list of 21 (x, y, z) coordinate tuples.
-        """
+        """Parse landmarks for a single detected hand."""
         landmarks: List[Tuple[float, float, float]] = []
         for landmark in hand_landmarks.landmark:
-            landmarks.append((
-                landmark.x,
-                landmark.y,
-                landmark.z,
-            ))
+            landmarks.append((landmark.x, landmark.y, landmark.z))
         return landmarks
 
-    def extract_handedness(
-        self,
-        results: Any,
-    ) -> List[str]:
-        """Extract hand labels (Left/Right) from MediaPipe results.
-
-        MediaPipe labels are mirrored by default since the camera
-        provides a mirror view. This function returns the raw labels
-        from the detection results.
-
-        Args:
-            results: MediaPipe results object from process_frame.
-
-        Returns:
-            A list of hand label strings ("Left" or "Right") in the
-            same order as the detected hands. Returns an empty list
-            if no hands are detected.
-        """
-        if self.use_opencv:
-            # Return placeholder handedness for each detected hand
-            return self._last_opencv_handedness
+    def extract_handedness(self, results: Any) -> List[str]:
+        """Extract hand labels (Left/Right) from MediaPipe results."""
         if results is None or results.multi_handedness is None:
             return []
         labels: List[str] = []
@@ -221,21 +194,7 @@ class HandTracker:
         current_landmarks: List[Tuple[float, float, float]],
         smoothing_factor: float = 0.7,
     ) -> List[Tuple[float, float, float]]:
-        """Apply temporal smoothing to hand landmarks.
-
-        Uses exponential moving average smoothing between the current
-        and previous frame landmarks to reduce tracking jitter.
-
-        Args:
-            hand_index: Index of the hand (0 or 1) for tracking
-                previous frame state.
-            current_landmarks: Current frame landmark positions.
-            smoothing_factor: Blending weight for current frame.
-                Higher = more responsive, lower = smoother.
-
-        Returns:
-            Smoothed landmark positions as a list of (x, y, z) tuples.
-        """
+        """Apply temporal smoothing to hand landmarks."""
         previous = self.previous_landmarks.get(hand_index)
         smoothed = smooth_landmarks(
             current_landmarks,
@@ -246,28 +205,32 @@ class HandTracker:
         return smoothed
 
     def get_landmark_count(self) -> int:
-        """Get the number of landmarks per hand.
-
-        Returns:
-            The constant number of landmarks per hand (always 21).
-        """
+        """Get the number of landmarks per hand."""
         return 21
 
     def get_connection_list(self) -> List[Tuple[int, int]]:
-        """Get the list of connections defining the hand skeleton.
-
-        Returns:
-            A list of (start_index, end_index) tuples defining
-            which landmarks should be connected by lines.
-        """
+        """Get the list of connections defining the hand skeleton."""
         return HAND_CONNECTIONS.copy()
 
     def release(self) -> None:
-        """Release MediaPipe resources.
-
-        Should be called when the tracker is no longer needed
-        to free GPU memory and processing resources.
-        """
-        if not self.use_opencv:
-            self.hands.close()
+        """Release MediaPipe resources."""
+        self.hands.close()
+        self.selfie.close()
+        self.face_mesh.close()
         self.previous_landmarks.clear()
+
+    def extract_face_landmarks(self, frame: np.ndarray) -> List[Tuple[float, float]]:
+        """Extract facial landmarks using MediaPipe FaceMesh.
+
+        Returns a list of (x, y) normalized coordinates for the detected face.
+        If no face is detected, returns an empty list.
+        """
+        rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        rgb.flags.writeable = False
+        results = self.face_mesh.process(rgb)
+        rgb.flags.writeable = True
+        if results.multi_face_landmarks:
+            # Use first face only
+            face_landmarks = results.multi_face_landmarks[0]
+            return [(lm.x, lm.y) for lm in face_landmarks.landmark]
+        return []

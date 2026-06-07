@@ -10,7 +10,7 @@ camera:
   # Requested frame rate (FPS)
   fps: 60
   # Flip the camera 180 degrees (rotate upside-down) — useful if your camera is mounted inverted
-  rotate_180: true
+  rotate_180: false
 
 tracking:
   # Maximum number of hands to detect and track simultaneously (1 or 2)
@@ -42,6 +42,7 @@ renderer:
   show_hand_label: false
   # Show active compute device in top-right corner
   show_device_label: true
+  show_ascii_overlay: true
 
 gestures:
   # Enable or disable gesture recognition logic
@@ -53,9 +54,9 @@ gestures:
 
 # GPU / compute device selection:
 #   "auto"    → prompt at startup to let you choose from available GPUs
-#   "cuda:0"  → NVIDIA GPU #0 (your RTX 3050 Laptop)
-#   "cuda:1"  → NVIDIA GPU #1 (if you have a second GPU)
+#   "cuda:0"  → NVIDIA GPU #0 (first GPU)
+#   "cuda:1"  → NVIDIA GPU #1 (second GPU)
 #   "cpu"     → force CPU only
 # Note: MediaPipe runs its own optimised CPU pipeline internally.
 # Setting cuda:0 makes the app display the GPU label and future torch inference uses that device.
-device: cuda:0
+device: auto
