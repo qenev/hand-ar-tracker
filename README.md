@@ -30,15 +30,15 @@ The core effect is a **holographic ASCII ribbon** that stretches between your tw
 
 ## Features
 
-- 🖐 **Dual-hand tracking** — up to two hands simultaneously via MediaPipe Hands
-- ✨ **Holographic ASCII ribbon** — scanline particle effect renders your silhouette as ASCII art between both hands
-- 🔄 **Snap-to-reverse** — snap your fingers to flip the effect: real video inside ribbon, ASCII art outside
-- 😉 **Double-wink lock** — wink twice in one second to freeze the ribbon position in space
-- 🎯 **Person + object segmentation** — MediaPipe Selfie Segmentation + background subtraction
-- 📟 **Live FPS counter** with rolling average
-- 🖱 **Click-to-flip** camera rotation button in the HUD
-- ⚡ Auto GPU/CPU selection (CUDA or CPU)
-- 🎨 Fully configurable via `config.yaml`
+- **Dual-hand tracking** — up to two hands simultaneously via MediaPipe Hands
+- **Holographic ASCII ribbon** — scanline particle effect renders your silhouette as ASCII art between both hands
+- **Snap-to-reverse** — snap your fingers to flip the effect: real video inside ribbon, ASCII art outside
+- **Double-wink lock** — wink twice in one second to freeze the ribbon position in space
+- **Person + object segmentation** — MediaPipe Selfie Segmentation + background subtraction
+- **Live FPS counter** with rolling average
+- **Click-to-flip** camera rotation button in the HUD
+- Auto GPU/CPU selection (CUDA or CPU)
+- Fully configurable via `config.yaml`
 
 ---
 
@@ -113,6 +113,35 @@ python main.py   # manual
 ```
 
 The app opens your webcam. Show **both hands** to the camera to start.
+
+---
+
+## Tutorial: Step‑by‑step Walkthrough
+
+1. **Launch** – run `start.bat` (Windows) or `python main.py`.
+2. **Calibration** – the system automatically detects your hands and face. Wait a couple of seconds for the FPS counter to stabilize.
+3. **Enable the ribbon** – perform a **double‑pinch** (thumb and index together on each hand, then touch the pinched tips). The holographic ASCII ribbon appears between your hands.
+4. **Reverse mode** – snap your fingers (thumb tip to middle fingertip, then release). The ribbon now shows the *real* video inside while the rest of the scene turns ASCII.
+5. **Lock the ribbon** – wink one eye twice within one second. The ribbon’s position freezes in space, allowing you to move your hands without moving the effect.
+6. **Unlock** – repeat the double‑wink to release the lock.
+7. **Toggle off** – repeat the double‑pinch gesture to turn the ribbon off.
+8. **Adjust settings** – edit `config.yaml` to change camera resolution, confidence thresholds, colors, or to enable extra gesture labels.
+9. **Exit** – press **Q** or **ESC** (hand‑skeleton toggle) to close the application.
+
+---
+
+## Controls Summary
+
+| Control | Action |
+|---|---|
+| **Double‑pinch touch** | Toggle ASCII ribbon ON/OFF |
+| **Snap gesture** | Switch to reverse mode (real video inside ribbon, ASCII outside) |
+| **Double wink** (one eye) | Lock / unlock ribbon position |
+| **Q** | Quit application |
+| **ESC** | Toggle hand skeleton visibility |
+| **Delete** | Show/hide HUD (FPS, flip button, device label) |
+
+---
 
 ---
 
