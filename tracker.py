@@ -164,7 +164,7 @@ class HandTracker:
         self._prev_seg_mask = blended
 
         # ── 3. Threshold ──────────────────────────────────────────────────────
-        # 0.55 × 255 ≈ 140 — slightly stricter than the old 128 so noisy edge
+        # 0.55 * 255 ≈ 140 - slightly stricter than the old 128 so noisy edge
         # pixels with low confidence are rejected rather than included.
         thresh_val = int(0.55 * 255)
         mask_u8 = (blended * 255).clip(0, 255).astype(np.uint8)

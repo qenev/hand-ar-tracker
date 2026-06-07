@@ -1,4 +1,4 @@
-"""ASCII art face overlay — fast vectorised renderer.
+"""ASCII art face overlay - fast vectorised renderer.
 
 Approach
 --------
@@ -6,7 +6,7 @@ Approach
 * Uses CLAHE contrast equalisation so the full range of characters
   is always used (no flat dark-dots look).
 * All characters in the gradient are visible (no space/empty cells).
-* Assembles the full ASCII canvas via numpy tiling — no Python loops.
+* Assembles the full ASCII canvas via numpy tiling - no Python loops.
 
 Colors: pure #FFFFFF characters on #000000 background.
 """
@@ -81,7 +81,7 @@ def _fast_ascii(grey: np.ndarray, out_w: int, out_h: int) -> np.ndarray:
     Applies CLAHE first so the full character range is always used
     regardless of ambient lighting.
 
-    Returns (out_h, out_w) uint8 — white chars on black.
+    Returns (out_h, out_w) uint8 - white chars on black.
     """
     cols = out_w // _CW
     rows = out_h // _CH
@@ -94,17 +94,17 @@ def _fast_ascii(grey: np.ndarray, out_w: int, out_h: int) -> np.ndarray:
     # Downsample to char grid
     small = cv2.resize(eq, (cols, rows), interpolation=cv2.INTER_AREA)
 
-    # Map 0-255 → 0-(_N-1) char index
+    # Map 0-255 -> 0-(_N-1) char index
     idx = (small.astype(np.float32) / 255.0 * (_N - 1)).astype(np.int32)
     idx = np.clip(idx, 0, _N - 1)
 
     # Assemble via advanced indexing + reshape (no Python loops)
-    # _CHAR_TILES[idx] → (rows, cols, _CH, _CW)
+    # _CHAR_TILES[idx] -> (rows, cols, _CH, _CW)
     canvas_tiles = _CHAR_TILES[idx]
 
     canvas_h = rows * _CH
     canvas_w = cols * _CW
-    # (rows, cols, CH, CW) → (rows, CH, cols, CW) → (rows*CH, cols*CW)
+    # (rows, cols, CH, CW) -> (rows, CH, cols, CW) -> (rows*CH, cols*CW)
     canvas = canvas_tiles.transpose(0, 2, 1, 3).reshape(canvas_h, canvas_w)
 
     if canvas_h < out_h or canvas_w < out_w:
@@ -116,7 +116,7 @@ def _fast_ascii(grey: np.ndarray, out_w: int, out_h: int) -> np.ndarray:
 
 
 def _grey_to_bgr_white(grey: np.ndarray) -> np.ndarray:
-    """Greyscale ASCII canvas → BGR with pure white chars (#FFFFFF on #000000)."""
+    """Greyscale ASCII canvas -> BGR with pure white chars (#FFFFFF on #000000)."""
     return cv2.cvtColor(grey, cv2.COLOR_GRAY2BGR)
 
 
@@ -124,7 +124,7 @@ def _grey_to_bgr_white(grey: np.ndarray) -> np.ndarray:
 # Public class
 # ---------------------------------------------------------------------------
 class AsciiProcessor:
-    """Real-time ASCII art overlay — #FFFFFF on #000000."""
+    """Real-time ASCII art overlay - #FFFFFF on #000000."""
 
     def render_face(
         self,

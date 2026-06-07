@@ -9,7 +9,7 @@ camera:
   height: 720
   # Requested frame rate (FPS)
   fps: 60
-  # Flip the camera 180 degrees (rotate upside-down) — useful if your camera is mounted inverted
+  # Flip the camera 180 degrees (rotate upside-down) - useful if your camera is mounted inverted
   rotate_180: false
 
 tracking:

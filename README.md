@@ -1,6 +1,6 @@
 # Hand AR Tracker
 
-*Real-time hand AR system with ASCII art effects, holographic ribbon, and gesture controls — built with Python + MediaPipe.*
+*Real-time hand AR system with ASCII art effects, holographic ribbon, and gesture controls built with Python + MediaPipe.*
 
 ---
 
@@ -22,7 +22,7 @@
 
 ## Overview
 
-Hand AR Tracker captures your webcam feed and overlays real-time augmented reality effects driven entirely by **hand gestures**, **finger snaps**, and **eye winks** — no buttons, no keyboard, just your body.
+Hand AR Tracker captures your webcam feed and overlays real-time augmented reality effects driven entirely by **hand gestures**, **finger snaps**, and **eye winks** no buttons, no keyboard, just your body.
 
 The core effect is a **holographic ASCII ribbon** that stretches between your two hands, rendering your silhouette as scrolling ASCII scanlines against a black background. A **snap gesture** inverts the entire effect, and a **double wink** locks the ribbon's position in 3D space.
 
@@ -30,11 +30,11 @@ The core effect is a **holographic ASCII ribbon** that stretches between your tw
 
 ## Features
 
-- **Dual-hand tracking** — up to two hands simultaneously via MediaPipe Hands
-- **Holographic ASCII ribbon** — scanline particle effect renders your silhouette as ASCII art between both hands
-- **Snap-to-reverse** — snap your fingers to flip the effect: real video inside ribbon, ASCII art outside
-- **Double-wink lock** — wink twice in one second to freeze the ribbon position in space
-- **Person + object segmentation** — MediaPipe Selfie Segmentation + background subtraction
+- **Dual-hand tracking** - up to two hands simultaneously via MediaPipe Hands
+- **Holographic ASCII ribbon** - scanline particle effect renders your silhouette as ASCII art between both hands
+- **Snap-to-reverse** - snap your fingers to flip the effect: real video inside ribbon, ASCII art outside
+- **Double-wink lock** - wink twice in one second to freeze the ribbon position in space
+- **Person + object segmentation** - MediaPipe Selfie Segmentation + background subtraction
 - **Live FPS counter** with rolling average
 - **Click-to-flip** camera rotation button in the HUD
 - Auto GPU/CPU selection (CUDA or CPU)
@@ -74,7 +74,7 @@ The core effect is a **holographic ASCII ribbon** that stretches between your tw
    cd hand-ar-tracker
    ```
 
-2. **Run the installer** — creates the virtual environment and installs all dependencies:
+2. **Run the installer** - creates the virtual environment and installs all dependencies:
    ```
    install.bat
    ```
@@ -147,9 +147,9 @@ The app opens your webcam. Show **both hands** to the camera to start.
 
 ## Gesture Controls
 
-All effects are controlled entirely by **body gestures** — no keyboard required for the AR effects.
+All effects are controlled entirely by **body gestures** - no keyboard required for the AR effects.
 
-### 🤌 Double Pinch Touch — Toggle Ribbon ON/OFF
+### Double Pinch Touch - Toggle Ribbon ON/OFF
 
 Bring both hands in front of the camera, **pinch** your thumb and index finger together on **each hand simultaneously**, then touch the two pinched fingertips together.
 
@@ -161,7 +161,7 @@ Bring both hands in front of the camera, **pinch** your thumb and index finger t
 Both hands visible → pinch both → touch pinched tips together → toggle
 ```
 
-### 👌 Snap — Reverse the Effect
+### Snap - Reverse the Effect
 
 Snap your fingers on either hand (bring your **thumb tip** and **middle fingertip** together then release quickly).
 
@@ -172,11 +172,11 @@ Snap your fingers on either hand (bring your **thumb tip** and **middle fingerti
 
 Snap again to revert back to normal mode.
 
-### 😉 Double Wink — Lock / Unlock Ribbon Position
+### Double Wink - Lock / Unlock Ribbon Position
 
-Wink **one eye** (not both — a full blink won't count) **twice within 1 second** to lock the ribbon at its current position in space. The ribbon will stay frozen even if you move your hands away.
+Wink **one eye** (not both - a full blink won't count) **twice within 1 second** to lock the ribbon at its current position in space. The ribbon will stay frozen even if you move your hands away.
 
-- **Double-wink while ribbon is ON:** Position locks. You can lower your hands — the ribbon stays.
+- **Double-wink while ribbon is ON:** Position locks. You can lower your hands - the ribbon stays.
 - **Double-wink while ribbon is locked:** Unlocks the ribbon so it follows your hands again.
 
 ---
@@ -189,7 +189,7 @@ Wink **one eye** (not both — a full blink won't count) **twice within 1 second
 | **ESC** | Toggle hand skeleton visibility (dots + lines) on/off |
 | **Delete** | Toggle the entire HUD (FPS counter, flip button, device label) on/off |
 
-### HUD — On-screen Controls
+### HUD - On-screen Controls
 
 | Element | Location | Action |
 |---------|----------|--------|
@@ -216,7 +216,7 @@ Ribbon ON:   Your silhouette rendered as scrolling ASCII scanlines
 Ribbon OFF:  Full frame converted to ASCII art on black background
 Ribbon ON:   Inside ribbon = clear real video
              Outside ribbon = ASCII art
-             (No border — clean hard edge)
+             (No border - clean hard edge)
 ```
 
 ### Locked Ribbon (after double wink)
@@ -254,8 +254,8 @@ tracking:
 
 ```yaml
 renderer:
-  skeleton_color: [0, 255, 0]     # BGR — green
-  keypoint_color: [0, 0, 255]     # BGR — red
+  skeleton_color: [0, 255, 0]     # BGR - green
+  keypoint_color: [0, 0, 255]     # BGR - red
   keypoint_radius: 6
   skeleton_thickness: 2
   show_fps: true
