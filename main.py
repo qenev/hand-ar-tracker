@@ -490,18 +490,13 @@ def run_main_loop(
 
         # ── Process hands (tracking + ribbon rendering) ───────────────────────
         orig_frame = frame.copy()   # keep real-camera copy for reverse-mode ASCII
-        frame, clap_active, snap_detected = process_hands(
+        frame, clap_active, _ = process_hands(
             frame, tracker, renderer, config,
             show_gui=show_skeleton, clap_active=clap_active, time_val=time.time(),
             wink_lock=wink_lock, reverse_mode=reverse_mode,
         )
 
-        # Snap toggles reverse mode
-        if snap_detected:
-            reverse_mode = not reverse_mode
-            print(f"[INFO] Snap! Reverse mode: {'ON (ribbon=real, no-ribbon=ASCII)' if reverse_mode else 'OFF'}")
-
-        # Reverse mode + no ribbon → full-frame ASCII on black background
+        # Reverse mode + no ribbon -> full-frame ASCII on black background
         if reverse_mode and not clap_active:
             frame = ascii_processor.ascii_full_frame(orig_frame)
 
@@ -529,6 +524,10 @@ def run_main_loop(
             if ascii_key == 27:
                 show_skeleton = not show_skeleton
                 print(f"[INFO] Skeleton visibility: {'ON' if show_skeleton else 'OFF'}")
+            # Space bar = invert effect (reverse mode)
+            if ascii_key == 32:
+                reverse_mode = not reverse_mode
+                print(f"[INFO] Space bar pressed! Reverse mode: {'ON (ribbon=real, no-ribbon=ASCII)' if reverse_mode else 'OFF'}")
             # Delete = toggle all GUI (HUD: FPS, flip button, device label)
             if key in [3014656, 46, 127, 65535, 0x2E0000]:
                 show_gui = not show_gui

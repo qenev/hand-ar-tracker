@@ -22,9 +22,9 @@
 
 ## Overview
 
-Hand AR Tracker captures your webcam feed and overlays real-time augmented reality effects driven entirely by **hand gestures**, **finger snaps**, and **eye winks** no buttons, no keyboard, just your body.
+Hand AR Tracker captures your webcam feed and overlays real-time augmented reality effects driven entirely by **hand gestures**, **spacebar presses**, and **eye winks** no buttons, no keyboard, just your body (plus the spacebar for toggling invert mode).
 
-The core effect is a **holographic ASCII ribbon** that stretches between your two hands, rendering your silhouette as scrolling ASCII scanlines against a black background. A **snap gesture** inverts the entire effect, and a **double wink** locks the ribbon's position in 3D space.
+The core effect is a **holographic ASCII ribbon** that stretches between your two hands, rendering your silhouette as scrolling ASCII scanlines against a black background. Pressing **spacebar** inverts the entire effect, and a **double wink** locks the ribbon's position in 3D space.
 
 ---
 
@@ -32,7 +32,7 @@ The core effect is a **holographic ASCII ribbon** that stretches between your tw
 
 - **Dual-hand tracking** - up to two hands simultaneously via MediaPipe Hands
 - **Holographic ASCII ribbon** - scanline particle effect renders your silhouette as ASCII art between both hands
-- **Snap-to-reverse** - snap your fingers to flip the effect: real video inside ribbon, ASCII art outside
+- **Space-to-reverse** - press the spacebar to flip the effect: real video inside ribbon, ASCII art outside
 - **Double-wink lock** - wink twice in one second to freeze the ribbon position in space
 - **Person + object segmentation** - MediaPipe Selfie Segmentation + background subtraction
 - **Live FPS counter** with rolling average
@@ -121,7 +121,7 @@ The app opens your webcam. Show **both hands** to the camera to start.
 1. **Launch** – run `start.bat` (Windows) or `python main.py`.
 2. **Calibration** – the system automatically detects your hands and face. Wait a couple of seconds for the FPS counter to stabilize.
 3. **Enable the ribbon** – perform a **double‑pinch** (thumb and index together on each hand, then touch the pinched tips). The holographic ASCII ribbon appears between your hands.
-4. **Reverse mode** – snap your fingers (thumb tip to middle fingertip, then release). The ribbon now shows the *real* video inside while the rest of the scene turns ASCII.
+4. **Reverse mode** – press **spacebar**. The ribbon now shows the *real* video inside while the rest of the scene turns ASCII.
 5. **Lock the ribbon** – wink one eye twice within one second. The ribbon’s position freezes in space, allowing you to move your hands without moving the effect.
 6. **Unlock** – repeat the double‑wink to release the lock.
 7. **Toggle off** – repeat the double‑pinch gesture to turn the ribbon off.
@@ -135,7 +135,7 @@ The app opens your webcam. Show **both hands** to the camera to start.
 | Control | Action |
 |---|---|
 | **Double‑pinch touch** | Toggle ASCII ribbon ON/OFF |
-| **Snap gesture** | Switch to reverse mode (real video inside ribbon, ASCII outside) |
+| **Spacebar** | Switch to reverse mode (real video inside ribbon, ASCII outside) |
 | **Double wink** (one eye) | Lock / unlock ribbon position |
 | **Q** | Quit application |
 | **ESC** | Toggle hand skeleton visibility |
@@ -147,7 +147,7 @@ The app opens your webcam. Show **both hands** to the camera to start.
 
 ## Gesture Controls
 
-All effects are controlled entirely by **body gestures** - no keyboard required for the AR effects.
+Most effects are controlled entirely by **body gestures** - no keyboard required for tracking or locking the AR effects.
 
 ### Double Pinch Touch - Toggle Ribbon ON/OFF
 
@@ -160,17 +160,6 @@ Bring both hands in front of the camera, **pinch** your thumb and index finger t
 ```
 Both hands visible → pinch both → touch pinched tips together → toggle
 ```
-
-### Snap - Reverse the Effect
-
-Snap your fingers on either hand (bring your **thumb tip** and **middle fingertip** together then release quickly).
-
-| Without Snap (default) | With Snap (reversed) |
-|---|---|
-| Ribbon ON → ASCII scanlines on your silhouette | Ribbon ON → Real video inside ribbon, ASCII art everywhere outside |
-| Ribbon OFF → Normal camera | Ribbon OFF → Full-frame ASCII art on black background |
-
-Snap again to revert back to normal mode.
 
 ### Double Wink - Lock / Unlock Ribbon Position
 
@@ -185,6 +174,7 @@ Wink **one eye** (not both - a full blink won't count) **twice within 1 second**
 
 | Key | Action |
 |-----|--------|
+| **Spacebar** | Switch to reverse mode (real video inside ribbon, ASCII outside) |
 | **Q** | Quit the application |
 | **ESC** | Toggle hand skeleton visibility (dots + lines) on/off |
 | **Delete** | Toggle the entire HUD (FPS counter, flip button, device label) on/off |
@@ -201,7 +191,7 @@ Wink **one eye** (not both - a full blink won't count) **twice within 1 second**
 
 ## Effect Modes
 
-### Default Mode (no snap)
+### Default Mode (no reverse toggle)
 
 ```
 Ribbon OFF:  Normal camera feed
@@ -210,7 +200,7 @@ Ribbon ON:   Your silhouette rendered as scrolling ASCII scanlines
              Rest of frame is plain black.
 ```
 
-### Reversed Mode (after snap)
+### Reversed Mode (after spacebar press)
 
 ```
 Ribbon OFF:  Full frame converted to ASCII art on black background
