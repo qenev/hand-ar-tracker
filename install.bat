@@ -3,7 +3,8 @@
 :: Hand-AR-Tracker - Install Dependencies
 :: -------------------------------------------------
 
-set "PROJECT_DIR=C:\Users\benbe\.gemini\antigravity\scratch\hand-ar-tracker"
+set "PROJECT_DIR=%~dp0"
+if "%PROJECT_DIR:~-1%"=="\" set "PROJECT_DIR=%PROJECT_DIR:~0,-1%"
 cd /d "%PROJECT_DIR%"
 
 :: Force using python or py launcher

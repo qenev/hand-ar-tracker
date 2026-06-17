@@ -49,7 +49,7 @@ The core effect is a **holographic ASCII ribbon** that stretches between your tw
 | Component | Requirement |
 |-----------|-------------|
 | Camera    | Any USB/built-in webcam |
-| Python    | 3.10+ |
+| Python    | 3.12.7 |
 | RAM       | 4 GB |
 | OS        | Windows 10+, macOS 12+, Linux |
 
